@@ -1,0 +1,546 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
+*{
+    font-family: 'Ubuntu', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+:root{
+    --blue: #287bff;
+    --white: #fff;
+    --gray: #f5f5f5;
+    --black1: #222;
+    --black2: #999;
+}
+body{
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+.main_container{
+    position: relative;
+    width: 100%;
+}
+.main_navigation{
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    background: var(--blue);
+    border-left: 10px solid var(--blue);
+    transition: .5s;
+    overflow: hidden;
+}
+.main_navigation.actived{
+    width: 80px;
+
+}
+.main_navigation ul{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.main_navigation ul li{
+    position: relative;
+    width: 100%;
+    list-style: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    
+}
+.main_navigation ul li:hover,
+.main_navigation ul li.hovered{
+    background: var(--white);
+}
+.main_navigation ul li:nth-child(1){
+    pointer-events: none;
+    margin-bottom: 50px;
+}
+.main_navigation ul li a{
+    position: relative;
+    display: block;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: var(--white);
+}
+.main_navigation ul li:hover a,
+.main_navigation ul li.hovered a{
+    color: var(--blue);
+}
+.main_navigation ul li a .a_icon{
+    position: relative;
+    display: block;
+    min-width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+.main_navigation ul li a .a_icon i{
+    font-size: 1.40em;
+}
+.main_navigation ul li a .title{
+    position: relative;
+    display: block;
+    padding: 0 10px;
+    height: 60px;
+    line-height: 60px;
+    text-align: start;
+    white-space: nowrap;
+}
+.logo{
+    position: relative;
+    display: block;
+    padding: 0 10px;
+    height: 60px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 60px;
+    text-align: start;
+    white-space: nowrap;
+}
+.main_navigation ul li:hover a::before, 
+.main_navigation ul li.hovered a::before{
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: 0;
+    height: 50px;
+    width: 50px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+}
+.main_navigation ul li:hover a::after,
+.main_navigation ul li.hovered a::after{
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: 0;
+    height: 50px;
+    width: 50px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+.main{
+    position: absolute;
+    width: calc(100% - 250px);
+    left: 250px;
+    min-height: 100vh;
+    background: var(--white);
+    transition: 0.5s;
+}
+.main.actived{
+    width: calc(100% - 80px);
+    left: 80px;
+}
+.topbar{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+.toggle{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: left;
+    /* align-items: center; */
+    background: var(--white);
+    font-size: 1.4em;
+    z-index: 1;
+}
+.toggle i{
+    margin-top: 15px;
+    cursor: pointer;
+}
+.cardBox{
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-gap: 30px;
+}
+.cardBox .card_content{
+    position: relative;
+    background: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+}
+.cardBox .card_content .numbers{
+    position: relative;
+    font-weight: 500;
+    font-size: 2.0em;
+    color: var(--blue);
+}
+.cardBox .card_content .cardName{
+    color: var(--black1);
+    font-size: 1em;
+    margin-top: 5px;
+}
+.cardBox .card_content .iconBx{
+    font-size: 3em;
+    color: var(--black2);
+}
+.cardBox .card_content:hover{
+    background-color: var(--blue);
+}
+.cardBox .card_content:hover .numbers,
+.cardBox .card_content:hover .cardName,
+.cardBox .card_content:hover .iconBx{
+    color: var(--white);
+}
+.details, .details1{
+ position: relative;
+ width: 100%;
+ padding: 20px;
+ display: grid;
+ grid-template-columns: 1fr;
+ /* margin-top: 10px; */
+}
+#colSum{
+    color: var(--blue);
+    font-weight: 500;
+    margin-right: 24px;
+}
+.requestor{
+ position: relative;
+ width: 100%;
+ padding: 20px;
+ display: grid;
+ grid-template-columns: .8fr 1fr;
+ grid-gap: 30px;
+}
+.purpose{
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    /* grid-template-columns: 1fr;
+    grid-gap: 30px; */
+
+}
+.purpose .purposeDtl{
+    position: relative;
+    /* display: grid; */
+    min-height: 300px;
+    width: 80%;
+    background: var(--white);
+    padding: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+.details .recentRequests{
+    position: relative;
+    /* display: grid; */
+    min-height: 300px;
+    background: var(--white);
+    padding: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+.requestor .reqDtl, .requestor .budgetDtl{
+    position: relative;
+    /* display: grid; */
+    min-height: 150px;
+    background: var(--white);
+    padding: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+.reqDtl table tbody tr{
+    height: 40px;
+    color: var(--black1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+.reqDtl table tbody tr td{
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0 10px;
+}
+
+.details1 .recentRequests1{
+    position: relative;
+    /* display: grid; */
+    min-height: 150px;
+    background: var(--white);
+    padding: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+.cardHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.cardHeader h2, .cardHeader h4, .cardHeader h3, .cardHeader h5, .topTitle h2, .label{
+    font-weight: 600;
+    color: var(--blue);
+}
+.abtn{
+    position: relative;
+    padding: 5px 10px;
+    background: var(--blue);
+    text-decoration: none;
+    color: var(--white);
+    border-radius: 6px;
+}
+.abtn:hover{
+    color: var(--white);
+}
+.details table, .details1 table, .reqDtl table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 10px
+}
+.details table thead td, .details1 table thead td{
+    font-weight: 600;
+}
+.details .recentRequests table tr{
+    color: var(--black1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    height: 45px;
+}
+.purpose .purposeDtl table tbody tr{
+    height: 30px;
+}
+.purpose .purposeDtl textarea{
+    padding: 10px;
+}
+.details .recentRequests table td{
+    color: var(--black1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.details .recentRequests table tr:last-child{
+    border-bottom: none;
+}
+.details1 .recentRequests1 table tr:first-child{
+    border: none;
+}
+.details1 .recentRequests1 table tbody tr td{
+    color: var(--black1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+}
+#plusImg{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+input[id='qty1'],input[id='desc1'],input[id='amount1'],input[id='type1'],input[id='unitPrice1'], input[id='department']{
+    pointer-events: none;
+    border: none;
+}
+/* .row .form-control{
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #1890ff;
+  } */
+
+
+.details1 .recentRequests1 table tbody tr:first-child, .details1 .recentRequests1 table tbody tr:first-child td{
+    border: none;
+}
+.details1 .recentRequests1 table tbody tr td:first-child{
+    border: none;
+}
+.details .recentRequests .search input{
+    border-style: solid;
+    display: flex;
+}
+.details .recentRequests .search{
+    float: right;
+    margin-bottom: 20px;
+    text-decoration: none;
+    position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+}
+.details .recentRequests .search input{
+    height: 40px;
+    text-indent: 25px;
+    border: 2px solid #d6d4d4;
+}
+.details .recentRequests .search input:focus{
+    box-shadow: none;
+    border: 2px solid #287bff;
+}
+.details .recentRequests .fa-search{
+    position: absolute;
+    top: 14px;
+    left: 16px;
+}
+
+.details .recentRequests table tr td, .details1 .recentRequests1 table tr td{
+    padding: 10px;
+}
+.details .recentRequests table tr td:last-child{
+    text-align: end;
+}
+.details .recentRequests table tr td:nth-child(2){
+    text-align: left;
+}
+.details .recentRequests table tr td:nth-child(3){
+    text-align: left;
+}
+.details .recentRequests table tbody tr:hover{
+    background: rgb(228, 228, 228);
+    color: var(--black1);
+}
+#ionum:disabled{
+    background: rgba(0, 0, 0, 0.1);
+}
+.status.approved{
+    padding: 2px 4px;
+    background: #8de02c;
+    color: var(--white);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.status.pending{
+    padding: 2px 4px;
+    background: #f9ca3f;
+    color: var(--white);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.status.reject{
+    padding: 2px 4px;
+    background: #fc2626;
+    color: var(--white);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.buttons{
+    margin-top: 20px;
+    margin-left: 30px;
+    padding: 10px 10px 10px 10px;
+}
+input{
+    border:none;
+    border-bottom: 1px solid #1890ff;
+}
+input:focus{
+    outline: none;
+}
+.reqInfo{
+    margin-left: 10px;
+    padding: 10px 10px 10px 10px;
+}
+.tableContainer{
+    padding: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top:30px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+.rowAmount{
+    pointer-events: none;
+    border:none;
+    text-align: center;
+}
+#filter{
+    padding:10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 6px;
+    justify-content: center;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+.label{
+    text-align: center;
+}
+.topTitle{
+    display: grid;
+    justify-content: center;
+}
+input[type='number']{
+    width: 80px;
+}
+@media (max-width: 991px) {
+    .main_navigation{
+        left: -250px;
+    }
+    .main_navigation.actived{
+        width: 250px;
+        left: 0;
+    }
+    .main{
+        width: 100%;
+        left: 0;
+        overflow-x: scroll;
+    }
+    .main.actived{
+        left: 250px;
+    }
+    .cardBox{
+        grid-template-columns: repeat(2,1fr);
+    }
+    .recentRequests1{
+        overflow-x: scroll;
+    }
+    .purpose .purposeDtl{
+        overflow-x: auto;
+    }
+    .tableContainer{
+        overflow-x: scroll;
+    }
+}
+@media (max-width: 768px) {
+    .details, .details1, .requestor{
+        grid-template-columns: repeat(1,1fr);
+    }
+    .recentRequests, .recentRequests1{
+        overflow-x: scroll;
+    }
+    .purpose .purposeDtl{
+        width: 100%;
+        overflow-x: auto;
+    }
+    .tableContainer{
+        overflow-x: scroll;
+    }
+}
+@media (max-width: 480px) {
+    .cardBox{
+        grid-template-columns: repeat(1,1fr);
+    }
+    .cardHeader h2{
+        font-size: 20px;
+    }
+    .purpose .purposeDtl{
+        width: 100%;
+        overflow-x: auto;
+    }
+    .tableContainer{
+        overflow-x: scroll;
+    }
+    .recentRequests1{
+        overflow-x: scroll;
+    }
+}
