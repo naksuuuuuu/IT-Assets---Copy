@@ -171,7 +171,6 @@ if (isset($_POST['data'])){
                     if($row1['PO_NUMBER'] == "" ){
                         $result.=" ";
                     }
-                    
                     else{
                         $po_num = $row1['PO_NUMBER'];
 
@@ -203,6 +202,72 @@ if (isset($_POST['data'])){
             }
         echo $result;
     }
+
+    // else if(isset($_POST['dept']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) 
+    //     and !isset($_POST['vendor']) and !isset($_POST['from_date']) and !isset($_POST['to_date'])){
+            
+    //     $dept = $_POST['dept'];
+
+    //     $sql = "SELECT A.EMPLID, C.NAMEENG, C.BUSINESSMAIL, B.DESCR 
+    //             FROM JOBCUR_EE A, DEPARTMENT_TBL B, PERSON_TBL C
+    //             WHERE A.DEPTID = B.DEPTID
+    //             AND B.DEPTID = :dept_id
+    //             AND C.EMPLID = A.EMPLID
+    //             AND A.EMPL_STATUS = 'A'";
+        
+    //     $res = oci_parse(connection1(), $sql);
+    //     oci_bind_by_name($res, ':dept_id', $dept);
+    //     oci_execute($res);
+        
+    //     $empIds = array();
+    //     while($row = oci_fetch_assoc($res)){
+    //         $empIds[] = $row["EMPLID"];
+    //     }
+
+    //     $result = "";
+
+    //     foreach($empIds as $empId) {
+    //         $emp_id = "SELECT DISTINCT PO_NUMBER FROM IT_ASSET_DETAILS1
+    //                 WHERE EMPL_ID = :emp_id";
+    //         $stmt = oci_parse(connection(), $emp_id);
+    //         oci_bind_by_name($stmt, ':emp_id', $empId);
+    //         oci_execute($stmt);
+
+    //         while($row1 = oci_fetch_assoc($stmt)){
+    //             if($row1['PO_NUMBER'] == "" ){
+    //                 $result.=" ";
+    //             }
+    //             else{
+    //                 $po_num = $row1['PO_NUMBER'];
+
+    //                 $head_sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.MTRL_SHORT, C.VENDOR_NAME 
+    //                             FROM IT_ASSET_HEADER1 A, IT_ASSET_VENDORS C, IT_ASSET_DETAILS1 B
+    //                             WHERE A.VENDOR_CODE = C.VENDOR_CODE 
+    //                             AND A.PO_NUMBER = B.PO_NUMBER
+    //                             AND A.PO_NUMBER = :po";
+
+    //                 $res = oci_parse(connection(), $head_sql);
+    //                 oci_bind_by_name($res, ':po', $po_num);
+    //                 oci_execute($res);
+
+    //                 $row2 = oci_fetch_assoc($res);
+
+    //                 $result.="<tr>
+    //                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+    //                         <td>".$row2["DOCUMENT_NO"]."</td>
+    //                         <td>".$row1["PO_NUMBER"]."</td>
+    //                         <td>".$row["NAMEENG"]."</td>
+    //                         <td>".$row["DESCR"]."</td>
+    //                         <td>".$row2["MTRL_SHORT"]."</td>
+    //                         <td>".$row2["VENDOR_NAME"]."</td>
+    //                         <td>".$row["BUSINESSMAIL"]."</td>
+    //                         <td hidden><input class='po_no' value='".$row1["PO_NUMBER"]."' hidden></td>
+    //                     </tr>";
+    //             }
+    //         }
+    //     }
+    //     echo $result;
+    // }
 
     // vendor
     else if(isset($_POST['vendor']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) 

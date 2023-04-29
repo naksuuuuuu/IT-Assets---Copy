@@ -6,25 +6,28 @@ require "../config/connection.php";
 date_default_timezone_set('Asia/Manila');
 $date = date('d/m/Y h:i:s a');
 
-if(isset($_POST['doc_no'])){
-    $doc_no = $_POST['doc_no'];
+if(isset($_POST['po_no'])){
+    $po_no = $_POST['po_no'];
     $name = $_POST['name'];
+    $reason = $_POST['reason'];
     
-    $update_query = "UPDATE IT_ASSET_HEADER SET CANCEL_ASSET_FLAG = 'Y', LAST_USER_UPDATE = :username, 
-        LAST_USER_UPDATED_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am') WHERE DOCUMENT_NO = :doc_no";
+    $update_query = "UPDATE IT_ASSET_HEADER1 SET CANCEL_ASSET_FLAG = 'Y', CANCEL_REASON = :reason, USER_CANCEL = :username, 
+        CANCEL_DATE = to_date(:cancel_date, 'DD/MM/YY HH:MI:SS am') WHERE PO_NUMBER = :po_no";
 
         $update_result = oci_parse(connection(), $update_query);
+        oci_bind_by_name($update_result, ':reason', $reason);
         oci_bind_by_name($update_result, ':username', $name);
-        oci_bind_by_name($update_result, ':update_date', $date);
-        oci_bind_by_name($update_result, ':doc_no', $doc_no);
+        oci_bind_by_name($update_result, ':cancel_date', $date);
+        oci_bind_by_name($update_result, ':po_no', $po_no);
 
     if (oci_execute($update_result, OCI_NO_AUTO_COMMIT)) {
-        $sql = "UPDATE IT_ASSET_DETAILS SET CANCEL_ASSET_FLAG = 'Y', LAST_USER_UPDATE = :username, 
-        LAST_USER_UPDATED_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am') WHERE DOCUMENT_NO = :doc_no";
+        $sql = "UPDATE IT_ASSET_DETAILS1 SET CANCEL_ASSET_FLAG = 'Y', CANCEL_REASON = :reason, USER_CANCEL = :username, 
+        CANCEL_DATE = to_date(:cancel_date, 'DD/MM/YY HH:MI:SS am') WHERE PO_NUMBER = :po_no";
         $res = oci_parse(connection(), $sql);
+        oci_bind_by_name($res, ':reason', $reason);
         oci_bind_by_name($res, ':username', $name);
-        oci_bind_by_name($res, ':update_date', $date);
-        oci_bind_by_name($res, ':doc_no', $doc_no);
+        oci_bind_by_name($res, ':cancel_date', $date);
+        oci_bind_by_name($res, ':po_no', $po_no);
 
         if (oci_execute($res, OCI_NO_AUTO_COMMIT)) {
             oci_commit(connection());

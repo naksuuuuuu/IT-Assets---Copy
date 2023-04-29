@@ -121,7 +121,6 @@
                 if(oci_execute($result, OCI_NO_AUTO_COMMIT)){
                     $unt_price = "SELECT UNIT_PRICE FROM IT_ASSET_DETAILS1 WHERE PO_NUMBER = :po_no";
                     $result = oci_parse(connection(), $unt_price);
-                    // oci_bind_by_name($result, ':po_no', $po_name);
                     oci_bind_by_name($result, ':po_no', $po_no);
                     oci_execute($result);
 
@@ -135,7 +134,6 @@
                         $res = oci_parse(connection(), $update);
 
                         oci_bind_by_name($res, ':total_amount', $total_amount);
-                        // oci_bind_by_name($res, ':po_no', $po_name);
                         oci_bind_by_name($res, ':po_no', $po_no);
 
                         if(oci_execute($res, OCI_NO_AUTO_COMMIT)){
@@ -272,7 +270,6 @@
             echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));
         }
     }
-
 
     else{
         oci_rollback(connection());

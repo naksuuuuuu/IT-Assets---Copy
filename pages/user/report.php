@@ -245,7 +245,7 @@ session_start();
                                                 <select type="text" name="po_num" id='po_num' class='form-select' required style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                 <?php  
-                                                    $sql = "SELECT DISTINCT PO_NUMBER FROM IT_ASSET_HEADER1";
+                                                    $sql = "SELECT DISTINCT PO_NUMBER FROM IT_ASSET_HEADER1 CANCEL_ASSET_FLAG is null";
                                                     $res = oci_parse(connection(), $sql);
                                                     oci_execute($res);
 
@@ -256,23 +256,15 @@ session_start();
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-3">
-                                                <div class="label" style="color: #000000">Vendor:</div>
-                                                <select type="text" name="vendor" id='vendor' class='form-select' required style="margin-bottom: 8px;"> 
-                                                    <option value=""></option>
-                                                    <?php 
-                                                        $sql = "SELECT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER1 A, IT_ASSET_VENDORS B
-                                                                WHERE A.VENDOR_CODE = B.VENDOR_CODE";
-
-                                                        $res = oci_parse(connection(), $sql);
-                                                        oci_execute($res);
-                                                        while($row = oci_fetch_row($res)){
-                                                            echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                                        }
-                                                    ?>
-                                                </select> 
+                                            <div class="col-md-6">
+                                                <div class="label" style="color: #000000">PO Document Date:</div>
+                                                    <div class="input-group">
+                                                        <input type="date" class="form-control" id="from_date" placeholder="From">
+                                                        <span class="input-group-text">-</span>
+                                                        <input type="date" class="form-control" id="to_date" placeholder="To">
+                                                    </div>
                                             </div>
-                                            
+
                                             <div class="col-md-3">
                                                 <div class="label" style="color: #000000">Employee Name:</div>
                                                 <select type="text" name="emp_name" id='emp_name' class='form-select' required style="margin-bottom: 8px;"> 
@@ -302,25 +294,54 @@ session_start();
                                             </div>
 
                                             <div class="col-md-3">
-                                                <div class="label" style="color: #000000">BRAND:</div>
-                                                <select type="text" name="brand" id='brand' class='form-select' required style="margin-bottom: 8px;"> 
+                                                <div class="label" style="color: #000">Serial Number</div>
+                                                <select class="form-select" name="ser_no1" id="ser_no1" style="margin-bottom: 8px;">
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT A.BRAND, B.BRAND_NAME FROM IT_ASSET_DETAILS1 A, IT_ASSET_BRAND B
-                                                                WHERE A.BRAND = B.BRAND_CODE";
-                                                        
+                                                        $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS1";
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
 
                                                         while($row = oci_fetch_row($res)){
-                                                            echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1], ENT_IGNORE)."</option>";
+                                                            echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="label" style="color: #000">Remarks</div>
+                                                <select class="form-select" name="rem" id="rem" style="margin-bottom: 8px;">
+                                                    <option value=""></option>
+                                                    <?php 
+                                                        $sql = "SELECT DISTINCT REMARKS FROM IT_ASSET_DETAILS1";
+                                                        $res = oci_parse(connection(), $sql);
+                                                        oci_execute($res);
+
+                                                        while($row = oci_fetch_row($res)){
+                                                            echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="label" style="color: #000000">Vendor:</div>
+                                                <select type="text" name="vendor" id='vendor' class='form-select' required style="margin-bottom: 8px;"> 
+                                                    <option value=""></option>
+                                                    <?php 
+                                                        $sql = "SELECT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER1 A, IT_ASSET_VENDORS B
+                                                                WHERE A.VENDOR_CODE = B.VENDOR_CODE";
+
+                                                        $res = oci_parse(connection(), $sql);
+                                                        oci_execute($res);
+                                                        while($row = oci_fetch_row($res)){
+                                                            echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
                                                         }
                                                     ?>
                                                 </select> 
                                             </div>
-                                        </div>
-                                
-                                        <div class="row g-2">
+
                                             <div class="col-md-3">
                                                 <div class="label" style="color: #000000">Department:</div>
                                                 <select type="text" name="dept" id='dept' class='form-select' required style="margin-bottom: 8px;"> 
@@ -350,15 +371,28 @@ session_start();
                                                     ?>
                                                 </select> 
                                             </div>
-                                            
-                                            <div class="col-md-6">
-                                                <div class="label" style="color: #000000">PO Document Date:</div>
-                                                    <div class="input-group">
-                                                        <input type="date" class="form-control" id="from_date" placeholder="From">
-                                                        <span class="input-group-text">-</span>
-                                                        <input type="date" class="form-control" id="to_date" placeholder="To">
-                                                    </div>
+
+                                            <div class="col-md-3">
+                                                <div class="label" style="color: #000000">BRAND:</div>
+                                                <select type="text" name="brand" id='brand' class='form-select' required style="margin-bottom: 8px;"> 
+                                                    <option value=""></option>
+                                                    <?php 
+                                                        $sql = "SELECT A.BRAND, B.BRAND_NAME FROM IT_ASSET_DETAILS1 A, IT_ASSET_BRAND B
+                                                                WHERE A.BRAND = B.BRAND_CODE";
+                                                        
+                                                        $res = oci_parse(connection(), $sql);
+                                                        oci_execute($res);
+
+                                                        while($row = oci_fetch_row($res)){
+                                                            echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1], ENT_IGNORE)."</option>";
+                                                        }
+                                                    ?>
+                                                </select> 
                                             </div>
+                                        </div>
+                                
+                                        <div class="row g-2">
+                                            
 
                                             <div class="col-md-3" style='justify-content: end; display: flex; margin-top: 35px'>
                                                 <button class="btn btn-success" id="srch" type="button"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
@@ -454,6 +488,7 @@ session_start();
                                                         FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
                                                         WHERE A.PO_NUMBER = B.PO_NUMBER
                                                         AND A.VENDOR_CODE = C.VENDOR_CODE
+                                                        AND A.CANCEL_ASSET_FLAG is null
                                                         ORDER BY A.DOCUMENT_NO DESC";
                                                 
                                                         $result = oci_parse(connection(), $sql);

@@ -7,7 +7,7 @@ if (isset($_POST['data'])){
     if(isset($_POST['po_no']) and !isset($_POST['ser_no'])){
         $po_no = $_POST['po_no'];
 
-        $sql1 = "SELECT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, C.VENDOR_NAME
+        $sql1 = "SELECT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, C.VENDOR_NAME, B.PO_ITEM
                 FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
                 WHERE A.PO_NUMBER = B.PO_NUMBER
                 AND A.VENDOR_CODE = C.VENDOR_CODE
@@ -39,6 +39,7 @@ if (isset($_POST['data'])){
                         <td>".$row["PO_DOCUMENT_DATE"]."</td>
                         <td>".$row1["DESCR"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                         <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
                     </tr>";
         }
@@ -50,7 +51,7 @@ if (isset($_POST['data'])){
     else if(isset($_POST['ser_no']) and !isset($_POST['po_no'])){
         $ser_no = $_POST['ser_no'];
 
-        $sql1 = "SELECT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, C.VENDOR_NAME
+        $sql1 = "SELECT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, C.VENDOR_NAME, B.PO_ITEM
                 FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
                 WHERE A.PO_NUMBER = B.PO_NUMBER
                 AND A.VENDOR_CODE = C.VENDOR_CODE
@@ -82,6 +83,7 @@ if (isset($_POST['data'])){
                         <td>".$row["PO_DOCUMENT_DATE"]."</td>
                         <td>".$row1["DESCR"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                         <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
                     </tr>";
         }

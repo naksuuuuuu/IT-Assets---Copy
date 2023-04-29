@@ -231,7 +231,8 @@ session_start();
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
-                                                            echo "<option value='".htmlspecialchars($result[0],ENT_IGNORE)."'>".htmlspecialchars($result[0],ENT_IGNORE)."</option>";
+                                                            // echo "<option value='".htmlspecialchars($result[0],ENT_IGNORE)."'>".htmlspecialchars($result[0],ENT_IGNORE)."</option>";
+                                                            echo "<p>".number_format($result[0], 2, '.', ',')."</p>";
                                                         ?>
                                                     </div>
                                                 </div>
@@ -257,7 +258,7 @@ session_start();
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
-                                                            echo "<option value='".htmlspecialchars($result[0],ENT_IGNORE)."'>".htmlspecialchars($result[0],ENT_IGNORE)."</option>";
+                                                            echo "<p>".number_format($result[0])."</p>";
                                                         ?>
                                                     </div>
                                                 </div>
@@ -283,7 +284,7 @@ session_start();
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
-                                                            echo "<option value='".htmlspecialchars($result[0],ENT_IGNORE)."'>".htmlspecialchars($result[0],ENT_IGNORE)."</option>";
+                                                            echo "<p>".number_format($result[0])."</p>";
                                                         ?>
                                                     </div>
                                                 </div>
@@ -311,7 +312,7 @@ session_start();
                                                                 $stmt = oci_parse(connection(), $sql);
                                                                 oci_execute($stmt);
                                                                 $result = oci_fetch_row($stmt);
-                                                                echo "<option value='".htmlspecialchars($result[0],ENT_IGNORE)."'>".htmlspecialchars($result[0],ENT_IGNORE)."</option>";
+                                                                echo "<p>".number_format($result[0])."</p>";
                                                             ?>
                                                             </div>
                                                         </div>
@@ -339,7 +340,7 @@ session_start();
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
-                                                            echo "<option value='".htmlspecialchars($result[0],ENT_IGNORE)."'>".htmlspecialchars($result[0],ENT_IGNORE)."</option>";
+                                                            echo "<p>".number_format($result[0], 2, '.', ',')."</p>";
                                                         ?>
                                                     </div>
                                                 </div>
@@ -365,7 +366,7 @@ session_start();
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
-                                                            echo "<option value='".htmlspecialchars($result[0],ENT_IGNORE)."'>".htmlspecialchars($result[0],ENT_IGNORE)."</option>";
+                                                            echo "<p>".number_format($result[0], 2, '.', ',')."</p>";
                                                         ?>
                                                     </div>
                                                 </div>

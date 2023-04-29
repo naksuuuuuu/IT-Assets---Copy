@@ -266,18 +266,18 @@ $username = $_SESSION['username'];
                                     </div>
 
                                     <div class="col-md-4">
-                                    <button class="btn btn-primary" id="set_po" type="button" style="height:35px; margin-top:33px">
-                                        <i class="fa fa-magnifying-glass"></i> Set</button>
+                                    <button class="btn btn-secondary" id="set_po" type="button" style="height:35px; margin-top:33px">
+                                        <i class="fa-solid fa-check"></i> Select</button>
 
                                         <button class="btn btn-warning" id="reset_po" type="button" style="height:35px; margin-top:33px">
-                                        <i class="fa fa-magnifying-glass"></i> Reset</button>
+                                        <i class="fa-solid fa-arrows-rotate"></i> Reset</button>
                                     </div>
                                 </div>
                                 <div class="row mb-3" style="margin-left: 7px;">
                                     <div class="col-sm-8">
                                         <button class="btn" id="add_btn" type="button" style="background-color: #26d991; color: white">
                                         <i class="fa-solid fa-plus"></i> Add New Item</button>
-                                        <button class="btn" id="edit_btn" type="button" style="background-color: #e6e6e6; color: #000">
+                                        <button class="btn btn-primary" id="edit_btn" type="button">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit Item</button>
                                         <button class="btn" id="remove_btn" type="button" style="background-color: #ff0000; color: white">
                                         <i class="fa-solid fa-trash-can"></i> Remove Item</button>
@@ -2571,7 +2571,7 @@ $username = $_SESSION['username'];
 
                         <!-- PO MODAL -->
                         <div class="modal fade" id="srch_po" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="pomodal">
-                            <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <form id="user-form">
                                         <div class="modal-header">
@@ -3271,7 +3271,7 @@ $username = $_SESSION['username'];
             $.each(filesname, function(index, file) {
                 uploadedFilename.push(file.name);
             });
-            reader.readAsDataURL(file); 
+            reader.readAsDataURL(file);
 
             var table = $("#dtl_dataTable").DataTable();
             count_item ++
@@ -3613,11 +3613,12 @@ $username = $_SESSION['username'];
             // table.rows().eq(0).each( function ( index ) {
             //     var row = table.row( index );
             // })
+            
             // var file = $("#attch")[0].files[0];            
             // if (file){
             //     var reader = new FileReader();
             //     reader.onload = function(e) {
-            //         var base64 = e.target.result;        
+            //         var base64 = e.target.result;
                     var data = 1
                     var po_no = $("#po_no").val()
                     var emp_id = []
@@ -3646,7 +3647,7 @@ $username = $_SESSION['username'];
                     var war_month = []
                     var war_exp = []
                     var rem = []
-                    // var attch = []
+                    var attch = []
                     var po_doc_date1 = []
                     var plant1 = []
                     var status = []
@@ -3833,6 +3834,8 @@ $username = $_SESSION['username'];
                                 })
                                 // ajaxData.append("po_item1", po_item1)
 
+                                
+
                                 // console.log(emp_id + ' ' + ref_per + ' ' + supp1 + ' ' + req_grp1 + ' ' + req_type1 + ' ' + ass_grp1 + ' ' +
                                 //  ass_sub_grp1 + ' ' + brand1 + ' ' + model1  + ' ' + unit_price + ' ' + ser_no1 + ' ' + ser_no2 + ' ' +
                                 //  ser_no3 + ' ' + ser_no4 + ' ' + ass_code + ' ' + del_note + ' ' + del_date + ' ' + mtrl_short 
@@ -3846,7 +3849,7 @@ $username = $_SESSION['username'];
                                         unit_price:unit_price, ser_no1:ser_no1, ser_no2:ser_no2, ser_no3:ser_no3, ser_no4:ser_no4, ass_code:ass_code, 
                                         del_note:del_note, del_date:del_date, mtrl_short:mtrl_short, lic_start:lic_start, lic_month:lic_month, lic_exp:lic_exp, 
                                         war_start:war_start, war_month:war_month, war_exp, rem:rem, po_doc_date1:po_doc_date1, plant1:plant1, status:status, 
-                                        qty:qty, unit:unit, po_item1:po_item1},
+                                        qty:qty, unit:unit, po_item1:po_item1} ,
                                     success: function(res){
                                         if(res.success == 1){
                                             // console.log(res)

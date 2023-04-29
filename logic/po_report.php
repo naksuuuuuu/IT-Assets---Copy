@@ -199,6 +199,7 @@ else if(isset($_POST['po_no']) and !isset($_POST['po_number'])){
 // modify.php
 else if(isset($_POST['po_number'])){
   $po_number = $_POST['po_number'];
+  $po_item = $_POST['po_item'];
 
   $sql = "SELECT B.DOCUMENT_NO, B.DOCUMENT_DATE, A.PO_NUMBER, B.EMPL_ID, B.DEL_DATE, B.PO_ITEM, C.BRAND_NAME, D.MODEL, 
           B.SERIAL_NO1, B.ASS_CODE, B.UNIT, B.QTY, B.UNIT_PRICE, B.DEL_NOTE, B.MTRL_SHORT, B.REMARKS, B.ATTACHMENT 
@@ -206,9 +207,11 @@ else if(isset($_POST['po_number'])){
           WHERE A.PO_NUMBER = B.PO_NUMBER
           AND B.BRAND = C.BRAND_CODE
           AND B.MODEL = D.MODEL_CODE
-          AND A.PO_NUMBER = :po_number";
+          AND A.PO_NUMBER = :po_number
+          AND B.PO_ITEM = :po_item";
   $res = oci_parse(connection(), $sql);
   oci_bind_by_name($res, ':po_number', $po_number);
+  oci_bind_by_name($res, ':po_item', $po_item);
   oci_execute($res);
 
   $result = "";
