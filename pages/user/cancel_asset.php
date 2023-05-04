@@ -263,9 +263,9 @@ session_start();
                                     <div class="col-md-6">
                                         <div class="label" style="color: #000">PO Document Date:</div>
                                             <div class="input-group">
-                                                <input type="date" class="form-control" id="from" placeholder="From">
+                                                <input type="date" class="form-control" id="from_date" placeholder="From">
                                                 <span class="input-group-text">-</span>
-                                                <input type="date" class="form-control" id="to" placeholder="To">
+                                                <input type="date" class="form-control" id="to_date" placeholder="To">
                                             </div>
                                     </div>
 
@@ -276,7 +276,7 @@ session_start();
                                             <?php
                                                 $sql = "SELECT DISTINCT A.DOCUMENT_NO, B.EMPL_ID FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B
                                                         WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
-                                                        AND WHERE A.CANCEL_ASSET_FLAG is null";
+                                                        AND A.CANCEL_ASSET_FLAG is null";
 
                                                 $result = oci_parse(connection(), $sql);
                                                 oci_execute($result);                                                    
@@ -338,6 +338,7 @@ session_start();
                                             <tr>
                                                 <th></th>
                                                 <th style="width: 200px">Document Number</th>
+                                                <th style="width: 200px">PO Item</th>
                                                 <th style="width: 200px">Document Date</th>
                                                 <th style="width: 200px">PO Number</th>
                                                 <th style="width: 200px">PO Document Date</th>
@@ -387,6 +388,7 @@ session_start();
                                                     echo"<tr>
                                                         <td><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></td>
                                                             <td>".$row["DOCUMENT_NO"]."</td>
+                                                            <td>".$row["PO_ITEM"]."</td>
                                                             <td>".$row["DOCUMENT_DATE"]."</td>
                                                             <td>".$row["PO_NUMBER"]."</td>
                                                             <td>".$row["PO_DOCUMENT_DATE"]."</td>
@@ -433,7 +435,7 @@ session_start();
 
     <!-- View Details modal -->
     <div class="modal fade" id="po_dtls" data-backdrop="static" data-keyboard="false" data-bs-focus="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
-        <div class="modal-dialog modal-xl" role="document" style="width: calc(98% - 250px); margin-left: 250px;">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form class="needs-validation" novalidate method='POST' enctype='multipart/form-data' id='user-form'>
                     <div class="modal-header">
@@ -681,6 +683,21 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
+                                    <label class="form-label">License Month Start</label>
+                                    <input id="license_start" name='license_start[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">License Month</label>
+                                    <input id="license_month" name='license_month[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">License Expiry Date</label>
+                                    <input id="license_exp" name='license_exp[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                </div>
+
+                                <div class="col-md-4">
                                     <label class="form-label">Material Short</label>
                                     <input id="malt_shrt" name='malt_shrt[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
                                 </div>
@@ -709,9 +726,13 @@ session_start();
                                     <label class="form-label">Attachment *</label>
                                     <input id="attch" name='attch[]' type="file" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" hidden>
                                     <label class="form-label">PO NUMBER</label>
                                     <input id="po_number" name='po_number[]' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+                                <div class="col-md-4" hidden>
+                                    <label class="form-label">Po Item</label>
+                                    <input id="po_item" name='po_item[]' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
                             </div>
                             <br>
@@ -800,6 +821,7 @@ $(document).ready(function(){
      // selectize
     $("#po_no").selectize({})
     $("#ser_no").selectize({})
+    $("#emp_name").selectize({})
 
     $("#dataTable1").on("click", '.view_dtl', function(){
         var po_number = $(this).closest('tr').find('.po_no').val()
@@ -853,12 +875,13 @@ $(document).ready(function(){
 
     $("#srch").click(function(){
         var data = 1
-        var po_no = $("#po_no").val()
-        // var from_doc_date = $("#from_doc_date").val()
-        // var to_doc_date = $("#to_doc_date").val()
-        var ser_no = $("#ser_no").val()
+        var po_no = $("#po_no").find(':selected').val()
+        var ser_no = $("#ser_no").find(':selected').val()
+        var from_date = $("#from_date").val()
+        var to_date = $("#to_date").val()
+        var emp_name = $("#emp_name").find(':selected').val()
 
-        if(po_no !== "" && ser_no == ""){
+        if(po_no !== "" && ser_no == "" && from_date == "" && to_date == "" && emp_name == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -898,7 +921,7 @@ $(document).ready(function(){
             })
         }
 
-        else if(ser_no !== "" && po_no == ""){
+        else if(ser_no !== "" && po_no == "" && from_date == "" && to_date == "" && emp_name == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -937,6 +960,89 @@ $(document).ready(function(){
                 }
             })
         }
+
+        // po_doc_date
+        else if(from_date && to_date !== "" && po_no == "" && ser_no == "" && emp_name == ""){
+            Swal.fire({
+                title: 'Loading',
+                text: 'Please wait while the data is being loaded...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+            $.ajax({
+                type:"POST",
+                url: "../../logic/cancel_php.php",
+                data:{data:data, from_date:from_date, to_date:to_date},
+                success: function(res){   
+                    Swal.hideLoading()
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Data loaded successfully!',
+                        icon: 'success',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        showCancelButton: false
+                    })            
+                    $('#doc_tbody').html(res) 
+                },
+                error: function(){
+                    // Hide the loading spinner
+                    Swal.hideLoading()
+                    // Show an error message
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while loading data',
+                        icon: 'error'
+                    })
+                }
+            })
+        }
+
+        // emp_name
+        else if(emp_name !== "" && po_no == "" && ser_no == "" && from_date == "" && to_date == ""){
+            Swal.fire({
+                title: 'Loading',
+                text: 'Please wait while the data is being loaded...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+            $.ajax({
+                type:"POST",
+                url: "../../logic/cancel_php.php",
+                data:{data:data, emp_name:emp_name},
+                success: function(res){   
+                    Swal.hideLoading()
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Data loaded successfully!',
+                        icon: 'success',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        showCancelButton: false
+                    })            
+                    $('#doc_tbody').html(res) 
+                },
+                error: function(){
+                    // Hide the loading spinner
+                    Swal.hideLoading()
+                    // Show an error message
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while loading data',
+                        icon: 'error'
+                    })
+                }
+            })
+        }
+
         else {
             Swal.fire({
                 title: "Error",
@@ -948,6 +1054,7 @@ $(document).ready(function(){
 
     $("#cancel_btn").click(function() {
         var po_no = $("#po_number").val();
+        var po_item = $("#po_item").val()
         Swal.fire({
             title: 'Please enter a reason',
             input: 'textarea',
@@ -984,7 +1091,7 @@ $(document).ready(function(){
                     $.ajax({
                         type: 'POST',
                         url: '../../logic/cancel_flag.php',
-                        data: {po_no: po_no, name: name, reason: reason},
+                        data: {po_no: po_no, po_item:po_item, name: name, reason: reason},
                         success: function(res) {
                             if (res.success == 1) {
                                 Swal.fire({

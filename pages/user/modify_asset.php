@@ -36,6 +36,7 @@ session_start();
     <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
     <link rel="stylesheet" href="../../datatable/datatables.css">
+    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
     <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
@@ -261,9 +262,9 @@ session_start();
                                     <div class="col-md-6">
                                         <div class="label" style="color: #000">PO Document Date:</div>
                                             <div class="input-group">
-                                                <input type="date" class="form-control" id="from" placeholder="From">
+                                                <input type="date" class="form-control" id="from_date" placeholder="From">
                                                 <span class="input-group-text">-</span>
-                                                <input type="date" class="form-control" id="to" placeholder="To">
+                                                <input type="date" class="form-control" id="to_date" placeholder="To">
                                             </div>
                                     </div>
 
@@ -314,7 +315,7 @@ session_start();
                                 </div>
                                     <div class="col-md-12">
                                         <div class="" style='justify-content: end; display: flex; height:40px; margin-top: 10px'>
-                                            <button class="btn btn-warning" id="clr" type="button" style="margin-right: 10px;"><i class="fa-solid fa-trash-can"></i> Reset</button>
+                                            <button class="btn btn-warning" id="clr" type="button" style="margin-right: 10px;"><i class="fa-solid fa-arrows-rotate"></i> Reset</button>
                                             <button class="btn btn-success" id="srch" type="button"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
                                         </div>
                                     </div>                                
@@ -335,10 +336,11 @@ session_start();
                                         <thead>
                                             <tr>
                                                 <th></th>
-                                                <th style="width: 200px">Document Number</th>
-                                                <th style="width: 200px">Document Date</th>
-                                                <th style="width: 200px">PO Number</th>
-                                                <th style="width: 200px">PO Document Date</th>
+                                                <th style="width: 200px">Doc No</th>
+                                                <th style="width: 200px">PO Item</th>
+                                                <th style="width: 200px">Doc Date</th>
+                                                <th style="width: 200px">PO No</th>
+                                                <th style="width: 200px">PO Doc Date</th>
                                                 <th style="width: 200px">Department</th>
                                                 <th style='width: 200px'>Supplier</th>
                                                 <th hidden>PO Item</th>
@@ -385,6 +387,7 @@ session_start();
                                                     echo"<tr>
                                                         <td><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></td>
                                                             <td>".$row["DOCUMENT_NO"]."</td>
+                                                            <td>".$row["PO_ITEM"]."</td>
                                                             <td>".$row["DOCUMENT_DATE"]."</td>
                                                             <td>".$row["PO_NUMBER"]."</td>
                                                             <td>".$row["PO_DOCUMENT_DATE"]."</td>
@@ -400,7 +403,6 @@ session_start();
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </form>
                 <!-- /.container-fluid -->
@@ -431,7 +433,7 @@ session_start();
 
     <!-- View Details modal -->
     <div class="modal fade" id="po_dtls" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
-        <div class="modal-dialog modal-xl" role="document" style="width: calc(98% - 250px); margin-left: 250px;">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form class="needs-validation" novalidate method='POST' enctype='multipart/form-data' id='user-form'>
                     <div class="modal-header">
@@ -513,7 +515,7 @@ session_start();
 
                                 <div class="col-md-4">
                                     <label class="form-label">Reference Person</label>
-                                    <input type="text" class="form-control" id="ref_person" placeholder=" " style="background-color: #e6e6e6;">
+                                    <input type="text" class="form-control" id="ref_person" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                 </div>
                             </div>
                             <br>
@@ -684,6 +686,21 @@ session_start();
                                 </div>
                                 
                                 <div class="col-md-4">
+                                    <label class="form-label">License Month Start</label>
+                                    <input id="license_start" name='license_start[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">License Month</label>
+                                    <input id="license_month" name='license_month[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">License Expiry Date</label>
+                                    <input id="license_exp" name='license_exp[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                </div>
+
+                                <div class="col-md-4">
                                     <label class="form-label">Warranty Month Start*</label>
                                     <input id="war_start" name='war_start[]' type="date" autocomplete="off" class="form-control war_start" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
@@ -703,15 +720,15 @@ session_start();
                                     <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
 
-                                <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     <label class="form-label">Attachment *</label>
                                     <input id="attch" name='attch[]' type="file" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
-                                <div class="col-md-4">
+                                </div> -->
+                                <div class="col-md-4" hidden>
                                     <label class="form-label">PO NUMBER</label>
                                     <input id="po_number" name='po_number[]' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" hidden>
                                     <label class="form-label">PO Item</label>
                                     <input id="po_item" name='po_item[]' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
@@ -719,17 +736,50 @@ session_start();
                             <br>
                         </div>
                         <br>
+                        <style>
+                                .main-section{
+                                margin:0 auto;
+                                padding: 20px;
+                                margin-top: 50px;
+                                height: auto;
+                                width: auto;
+                                background-color: #fff;
+                                box-shadow: 0px 0px 20px #c1c1c1;
+                                }
+                                .fileinput-remove,
+                                .fileinput-upload{
+                                display: none;
+                                }
+                            </style>
+                            <!-- <div class="card" style="border: 2px solid #e6e6e6">
+                                <div class="card-header py-2" style="background-color: #e6e6e6">
+                                    <h2 class="m-0 font-weight-bold" style="color: #000">Attachment</h2>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-8 col-sm-12 col-11 main-section">
+                                            <h2 class="text-center text-danger">Attachment</h2><br>
+                                            <form enctype="multipart/form-data">
+                                                <div class="form-group">
+                                                    <div class="file-loading">
+                                                        <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                                                    </div>
+                                                </div>
+                                            </form>            
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div> -->
+                            <br>
+                            <div class="col-md-12">
+                                <button id="add_btn1" class="btn btn-success" type="button">
+                                    <i class="fa-solid fa-plus"></i> Add</button>
+                                <button id="close_btn1" class="btn btn-warning" type="button">
+                                    <i class="fa-solid fa-xmark"></i> Close</button>
+                            </div>
                     </div>
-                        <br>
-                    <div class="modal-footer">
-                        <div>
-                            <button class="btn btn-warning" id="mod_btn" type="button" style="margin-right: 50px; margin-bottom:10px">
-                            <i class="fa-solid fa-pen-to-square"></i>  Modify Asset</button>
-                        </div>  
-
-                        <!-- <input type="hidden" value="1" name="type">
-                        <input type="button" class="btn btn-success" data-dismiss="modal" value="Close"> -->
-                    </div>
+                    <br>
                 </form>
             </div>
         </div>
@@ -767,6 +817,7 @@ session_start();
 
     <!-- Page level plugins -->
     <script src="../../datatable/datatables.js"></script>
+    <script src="../../assets/file_input/js/fileinput.js"></script>
 
     <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
     <script src="../../assets/selectize/dist/js/selectize.js"></script>
@@ -791,6 +842,7 @@ $(document).ready(function(){
     // selectize
     $("#po_no").selectize({})
     $("#ser_no").selectize({})
+    $("#emp_name").selectize({})
 
     // datatable1 = $('#dataTable1').DataTable({
     // searching: false, 
@@ -811,19 +863,33 @@ $(document).ready(function(){
         "bDestroy": true,
     })
 
-     // warranty
-     $("#war_month").change(function(){
-            var war_duration = $(this).val()
-            var war_start = $("#war_start").val()
-            $.ajax({
-                method: 'POST',
-                url: "../../logic/war_expired.php",
-                data :{war_duration:war_duration, war_start:war_start},
-                success:function(res){
-                    $("#war_exp").val(res)
-                }
-            })
+    // license
+    $("#license_month").change(function(){
+        var duration = $(this).val()
+        var license_start = $("#license_start").val()
+        $.ajax({
+            method: 'POST',
+            url: "../../logic/expired.php",
+            data :{duration:duration, license_start:license_start},
+            success:function(res){
+                $("#license_exp").val(res)
+            }
         })
+    })
+
+     // warranty
+    $("#war_month").change(function(){
+        var war_duration = $(this).val()
+        var war_start = $("#war_start").val()
+        $.ajax({
+            method: 'POST',
+            url: "../../logic/war_expired.php",
+            data :{war_duration:war_duration, war_start:war_start},
+            success:function(res){
+                $("#war_exp").val(res)
+            }
+        })
+    })
 
     $("#dataTable1").on("click", '.view_dtl', function(){
         var po_number = $(this).closest('tr').find('.po_no').val()
@@ -865,6 +931,9 @@ $(document).ready(function(){
                 $("#del_note").val(res1.DEL_NOTE)
                 $("#del_date").val(res1.DEL_DATE)
                 $("#malt_shrt").val(res1.MTRL_SHORT)
+                $("#license_start").val(res1.LICENSE_START)
+                $("#license_month").val(res1.LICENSE_MONTH)
+                $("#license_exp").val(res1.LICENSE_EXP)
                 $("#war_start").val(res1.WAR_START)
                 $("#war_month").val(res1.WAR_MONTH)
                 $("#war_exp").val(res1.WAR_EXP)
@@ -879,12 +948,13 @@ $(document).ready(function(){
     $("#srch").click(function(){
         // var doc_no = $("#doc_no").find(":selected").val()
         var data = 1
-        var po_no = $("#po_no").val()
-        // var from_doc_date = $("#from_doc_date").val()
-        // var to_doc_date = $("#to_doc_date").val()
-        var ser_no = $("#ser_no").val()
+        var po_no = $("#po_no").find(':selected').val()
+        var ser_no = $("#ser_no").find(':selected').val()
+        var from_date = $("#from_date").val()
+        var to_date = $("#to_date").val()
+        var emp_name = $("#emp_name").find(':selected').val()
 
-        if(po_no !== "" && ser_no == ""){
+        if(po_no !== "" && ser_no == "" && from_date == "" && to_date == "" && emp_name == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -924,7 +994,8 @@ $(document).ready(function(){
             })
         }
 
-        else if(ser_no !== "" && po_no == ""){
+        // ser_no1
+        else if(ser_no !== "" && po_no == "" && from_date == "" && to_date == "" && emp_name == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -963,6 +1034,89 @@ $(document).ready(function(){
                 }
             })
         }
+
+        // po_doc_date
+        else if(from_date && to_date !== "" && po_no == "" && ser_no == "" && emp_name == ""){
+            Swal.fire({
+                title: 'Loading',
+                text: 'Please wait while the data is being loaded...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+            $.ajax({
+                type:"POST",
+                url: "../../logic/modify.php",
+                data:{data:data, from_date:from_date, to_date:to_date},
+                success: function(res){   
+                    Swal.hideLoading()
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Data loaded successfully!',
+                        icon: 'success',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        showCancelButton: false
+                    })            
+                    $('#doc_tbody').html(res) 
+                },
+                error: function(){
+                    // Hide the loading spinner
+                    Swal.hideLoading()
+                    // Show an error message
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while loading data',
+                        icon: 'error'
+                    })
+                }
+            })
+        }
+
+        // emp_name
+        else if(emp_name !== "" && po_no == "" && ser_no == "" && from_date == "" && to_date == ""){
+            Swal.fire({
+                title: 'Loading',
+                text: 'Please wait while the data is being loaded...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+            $.ajax({
+                type:"POST",
+                url: "../../logic/modify.php",
+                data:{data:data, emp_name:emp_name},
+                success: function(res){   
+                    Swal.hideLoading()
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Data loaded successfully!',
+                        icon: 'success',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        showCancelButton: false
+                    })            
+                    $('#doc_tbody').html(res) 
+                },
+                error: function(){
+                    // Hide the loading spinner
+                    Swal.hideLoading()
+                    // Show an error message
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while loading data',
+                        icon: 'error'
+                    })
+                }
+            })
+        }
+
         else {
             Swal.fire({
                 title: "Error",
@@ -972,12 +1126,33 @@ $(document).ready(function(){
         }
     })
 
-    $("#mod_btn").click(function(){
+    $("#close_btn1").click(function(){
+        Swal.fire({
+            title: 'Are you sure you want to CLOSE?',
+            text: 'This will be closed',
+            icon: 'question',
+            showCancelButton: true,
+            reverseButtons: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            confirmButtonColor: 'green',
+            cancelButtonColor: 'red'
+        }).then(confirm => {
+            if(confirm.isConfirmed){
+                $("#po_dtls").modal('hide')
+            }
+        })
+    })
+
+    $("#add_btn1").click(function(){
         var po_no =  $("#po_number").val()
         var po_item = $("#po_item").val()
         var ser_no1 = $(".ser_no1").val()
         var ass_code = $(".ass_code").val()
         var del_note = $(".del_note").val()
+        var license_start = $("#license_start").val()
+        var license_month = $("#license_month").val()
+        var license_exp = $("#license_exp").val()
         var war_start = $(".war_start").val()
         var war_month = $(".war_month").val()
         var war_exp = $(".war_exp").val()
@@ -998,7 +1173,8 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "../../logic/modified_po.php",
-                    data:{po_no:po_no, po_item:po_item, name:name, ser_no1:ser_no1, ass_code:ass_code, del_note:del_note, war_start:war_start,
+                    data:{po_no:po_no, po_item:po_item, name:name, ser_no1:ser_no1, ass_code:ass_code, del_note:del_note,
+                        license_start:license_start, license_month:license_month, license_exp:license_exp, war_start:war_start,
                         war_month:war_month, war_exp:war_exp, remarks:remarks},
                     success: function(res){
                         if(res.success == 1){
@@ -1025,23 +1201,21 @@ $(document).ready(function(){
         })
     })
 
-    var toggle = true
-    $(".inputToggle").hide()
-    $("#clr").click(function(){
-        // location.reload()
-        if(toggle){
-            $(".cardToggle").hide()
-            $(".inputToggle").show()
-            toggle = false
-        }
-        else {
-            $(".cardToggle").show()
-            $(".inputToggle").hide()
-            toggle = true
-        }
-        
-        
-    })
+    // var toggle = true
+    // $(".inputToggle").hide()
+    // $("#clr").click(function(){
+    //     // location.reload()
+    //     if(toggle){
+    //         $(".cardToggle").hide()
+    //         $(".inputToggle").show()
+    //         toggle = false
+    //     }
+    //     else {
+    //         $(".cardToggle").show()
+    //         $(".inputToggle").hide()
+    //         toggle = true
+    //     }
+    // })
 })
 
     function notify(icon, message){

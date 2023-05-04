@@ -13,12 +13,17 @@
         $ser_no1  = $_POST['ser_no1'];
         $ass_code = $_POST['ass_code'];
         $del_note = $_POST['del_note'];
+        $license_start = date_format(date_create($_POST['license_start']), 'd/m/Y');
+        $license_month = $_POST['license_month'];
+        $license_exp = date_format(date_create($_POST['license_exp']), 'd/m/Y');
         $war_start = date_format(date_create($_POST['war_start']), 'd/m/Y');
         $war_month = $_POST['war_month'];
         $war_exp = date_format(date_create($_POST['war_exp']), 'd/m/Y');
         $remarks = $_POST['remarks'];
         
-            $sql = "UPDATE IT_ASSET_DETAILS1 SET SERIAL_NO1 = :ser_no1, ASS_CODE = :ass_code, DEL_NOTE = :del_note, 
+            $sql = "UPDATE IT_ASSET_DETAILS1 SET SERIAL_NO1 = :ser_no1, ASS_CODE = :ass_code, DEL_NOTE = :del_note,
+            LICENSE_START_DATE = to_date(:license_start, 'DD/MM/YY'), LICENSE_MONTH = :license_month, 
+            LICENSE_EXPIRE_DATE = to_date(:license_exp, 'DD/MM/YY'),
             WARRANTY_START_DATE = to_date(:war_start, 'DD/MM/YY'), WARRANTY_MONTH = :war_month, 
             WARRANTY_EXPIRE_DATE = to_date(:war_exp, 'DD/MM/YY'), REMARKS = :remarks, LAST_USER_UPDATE = :username, 
             LAST_USER_UPDATE_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am') 
@@ -31,6 +36,9 @@
             oci_bind_by_name($res, ':ser_no1', $ser_no1);
             oci_bind_by_name($res, ':ass_code', $ass_code);
             oci_bind_by_name($res, ':del_note', $del_note);
+            oci_bind_by_name($res, ':license_start', $license_start);
+            oci_bind_by_name($res, ':license_month', $license_month);
+            oci_bind_by_name($res, ':license_exp', $license_exp);
             oci_bind_by_name($res, ':war_start', $war_start);
             oci_bind_by_name($res, ':war_month', $war_month);
             oci_bind_by_name($res, ':war_exp', $war_exp);

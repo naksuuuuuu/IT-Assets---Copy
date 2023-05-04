@@ -36,6 +36,7 @@ $username = $_SESSION['username'];
     <link rel="stylesheet" href="../../assets//fontawesome_1/css/all.min.css">
     <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
     <link rel="stylesheet" href="../../datatable/datatables.css">
+    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
     <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
@@ -921,7 +922,7 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Offcie Phone</label>
+                                                        <label class="form-label">Office Phone</label>
                                                         <input type="text" class="form-control" id="off_phone" placeholder=" " readonly style="background-color: #e6e6e6;">
                                                     </div>
 
@@ -947,7 +948,7 @@ $username = $_SESSION['username'];
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Reference Person</label>
-                                                        <input type="text" class="form-control" id="ref_person" placeholder=" " style="background-color: #e6e6e6;">
+                                                        <input type="text" class="form-control" id="ref_person" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
                                                 </div>
 
@@ -1198,17 +1199,17 @@ $username = $_SESSION['username'];
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Serial Number 2</label>
-                                                        <input id="ser_no2" name='ser_no2[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                        <input id="ser_no2" name='ser_no2[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Serial Number 3</label>
-                                                        <input id="ser_no3" name='ser_no3[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                        <input id="ser_no3" name='ser_no3[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Serial Number 4</label>
-                                                        <input id="ser_no4" name='ser_no4[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                        <input id="ser_no4" name='ser_no4[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -1232,22 +1233,22 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">License Month Start*</label>
-                                                        <input id="license_start" name='license_start[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">License Month Start</label>
+                                                        <input id="license_start" name='license_start[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">License Month *</label>
-                                                        <input id="license_month" name='license_month[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">License Month</label>
+                                                        <input id="license_month" name='license_month[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">License Expiry Date *</label>
-                                                        <input id="license_exp" name='license_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">License Expiry Date</label>
+                                                        <input id="license_exp" name='license_exp[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Warranty Month Start*</label>
+                                                        <label class="form-label">Warranty Month Start *</label>
                                                         <input id="war_start" name='war_start[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
@@ -1266,10 +1267,10 @@ $username = $_SESSION['username'];
                                                         <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <!-- <div class="col-md-4">
                                                         <label class="form-label">Attachment *</label>
                                                         <input id="attch" name='attch[]' type="file" type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 <br>
 
@@ -1446,9 +1447,6 @@ $username = $_SESSION['username'];
                                                     <button id="upload" name="upload">Upload File</button> 
                                                 </div> -->
 
-
-                                                
-                                                
                                                 <!-- <div class="table-responsive">
                                                     <table class="display nowrap" id="dataTable" width="100%">
                                                         <thead>
@@ -1671,13 +1669,48 @@ $username = $_SESSION['username'];
                                                     </div> -->
                                             <!-- </div> -->
                                             </div>
-                                            <br>
-
-                                                <div class="col-md-12">
-                                                    <button id="add_btn1" class="btn btn-success" type="submit">
-                                                    <i class="fa-solid fa-plus"></i> Add</button>
+                                            <style>
+                                                .main-section{
+                                                margin:0 auto;
+                                                padding: 20px;
+                                                margin-top: 50px;
+                                                height: auto;
+                                                width: auto;
+                                                background-color: #fff;
+                                                box-shadow: 0px 0px 20px #c1c1c1;
+                                                }
+                                                .fileinput-remove,
+                                                .fileinput-upload{
+                                                display: none;
+                                                }
+                                            </style>
+                                            <div class="card" style="border: 2px solid #e6e6e6">
+                                                <div class="card-header py-2" style="background-color: #e6e6e6">
+                                                    <h2 class="m-0 font-weight-bold" style="color: #000">Attachment</h2>
+                                                </div>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-8 col-sm-12 col-11 main-section">
+                                                            <h2 class="text-center text-danger">Attachment</h2><br>
+                                                            <form enctype="multipart/form-data">
+                                                                <div class="form-group">
+                                                                    <div class="file-loading">
+                                                                        <input id="attch" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                                                                    </div>
+                                                                </div>
+                                                            </form>            
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <br>
+                                            </div>
+                                            <br>
+
+                                            <div class="col-md-12">
+                                                <button id="add_btn1" class="btn btn-success" type="submit">
+                                                <i class="fa-solid fa-plus"></i> Add</button>
+                                            </div>
+                                            <br>
                                         </div>
                                         <br>
                                     </form>
@@ -1806,7 +1839,7 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Offcie Phone</label>
+                                                        <label class="form-label">Office Phone</label>
                                                         <input type="text" class="form-control" id="off_phone1" placeholder=" " readonly style="background-color: #e6e6e6;">
                                                     </div>
 
@@ -1832,7 +1865,7 @@ $username = $_SESSION['username'];
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Reference Person</label>
-                                                        <input type="text" class="form-control" id="ref_person1" placeholder=" " style="background-color: #e6e6e6;">
+                                                        <input type="text" class="form-control" id="ref_person1" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
                                                 </div>
 
@@ -2083,17 +2116,17 @@ $username = $_SESSION['username'];
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Serial Number 2</label>
-                                                        <input id="ser_no21" name='ser_no2[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                        <input id="ser_no21" name='ser_no2[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Serial Number 3</label>
-                                                        <input id="ser_no31" name='ser_no3[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                        <input id="ser_no31" name='ser_no3[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Serial Number 4</label>
-                                                        <input id="ser_no41" name='ser_no4[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                        <input id="ser_no41" name='ser_no4[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -2117,18 +2150,18 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">License Month Start*</label>
-                                                        <input id="license_start1" name='license_start[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">License Month Start</label>
+                                                        <input id="license_start1" name='license_start[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">License Month *</label>
-                                                        <input id="license_month1" name='license_month[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">License Month</label>
+                                                        <input id="license_month1" name='license_month[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">License Expiry Date *</label>
-                                                        <input id="license_exp1" name='license_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">License Expiry Date</label>
+                                                        <input id="license_exp1" name='license_exp[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -2151,10 +2184,10 @@ $username = $_SESSION['username'];
                                                         <input id="remarks1" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <!-- <div class="col-md-4">
                                                         <label class="form-label">Attachment *</label>
                                                         <input id="attch1" name='attch[]' type="file" type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 <br>
 
@@ -2554,6 +2587,27 @@ $username = $_SESSION['username'];
                                             <!-- </div> -->
                                             </div>
                                             <br>
+                                            <div class="card" style="border: 2px solid #e6e6e6">
+                                                <div class="card-header py-2" style="background-color: #e6e6e6">
+                                                    <h2 class="m-0 font-weight-bold" style="color: #000">Attachment</h2>
+                                                </div>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-8 col-sm-12 col-11 main-section">
+                                                            <h2 class="text-center text-danger">Attachment</h2><br>
+                                                            <form enctype="multipart/form-data">
+                                                                <div class="form-group">
+                                                                    <div class="file-loading">
+                                                                        <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                                                                    </div>
+                                                                </div>
+                                                            </form>            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                            <br>
 
                                                 <div class="col-md-12">
                                                     <button id="update_btn" class="btn btn-primary" type="button">
@@ -2783,6 +2837,7 @@ $username = $_SESSION['username'];
     <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
     <script src="../../datatable/datatables.js"></script>
     <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
+    <script src="../../assets/file_input/js/fileinput.js"></script>
     <!-- Page level custom scripts -->
     <!-- <script src="../../js/demo/datatables-demo.js"></script> -->
     <script src="../../assets/selectize/dist/js/selectize.js"></script>
@@ -3604,6 +3659,10 @@ $username = $_SESSION['username'];
                 });
             }
         });
+
+        // $('#remove_btn').click(function () {
+        //     dtl_table.row('.selected').remove().draw(false);
+        // });
 
         // save btn in UI
         $("#save_btn1").click(function(){

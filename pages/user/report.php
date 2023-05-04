@@ -36,6 +36,7 @@ session_start();
     <!-- Custom styles for this page -->
     <!-- <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
     <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
     <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
     <link rel="stylesheet" href="../../datatable/datatables.css">
@@ -245,7 +246,7 @@ session_start();
                                                 <select type="text" name="po_num" id='po_num' class='form-select' required style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                 <?php  
-                                                    $sql = "SELECT DISTINCT PO_NUMBER FROM IT_ASSET_HEADER1 CANCEL_ASSET_FLAG is null";
+                                                    $sql = "SELECT DISTINCT PO_NUMBER FROM IT_ASSET_HEADER1 WHERE CANCEL_ASSET_FLAG is null";
                                                     $res = oci_parse(connection(), $sql);
                                                     oci_execute($res);
 
@@ -271,7 +272,8 @@ session_start();
                                                 <option value=""></option>
                                                     <?php
                                                         $sql = "SELECT DISTINCT A.DOCUMENT_NO, B.EMPL_ID FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B
-                                                                WHERE A.DOCUMENT_NO = B.DOCUMENT_NO";
+                                                                WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                                AND A.CANCEL_ASSET_FLAG is null";
 
                                                         $result = oci_parse(connection(), $sql);
                                                         oci_execute($result);                                                    
@@ -298,7 +300,7 @@ session_start();
                                                 <select class="form-select" name="ser_no1" id="ser_no1" style="margin-bottom: 8px;">
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS1";
+                                                        $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS1 WHERE CANCEL_ASSET_FLAG is null";
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
 
@@ -314,7 +316,7 @@ session_start();
                                                 <select class="form-select" name="rem" id="rem" style="margin-bottom: 8px;">
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT DISTINCT REMARKS FROM IT_ASSET_DETAILS1";
+                                                        $sql = "SELECT DISTINCT REMARKS FROM IT_ASSET_DETAILS1 WHERE CANCEL_ASSET_FLAG is null";
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
 
@@ -331,7 +333,8 @@ session_start();
                                                     <option value=""></option>
                                                     <?php 
                                                         $sql = "SELECT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER1 A, IT_ASSET_VENDORS B
-                                                                WHERE A.VENDOR_CODE = B.VENDOR_CODE";
+                                                                WHERE A.VENDOR_CODE = B.VENDOR_CODE
+                                                                AND A.CANCEL_ASSET_FLAG is null";
 
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
@@ -348,7 +351,8 @@ session_start();
                                                     <option value=""></option>
                                                     <?php
                                                         $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_HEADER1 B
-                                                        WHERE A.DOCUMENT_NO = B.DOCUMENT_NO";
+                                                        WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                        AND A.CANCEL_ASSET_FLAG is null";
 
                                                         $result = oci_parse(connection(), $sql);
                                                         oci_execute($result);                                                    
@@ -394,7 +398,7 @@ session_start();
                                         <div class="row g-2">
                                             
 
-                                            <div class="col-md-3" style='justify-content: end; display: flex; margin-top: 35px'>
+                                            <div class="col-md-3" style='justify-content: start; display: flex; margin-top: 35px'>
                                                 <button class="btn btn-success" id="srch" type="button"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
                                             </div>
 
@@ -450,6 +454,7 @@ session_start();
                                                         <th>Item</th>
                                                         <th>Supplier</th>
                                                         <th>User (Email)</th>
+                                                        <th hidden>PO Item</th>
                                                         <th hidden>po number</th>
                                                         <!-- <th>Status</th> -->
                                                     </tr>
@@ -484,7 +489,7 @@ session_start();
                                                 <tbody id="doc_tbody">
                                                     <?php
                                                         $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, C.VENDOR_NAME, 
-                                                        B.EMPL_ID, B.MTRL_SHORT
+                                                        B.EMPL_ID, B.MTRL_SHORT, B.PO_ITEM
                                                         FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
                                                         WHERE A.PO_NUMBER = B.PO_NUMBER
                                                         AND A.VENDOR_CODE = C.VENDOR_CODE
@@ -516,6 +521,7 @@ session_start();
                                                                     <td>".$row["MTRL_SHORT"]."</td>
                                                                     <td>".$row["VENDOR_NAME"]."</td>
                                                                     <td>".$row1["BUSINESSMAIL"]."</td>
+                                                                    <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                                                                     <td hidden><input class='po_no' value=".$row["PO_NUMBER"]." hidden></td>
                                                                 </tr>";
                                                         }
@@ -613,13 +619,14 @@ session_start();
                                             </div> -->
 
                                             <div class="row g-2">
-                                                <div class="col-md-4" style="margin: auto">
-                                                    <div class="label" style="color: #000">Department:</div>
-                                                    <select type="text" name="dept1" id='dept1' class='form-select' required> 
+                                                <div class="col-md-4"  style="margin: auto">
+                                                    <div class="label" style="color: #000000">Department:</div>
+                                                    <select type="text" name="dept1" id='dept1' class='form-select' required style="margin-bottom: 8px;"> 
                                                         <option value=""></option>
                                                         <?php
                                                             $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_HEADER1 B
-                                                            WHERE A.DOCUMENT_NO = B.DOCUMENT_NO";
+                                                            WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                            AND A.CANCEL_ASSET_FLAG is null";
 
                                                             $result = oci_parse(connection(), $sql);
                                                             oci_execute($result);                                                    
@@ -755,172 +762,301 @@ session_start();
     </a>
 
     <!-- View Details modal -->
-    <div class="modal fade" id="po_dtls" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
+    <div class="modal fade" id="po_dtls" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
         <div class="modal-dialog modal-xl" role="document" style="width: calc(98% - 250px); margin-left: 250px;">
             <div class="modal-content">
-                <form id="user-form">
+                <form action="../../printouts/index.php" method="POST" target="_blank" class="needs-validation" novalidate method='POST' enctype='multipart/form-data' id='user_form'>
                     <div class="modal-header">
-                        <h5 class="modal-title" id="grpmodal"><b>Details</b></h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">                 
-                    <div class="card-body">
-                        <div class="table-responsive">
-                        <table class="display nowrap" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Document Number</th>
-                                        <th>Document Date</th>
-                                        <th>PO Number</th>
-                                        <th>Delivery Date</th>
-                                        <th>Item</th>
-                                        <th>Brand</th>
-                                        <th>Model</th>
-                                        <th>Serial Number</th>
-                                        <th>Asset_Code</th>
-                                        <th>Unit</th>
-                                        <th>Quantity</th>
-                                        <th>Unit_Price</th>
-                                        <th>Delivery_Note</th>
-                                        <th>PO Item Text</th>
-                                        <th>Remarks</th>
-                                        <th>Attachment</th>
-                                    </tr>
-                                </thead>
-                                <!-- <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </tfoot> -->
-                                <tbody id="td_body">
-                                <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="doc_no" class="doc_no" name='doc_no' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('doc_no').value = "<?php echo ($_POST['doc_no']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="doc_date" class="doc_date" name='doc_date' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('doc_date').value = "<?php echo ($_POST['doc_date']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="po_no" class="po_num" name='po_no' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('po_no').value = "<?php echo ($_POST['po_no']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="del_date" name='del_date' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('del_date').value = "<?php echo ($_POST['del_date']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="item" name='item' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('item').value = "<?php echo ($_POST['item']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="brand" name='brand' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('brand').value = "<?php echo ($_POST['brand']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="model" name='model' type="text" autocomplete="off" style=" background-color: transparent; ">                                           
-                                        
-                                        <script>
-                                            document.getElementById('model').value = "<?php echo ($_POST['model']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="ser_no" name='ser_no' type="text" autocomplete="off" style=" background-color: transparent; ">                                           
-                                        
-                                        <script>
-                                            document.getElementById('ser_no').value = "<?php echo ($_POST['ser_no']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="ass_code" name='ass_code' type="text" autocomplete="off" style=" background-color: transparent; ">                                           
-                                        
-                                        <script>
-                                            document.getElementById('ass_code').value = "<?php echo ($_POST['ass_code']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="unit" name='unit' type="text" autocomplete="off" style=" background-color: transparent; ">                                           
-                                        
-                                        <script>
-                                            document.getElementById('unit').value = "<?php echo ($_POST['unit']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="qty" name='qty' type="text" autocomplete="off" style=" background-color: transparent; ">                                           
-                                        
-                                        <script>
-                                            document.getElementById('qty').value = "<?php echo ($_POST['qty']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="unit_price" name='unit_price' type="text" autocomplete="off" style=" background-color: transparent; ">                                           
-                                        
-                                        <script>
-                                            document.getElementById('unit_price').value = "<?php echo ($_POST['unit_price']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="del_note" name='del_note' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('del_note').value = "<?php echo ($_POST['del_note']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF	'>
-                                        <input id="po_item" name='po_item' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('po_item').value = "<?php echo ($_POST['po_item']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF; '>
-                                        <input id="remarks" name='remarks' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('remarks').value = "<?php echo ($_POST['remarks']);?>";
-                                        </script>
-                                    </td>
-                                    <td style='text-align: start; background-color: #FFFFFF; '>
-                                        <input id="attch" name='attch' type="text" autocomplete="off" style=" background-color: transparent;">                                           
-                                        
-                                        <script>
-                                            document.getElementById('attch').value = "<?php echo ($_POST['attch']);?>";
-                                        </script>
-                                    </td>
-                                </tbody>
-                            </table>
+                    <br>
+
+                    <div class="container-fluid">
+                        <div class="card" style="border: 2px solid #e6e6e6">
+                            <div class="card-header py-2" style="background-color: #e6e6e6">
+                                <h2 class="m-0 font-weight-bold" style="color: #000">Receiver Information</h2>
+                            </div>
+                            <br>
+                            <div class="col-md-4">
+                                <label class="form-label">Employee Name *</label>
+                                <select type="text" class="form-select" id="empl_name" placeholder=" " required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                    <option value="">Select Name....</option>
+                                    <?php 
+                                        $sql = "SELECT A.NAMEENG, A.EMPLID FROM PERSON_TBL A, JOBCUR_EE B 
+                                        WHERE B.EMPLID = A.EMPLID
+                                        and B.EMPL_STATUS = 'A'
+                                        ORDER BY A.NAMEENG ASC";
+                                        $result = oci_parse(connection1(), $sql);
+                                        oci_execute($result);
+                                        while ($row = oci_fetch_row($result)){
+                                            echo "<option value='$row[1]'>".htmlspecialchars($row[0], ENT_IGNORE)."</option>";
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="row g-3" style="margin: auto">
+                                <div class="col-md-4">
+                                    <label class="form-label">Department</label>
+                                    <input type="text" class="form-control" id="dept" readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Employee ID</label>
+                                    <input type="text" class="form-control" id="emp_id" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Employee Address</label>
+                                    <input type="text" class="form-control" id="emp_add" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Working Location</label>
+                                    <input type="text" class="form-control" id="work_loc" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Offcie Phone</label>
+                                    <input type="text" class="form-control" id="off_phone" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Mobile Phone</label>
+                                    <input type="text" class="form-control" id="mob_phone" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Hired Date</label>
+                                    <input type="text" class="form-control" id="hired_date" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Personal Email</label>
+                                    <input type="text" class="form-control" id="per_email" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Business Email</label>
+                                    <input type="text" class="form-control" id="bus_email" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Reference Person</label>
+                                    <input type="text" class="form-control" id="ref_person" placeholder=" " style="background-color: #e6e6e6;">
+                                </div>
+                            </div>
+                            <br>
                         </div>
-                    </div>     
+                    <br>
+
+                    <!-- <div id="filter" class='card container' style="width: calc(100% - 40px);"> -->
+                        <div class="card" style="border: 2px solid #e6e6e6">
+                            <div class="card-header py-2" style="background-color: #e6e6e6">
+                                <h2 class="m-0 font-weight-bold" style="color: #000">Item Information</h2>
+                            </div>
+                            <br>
+                            
+                            <!-- hidden input -->
+                            <div class="row mb-3" style="margin-left: 40px;" hidden>
+                                <div class="col-sm-3" style="margin-left: 40px;">
+                                    <label for="">Po Doc Date</label>
+                                    <input type="date" class="form-control" id="po_doc_date" name="po_doc_date[]" required>
+                                </div>
+
+                                <div class="col-sm-3" style="margin-left: 40px;" >
+                                    <label for="">Plant</label>
+                                    <input type="text" class="form-control" id="plant" name="plant[]" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3" style="margin-left: 40px;" hidden>
+                                <div class="col-sm-3" style="margin-left: 40px;">
+                                    <label for="">Status</label>
+                                    <input type="text" class="form-control" id="status" name="status[]" required>
+                                </div>
+
+                                <div class="col-sm-3" style="margin-left: 40px;">
+                                    <label for="">Po Name</label>
+                                    <input type="text" class="form-control" id="po_name" name="po_name[]" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3" style="margin-left: 40px;" hidden>
+                                <div class="col-sm-2" style="margin-left: 40px;">
+                                    <label for="">QUANTITY</label>
+                                    <input type="text" class="form-control" id="qty" name="qty[]" required>
+                                </div>
+
+                                <div class="col-sm-2" style="margin-left: 40px;">
+                                    <label for="">UNIT</label>
+                                    <input type="text" class="form-control" id="unit" name="unit[]" required>
+                                </div>
+
+                                <div class="col-sm-2" style="margin-left: 40px;">
+                                    <label for="">PO ITEM</label>
+                                    <input type="text" class="form-control" id="item" name="item[]" required>
+                                </div>
+                            </div>
+                            <!-- end of hidden input -->
+
+                            <div class="row g-3" style="margin: auto">
+                                <div class="col-md-4">
+                                    <label class="form-label">Supplier</label>
+                                    <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" placeholder=" " required>
+                                        <!-- <option selected=" ">Select Suppliers...</option> -->
+                                            <?php 
+                                                $sql = "SELECT DISTINCT VENDOR_CODE, VENDOR_NAME FROM IT_ASSET_VENDORS";
+                                                $res = oci_parse(connection(), $sql);
+                                                oci_execute($res);
+
+                                                while($row = oci_fetch_row($res)){
+                                                    echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
+                                                }
+                                            ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Request Group *</label>
+                                    <select class="form-select" id="req_grp" name='req_grp[]' type="text" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        <!-- <option selected=" ">Select Request Group...</option> -->
+                                        <?php 
+                                            $sql = "SELECT REQ_GROUP_ID, REQ_GROUP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GROUP_ID";
+                                            $res = oci_parse(connection(), $sql);
+                                            oci_execute($res);
+
+                                            while($row = oci_fetch_row($res)){
+                                                echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Request Type *</label>
+                                    <select id="type" name='type[]' type="text" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                            <!-- <option selected=" ">Select Request Type...</option> -->
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Asset Group *</label>
+                                    <select id="asset_group" name='asset_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        <!-- <option selected=" ">Select Asset...</option> -->
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Asset Sub Group *</label>
+                                    <select id="asset_sub_group" name='asset_sub_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        <!-- <option selected=" ">Select Asset Sub Group...</option> -->
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Brand *</label>
+                                    <select id="brand" name='brand[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                            <!-- <option selected=" ">Select Brand...</option> -->
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Model *</label>
+                                    <select id="model" name='model[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        <!-- <option selected=" ">Select Model...</option> -->
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Price</label>
+                                    <input id="price" name='price[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Serial Number 1 *</label>
+                                    <input id="ser_no11" name='ser_no[]' type="text" autocomplete="off" class="form-control ser_no1" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Serial Number 2</label>
+                                    <input id="ser_no2" name='ser_no2[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Serial Number 3</label>
+                                    <input id="ser_no3" name='ser_no3[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Serial Number 4</label>
+                                    <input id="ser_no4" name='ser_no4[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Asset Code *</label>
+                                    <input id="ass_code" name='ass_code[]' type="text" autocomplete="off" class="form-control ass_code" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Delivery Note *</label>
+                                    <input id="del_note" name='del_note[]' type="text" autocomplete="off" class="form-control del_note" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Delivery Date</label>
+                                    <input id="del_date" name='del_date[]' type="date" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Material Short</label>
+                                    <input id="malt_shrt" name='malt_shrt[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label class="form-label">Warranty Month Start*</label>
+                                    <input id="war_start" name='war_start[]' type="date" autocomplete="off" class="form-control war_start" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Warranty Month *</label>
+                                    <input id="war_month" name='war_month[]' type="text" autocomplete="off" class="form-control war_month" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Warranty Expiry Date *</label>
+                                    <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Remarks *</label>
+                                    <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Attachment *</label>
+                                    <input id="attch" name='attch[]' type="file" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+                                <div class="col-md-4" hidden>
+                                    <label class="form-label">PO NUMBER</label>
+                                    <input id="po_number" name='po_number' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+                                <div class="col-md-4" hidden>
+                                    <label class="form-label">PO Item</label>
+                                    <input id="po_item" name='po_item' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <br>
+                        <div>
+                            <button class="btn btn-success" id="print_btn" type="submit" style="margin-right: 50px; margin-bottom:10px">
+                            <i class="fa-solid fa-print"></i> Print</button>
+                        </div> 
                     </div>
-                    <div class="modal-footer">
-                        <input type="hidden" value="1" name="type">
-                        <input type="button" class="btn btn-success" data-dismiss="modal" value="Close">
-                    </div>
+                    <br>
                 </form>
             </div>
         </div>
@@ -966,7 +1102,7 @@ session_start();
     <script src="../../js/demo/datatables-demo.js"></script>
     <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
     <script src="../../assets/selectize/dist/js/selectize.js"></script>
-
+    <script src="../../assets/file_input/js/fileinput.js"></script>
     <script src='../../assets/canvasjs/canvasjs.min.js'></script>
     
 </body>
@@ -997,27 +1133,56 @@ session_start();
     $("#emp_name").selectize({})
     $("#vendor").selectize({})
     $("#brand").selectize({})
+    $("#ser_no1").selectize({})
+    $("#rem").selectize({})
 
-    $(".view_dtl").on("click", function(){
-        var po_num = $(this).closest('tr').find('.po_no').val()
+    $("#dataTable1").on("click", '.view_dtl', function(){
+        var po_number = $(this).closest('tr').find('.po_no').val()
+        var po_item = $(this).closest('tr').find('.po_item').val()
         $.ajax({
             type: "POST",
-            url: "../../logic/po_report.php",
-            data: {po_num: po_num},
-            success: function(res){
-                var table = $('#dataTable').DataTable({
-                sorting: false,
-                scrollX: false,
-                destroy: true,
-                "bDestroy": true,
-                searching: false,
-                "bPaginate": false,
-                        "dom": 'rtip',
-                        "bInfo": false,
-                }) 
-                $('#po_dtls').modal('show')
-                // $('#dataTable').DataTable().clear().draw()               
-                $('#td_body').html(res) 
+            url: "../../logic/mod_json.php",
+            data: {po_number: po_number, po_item:po_item},
+            success: function(res1){
+                $('#po_dtls').modal('show');
+                $('#po_dtls').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#empl_name").val(res1.EMP_ID)
+                $("#dept").val(res1.DEPT)
+                $("#emp_id").val(res1.EMP_ID)
+                $("#emp_add").val(res1.EMP_ADD)
+                $("#work_loc").val(res1.WORK_LOC)
+                $("#off_phone").val(res1.OFF_PHONE)
+                $("#mob_phone").val(res1.MOB_PHONE)
+                $("#hired_date").val(res1.HIRED_DATE)
+                $("#per_email").val(res1.PER_EMAIL)
+                $("#bus_email").val(res1.BUS_EMAIL)
+                $("#ref_person").val(res1.REF_PERSON)
+                $("#supplier").val(res1.SUPPLIER)
+                $("#req_grp").append("<option value="+ res1.REQ_GRP +">"+ res1.REQ_GRP_NAME +"</option>")
+                $("#type").append("<option value="+ res1.REQ_TYPE +">"+ res1.REQ_TYPE_NAME +"</option>")
+                $("#asset_group").append("<option value="+ res1.ASS_GRP +">"+ res1.ASS_GRP_NAME +"</option>")
+                $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
+                $("#brand").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
+                $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
+                $("#price").val(res1.PRICE)
+                $("#ser_no11").val(res1.SER_NO1)
+                $("#ser_no2").val(res1.SER_NO2)
+                $("#ser_no3").val(res1.SER_NO3)
+                $("#ser_no4").val(res1.SER_NO4)
+                $("#ass_code").val(res1.ASS_CODE)
+                $("#del_note").val(res1.DEL_NOTE)
+                $("#del_date").val(res1.DEL_DATE)
+                $("#malt_shrt").val(res1.MTRL_SHORT)
+                $("#war_start").val(res1.WAR_START)
+                $("#war_month").val(res1.WAR_MONTH)
+                $("#war_exp").val(res1.WAR_EXP)
+                $("#remarks").val(res1.REMARKS)
+                $("#po_number").val(res1.PO_NUMBER)
+                $("#po_item").val(res1.PO_ITEM)
+                // $("#attch").val(res1.ATTCH)
             }
         })
     })
@@ -1031,9 +1196,12 @@ session_start();
         var vendor = $("#vendor").find(':selected').val()
         var from_date = $("#from_date").val()
         var to_date = $("#to_date").val()
+        var ser_no1 = $("#ser_no1").find(':selected').val()
+        var rem = $("#rem").find(':selected').val()
 
         // po num
-        if (po_num != "" && emp_name == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == "") {
+        if (po_num != "" && emp_name == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == "" 
+            && ser_no1 == "" && rem == "") {
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1073,7 +1241,8 @@ session_start();
         }
 
         // emp name
-        else if (emp_name != "" && po_num == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == ""){
+        else if (emp_name != "" && po_num == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == "" 
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1113,7 +1282,8 @@ session_start();
         }
 
         // brand
-        else if (brand != "" && po_num == "" && emp_name == "" && dept == "" && vendor == "" && from_date == "" && to_date == ""){
+        else if (brand != "" && po_num == "" && emp_name == "" && dept == "" && vendor == "" && from_date == "" && to_date == ""
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1153,7 +1323,8 @@ session_start();
         }
 
         // dept
-        else if (dept != "" && po_num == "" && emp_name == "" && brand == "" && vendor == "" && from_date == "" && to_date == ""){
+        else if (dept != "" && po_num == "" && emp_name == "" && brand == "" && vendor == "" && from_date == "" && to_date == "" 
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1168,7 +1339,6 @@ session_start();
                 url: "../../logic/reports.php",
                 data: {data:data, dept:dept},
                 success: function(res){
-                    console.log(res)
                     Swal.hideLoading()
                     Swal.fire({
                         icon: 'success',
@@ -1189,12 +1359,13 @@ session_start();
                         text: 'An error occurred while loading data',
                         icon: 'error'
                     })
-                }
+                },
             })
         }
 
         // vendor
-        else if (vendor != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && from_date == "" && to_date == ""){
+        else if (vendor != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && from_date == "" && to_date == ""
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1234,7 +1405,8 @@ session_start();
         }
 
         // po_doc_date
-        else if (from_date && to_date != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""){
+        else if (from_date && to_date != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1272,6 +1444,88 @@ session_start();
                 }
             })
         }
+
+        // ser_no1
+        else if (ser_no1 != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
+            && from_date == "" && to_date == "" && rem == ""){
+            Swal.fire({
+                title: 'Loading',
+                text: 'Please wait while the data is being loaded...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+            $.ajax({
+                type: "POST",
+                url: "../../logic/reports.php",
+                data: {data:data, ser_no1:ser_no1},
+                success: function(res){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Data loaded successfully!',
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
+                    })
+                    $('#doc_tbody').html(res)
+                },
+                error: function(){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while loading data',
+                        icon: 'error'
+                    })
+                }
+            })
+        }
+
+        // remarks
+        else if (rem != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
+            && from_date == "" && to_date == "" && ser_no1 == ""){
+            Swal.fire({
+                title: 'Loading',
+                text: 'Please wait while the data is being loaded...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+            $.ajax({
+                type: "POST",
+                url: "../../logic/reports.php",
+                data: {data:data, rem:rem},
+                success: function(res){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Data loaded successfully!',
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
+                    })
+                    $('#doc_tbody').html(res)
+                },
+                error: function(){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while loading data',
+                        icon: 'error'
+                    })
+                }
+            })
+        }
         
         else {
             Swal.fire({
@@ -1282,40 +1536,35 @@ session_start();
         }
     })
 
-
-    $("#dataTable1").on("click", '.view_dtl', function(){
-        var po_num = $(this).closest('tr').find('.po_no').val()
-        $.ajax({
-            type: "POST",
-            url: "../../logic/po_report.php",
-            data: {po_num: po_num},
-            success: function(res1){ 
-                var table = $('#dataTable').DataTable({
-                sorting: false,
-                scrollX: false,
-                destroy: true,
-                "bDestroy": true,
-                searching: false,
-                "bPaginate": false,
-                        "dom": 'rtip',
-                        "bInfo": false,
-                });
-                $('#po_dtls').modal('show');
-                $('#po_dtls').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                $('#td_body').html(res1); 
-            }
-        })
-    })
-
     // reset button
-    
     $("#clr").click(function(){
         location.reload()
     })
 
+    // $("#print_btn").click(function(){
+    //     var po_no =  $("#po_number").val()
+    //     var po_item = $("#po_item").val()
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "../../printouts/index.php",
+    //         data: {po_no:po_no, po_item:po_item},
+    //         success: function(res){
+    //             window.open(res);
+    //         },
+    //         failure: function(response){
+    //             alert("ERROR");
+    //         },
+    //         error: function(req, textStatus, errorThrown){
+    //             console.log("ERROR ",textStatus);
+    //             console.log("ERROR ",errorThrown);
+    //             console.log("ERROR", req)
+    //         }
+    //     })
+    // })
+
+    
+
+    // chart start
     window.onload = function () {
         // chart 1
         var chart = new CanvasJS.Chart("chartContainer", {
@@ -1381,6 +1630,7 @@ session_start();
                         icon: 'error'
                     })
                 }
+                
             })
         })
 
