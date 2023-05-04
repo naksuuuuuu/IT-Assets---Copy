@@ -22,8 +22,9 @@ if(isset($_POST['po_num']) and !isset($_POST['po_item1'])){
     while($PO = oci_fetch_assoc($stmt)){
         // array_push($array, array('VENDOR_NAME' => htmlspecialchars($PO['VENDOR_NAME'],ENT_IGNORE)));
         $result.="<tr>
-                    <td style='text-align: center'><img id='plusImg' class='add_po' src='../../assets/add-free-icon-font.png'></i></td>
+                    <td style='text-align: center'><img id='plusImg' class='add_po' src='../../assets/add-button.png'></i></td>
                     <td><input class='po_num form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_NO']."'></td>
+                    <td><input class='po_item form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
                     <td><input class='plant form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PLANT']."'></td>
                     <td><input class='supp_name form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['VENDOR_NAME']."'></td>
                     <td><input class='short_text form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['SHORT_TEXT']."'></td>
@@ -33,7 +34,6 @@ if(isset($_POST['po_num']) and !isset($_POST['po_item1'])){
                     <td><input class='po_itm_price form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_UNT_PRICE']."'></td>
                     <td><input class='po_doc_date form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_DOC_DATE']."'></td>
                     <td><input class='po_stat form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_STATUS']."'></td>
-                    <td><input class='po_item form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
                   </tr>";
     }
 
@@ -47,8 +47,9 @@ if(isset($_POST['po_num']) and !isset($_POST['po_item1'])){
     while($PO = oci_fetch_assoc($stmt)){
         // array_push($array, array('VENDOR_NAME' => htmlspecialchars($PO['VENDOR_NAME'],ENT_IGNORE)));
         $result.="<tr>
-                    <td style='text-align: center'><i class='fa-solid fa-check in_po' id='plusImg' style='color: blue'></i></td>
+                    <td style='text-align: center'><i class='fa-solid fa-check in_po' id='plusImg' style='color: #08F11B'></i></td>
                     <td><input class='po_num form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_NO']."'></td>
+                    <td><input class='po_item form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
                     <td><input class='plant form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PLANT']."'></td>
                     <td><input class='supp_name form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['VENDOR_NAME']."'></td>
                     <td><input class='short_text form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['SHORT_TEXT']."'></td>
@@ -58,7 +59,6 @@ if(isset($_POST['po_num']) and !isset($_POST['po_item1'])){
                     <td><input class='po_itm_price form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_UNT_PRICE']."'></td>
                     <td><input class='po_doc_date form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_DOC_DATE']."'></td>
                     <td><input class='po_stat form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_STATUS']."'></td>
-                    <td><input class='po_item form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
                   </tr>";
     }
 

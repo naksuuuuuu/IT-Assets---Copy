@@ -344,8 +344,8 @@ body{
 
 }
 #plusImg{
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
 }
 input[id='qty1'],input[id='desc1'],input[id='amount1'],input[id='type1'],input[id='unitPrice1'], input[id='department']{

@@ -164,6 +164,9 @@ session_start();
                         </button>
                     </form>
 
+                    <div class="card-header">
+                        <h2 class="m-0 font-weight-bold text-primary">Modify Assets</h2>
+                    </div>
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -238,9 +241,9 @@ session_start();
                 <form method='POST' enctype='multipart/form-data' id='srch_Form'>
                     <div class="container-fluid">
                         <div class="card shadow mb-4">
-                            <div class="card-header py-3">
+                            <!-- <div class="card-header py-3">
                                 <h2 class="m-0 font-weight-bold text-primary">Modify Assets</h2>
-                            </div>
+                            </div> -->
                             <div class="card-header py-3" style="background: #87CEFA">
                                 <div class="row g-2">
                                     <div class="col-md-3">
@@ -489,7 +492,7 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="form-label">Offcie Phone</label>
+                                    <label class="form-label">Office Phone</label>
                                     <input type="text" class="form-control" id="off_phone" placeholder=" " readonly style="background-color: #e6e6e6;">
                                 </div>
 
@@ -513,10 +516,10 @@ session_start();
                                     <input type="text" class="form-control" id="bus_email" placeholder=" " readonly style="background-color: #e6e6e6;">
                                 </div>
 
-                                <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     <label class="form-label">Reference Person</label>
                                     <input type="text" class="form-control" id="ref_person" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                </div>
+                                </div> -->
                             </div>
                             <br>
                         </div>
@@ -575,7 +578,7 @@ session_start();
                             <div class="row g-3" style="margin: auto">
                                 <div class="col-md-4">
                                     <label class="form-label">Supplier</label>
-                                    <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" placeholder=" " required>
+                                    <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" placeholder=" " required style="background-color: #e6e6e6;">
                                         <!-- <option selected=" ">Select Suppliers...</option> -->
                                             <?php 
                                                 $sql = "SELECT DISTINCT VENDOR_CODE, VENDOR_NAME FROM IT_ASSET_VENDORS";
@@ -701,7 +704,7 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="form-label">Warranty Month Start*</label>
+                                    <label class="form-label">Warranty Month Start *</label>
                                     <input id="war_start" name='war_start[]' type="date" autocomplete="off" class="form-control war_start" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
 
@@ -711,13 +714,15 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="form-label">Warranty Expiry Date *</label>
-                                    <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                    <label class="form-label">Warranty Expiry Date</label>
+                                    <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="background-color: #e6e6e6;">
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-8">
                                     <label class="form-label">Remarks *</label>
-                                    <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                    <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " 
+                                        style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                    </textarea>
                                 </div>
 
                                 <!-- <div class="col-md-4">
@@ -751,11 +756,11 @@ session_start();
                                 display: none;
                                 }
                             </style>
-                            <!-- <div class="card" style="border: 2px solid #e6e6e6">
+                            <div class="card" style="border: 2px solid #e6e6e6">
                                 <div class="card-header py-2" style="background-color: #e6e6e6">
                                     <h2 class="m-0 font-weight-bold" style="color: #000">Attachment</h2>
                                 </div>
-                                <div class="container">
+                                <!-- <div class="container">
                                     <div class="row">
                                         <div class="col-lg-8 col-sm-12 col-11 main-section">
                                             <h2 class="text-center text-danger">Attachment</h2><br>
@@ -768,13 +773,13 @@ session_start();
                                             </form>            
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <br>
-                            </div> -->
+                            </div>
                             <br>
                             <div class="col-md-12">
-                                <button id="add_btn1" class="btn btn-success" type="button">
-                                    <i class="fa-solid fa-plus"></i> Add</button>
+                                <button id="save_btn1" class="btn btn-success" type="button">
+                                <i class="fa-solid fa-floppy-disk"></i> Save</button>
                                 <button id="close_btn1" class="btn btn-warning" type="button">
                                     <i class="fa-solid fa-xmark"></i> Close</button>
                             </div>
@@ -844,6 +849,26 @@ $(document).ready(function(){
     $("#ser_no").selectize({})
     $("#emp_name").selectize({})
 
+    $("#empl_name").selectize({})
+    $("#empl_name").change(function(){
+        var empl_name1 = $(this).val()
+        $.ajax({
+            url:"../../logic/empl_details.php",
+            method:"POST",
+            data:{empl_name1: empl_name1},
+            success:function(res){
+                $("#dept").val(res.DEPT)
+                $("#emp_id").val(res.EMPLID)
+                $("#emp_add").val(res.ADDRESS)
+                $("#work_loc").val(res.LOCATION)
+                $("#off_phone").val(res.OFFICEPHONE)
+                $("#mob_phone").val(res.MOBILEPHONE)
+                $("#hired_date").val(res.HIREDDATE)
+                $("#per_email").val(res.PERSONAL_EMAIL)
+                $("#bus_email").val(res.BUSINESS_EMAIL)
+            }
+        })
+    })
     // datatable1 = $('#dataTable1').DataTable({
     // searching: false, 
     // paging: true,
@@ -904,7 +929,11 @@ $(document).ready(function(){
                     backdrop: 'static',
                     keyboard: false
                 });
-                $("#empl_name").val(res1.EMP_ID)
+                // $("#empl_name").val(res1.EMP_ID)
+                var selectize = $('#empl_name').selectize()
+                var select = selectize[0].selectize
+                select.setValue(res1.EMP_ID, false);
+
                 $("#dept").val(res1.DEPT)
                 $("#emp_id").val(res1.EMP_ID)
                 $("#emp_add").val(res1.EMP_ADD)
@@ -914,7 +943,7 @@ $(document).ready(function(){
                 $("#hired_date").val(res1.HIRED_DATE)
                 $("#per_email").val(res1.PER_EMAIL)
                 $("#bus_email").val(res1.BUS_EMAIL)
-                $("#ref_person").val(res1.REF_PERSON)
+                // $("#ref_person").val(res1.REF_PERSON)
                 $("#supplier").val(res1.SUPPLIER)
                 $("#req_grp").append("<option value="+ res1.REQ_GRP +">"+ res1.REQ_GRP_NAME +"</option>")
                 $("#type").append("<option value="+ res1.REQ_TYPE +">"+ res1.REQ_TYPE_NAME +"</option>")
@@ -1128,7 +1157,7 @@ $(document).ready(function(){
 
     $("#close_btn1").click(function(){
         Swal.fire({
-            title: 'Are you sure you want to CLOSE?',
+            title: 'Are you sure?',
             text: 'This will be closed',
             icon: 'question',
             showCancelButton: true,
@@ -1144,7 +1173,7 @@ $(document).ready(function(){
         })
     })
 
-    $("#add_btn1").click(function(){
+    $("#save_btn1").click(function(){
         var po_no =  $("#po_number").val()
         var po_item = $("#po_item").val()
         var ser_no1 = $(".ser_no1").val()
@@ -1159,7 +1188,7 @@ $(document).ready(function(){
         var remarks = $(".remarks").val()
         // var attch = $(".attch").val()
         Swal.fire({
-            title: 'Are you sure you want to MODIFY?',
+            title: 'Are you sure you?',
             text: 'This asset will be MODIFIED',
             icon: 'question',
             showCancelButton: true,

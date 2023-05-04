@@ -163,6 +163,10 @@ session_start();
                         </button>
                     </form>
 
+                    <div class="card-header">
+                        <h2 class="m-0 font-weight-bold text-primary">Cancel Assets</h2>
+                    </div>
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -238,10 +242,6 @@ session_start();
                 <form method='POST' enctype='multipart/form-data' id='srch_Form'>
                     <div class="container-fluid">
                         <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h2 class="m-0 font-weight-bold text-primary">Cancel Assets</h2>
-                            </div>
-
                             <div class="card-header py-3" style="background: #87CEFA">
                                 <div class="row g-2">
                                     <div class="col-md-3">
@@ -337,11 +337,11 @@ session_start();
                                         <thead>
                                             <tr>
                                                 <th></th>
-                                                <th style="width: 200px">Document Number</th>
+                                                <th style="width: 200px">Doc No</th>
                                                 <th style="width: 200px">PO Item</th>
-                                                <th style="width: 200px">Document Date</th>
-                                                <th style="width: 200px">PO Number</th>
-                                                <th style="width: 200px">PO Document Date</th>
+                                                <th style="width: 200px">Doc Date</th>
+                                                <th style="width: 200px">PO No</th>
+                                                <th style="width: 200px">PO Doc Date</th>
                                                 <th style="width: 200px">Department</th>
                                                 <th style='width: 200px'>Supplier</th>
                                                 <th hidden>po_item</th>
@@ -515,10 +515,10 @@ session_start();
                                     <input type="text" class="form-control" id="bus_email" placeholder=" " readonly style="background-color: #e6e6e6;">
                                 </div>
 
-                                <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     <label class="form-label">Reference Person</label>
                                     <input type="text" class="form-control" id="ref_person" placeholder=" " style="background-color: #e6e6e6;">
-                                </div>
+                                </div> -->
                             </div>
                             <br>
                         </div>
@@ -577,7 +577,7 @@ session_start();
                             <div class="row g-3" style="margin: auto">
                                 <div class="col-md-4">
                                     <label class="form-label">Supplier</label>
-                                    <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" placeholder=" " required>
+                                    <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" placeholder=" " required style="background-color: #e6e6e6;">
                                         <!-- <option selected=" ">Select Suppliers...</option> -->
                                             <?php 
                                                 $sql = "SELECT DISTINCT VENDOR_CODE, VENDOR_NAME FROM IT_ASSET_VENDORS";
@@ -683,6 +683,11 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
+                                    <label class="form-label">Material Short</label>
+                                    <input id="malt_shrt" name='malt_shrt[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
+                                </div>
+
+                                <div class="col-md-4">
                                     <label class="form-label">License Month Start</label>
                                     <input id="license_start" name='license_start[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                 </div>
@@ -698,12 +703,7 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="form-label">Material Short</label>
-                                    <input id="malt_shrt" name='malt_shrt[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-                                
-                                <div class="col-md-4">
-                                    <label class="form-label">Warranty Month Start*</label>
+                                    <label class="form-label">Warranty Month Start *</label>
                                     <input id="war_start" name='war_start[]' type="date" autocomplete="off" class="form-control war_start" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
 
@@ -713,19 +713,20 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="form-label">Warranty Expiry Date *</label>
-                                    <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                    <label class="form-label">Warranty Expiry Date</label>
+                                    <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="background-color: #e6e6e6;">
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-8">
                                     <label class="form-label">Remarks *</label>
-                                    <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                    <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                    </textarea>
                                 </div>
 
-                                <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     <label class="form-label">Attachment *</label>
                                     <input id="attch" name='attch[]' type="file" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
+                                </div> -->
                                 <div class="col-md-4" hidden>
                                     <label class="form-label">PO NUMBER</label>
                                     <input id="po_number" name='po_number[]' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
@@ -738,17 +739,50 @@ session_start();
                             <br>
                         </div>
                         <br>
-                    </div>
+                        <style>
+                            .main-section{
+                            margin:0 auto;
+                            padding: 20px;
+                            margin-top: 50px;
+                            height: auto;
+                            width: auto;
+                            background-color: #fff;
+                            box-shadow: 0px 0px 20px #c1c1c1;
+                            }
+                            .fileinput-remove,
+                            .fileinput-upload{
+                            display: none;
+                            }
+                        </style>
+                        <div class="card" style="border: 2px solid #e6e6e6">
+                            <div class="card-header py-2" style="background-color: #e6e6e6">
+                                <h2 class="m-0 font-weight-bold" style="color: #000">Attachment</h2>
+                            </div>
+                            <!-- <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-8 col-sm-12 col-11 main-section">
+                                        <h2 class="text-center text-danger">Attachment</h2><br>
+                                        <form enctype="multipart/form-data">
+                                            <div class="form-group">
+                                                <div class="file-loading">
+                                                    <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                                                </div>
+                                            </div>
+                                        </form>            
+                                    </div>
+                                </div>
+                            </div> -->
+                            <br>
+                        </div>
                         <br>
-                    <div class="modal-footer">
-                        <div>
-                            <button class="btn btn-danger" id="cancel_btn" type="button" style="margin-right: 50px; margin-bottom:10px">
-                            <i class="fa-solid fa-ban"></i> Cancel Asset</button>
-                        </div>  
-
-                        <!-- <input type="hidden" value="1" name="type">
-                        <input type="button" class="btn btn-success" data-dismiss="modal" value="Close"> -->
+                        <div class="col-md-12">
+                            <button id="cancel_btn" class="btn btn-danger" type="button">
+                                <i class="fa-solid fa-ban"></i> Cancel</button>
+                            <button id="close_btn1" class="btn btn-warning" type="button">
+                                <i class="fa-solid fa-xmark"></i> Close</button>
+                        </div>
                     </div>
+                    <br>
                 </form>
             </div>
         </div>
@@ -822,6 +856,25 @@ $(document).ready(function(){
     $("#po_no").selectize({})
     $("#ser_no").selectize({})
     $("#emp_name").selectize({})
+    $("#empl_name").change(function(){
+        var empl_name1 = $(this).val()
+        $.ajax({
+            url:"../../logic/empl_details.php",
+            method:"POST",
+            data:{empl_name1: empl_name1},
+            success:function(res){
+                $("#dept").val(res.DEPT)
+                $("#emp_id").val(res.EMPLID)
+                $("#emp_add").val(res.ADDRESS)
+                $("#work_loc").val(res.LOCATION)
+                $("#off_phone").val(res.OFFICEPHONE)
+                $("#mob_phone").val(res.MOBILEPHONE)
+                $("#hired_date").val(res.HIREDDATE)
+                $("#per_email").val(res.PERSONAL_EMAIL)
+                $("#bus_email").val(res.BUSINESS_EMAIL)
+            }
+        })
+    })
 
     $("#dataTable1").on("click", '.view_dtl', function(){
         var po_number = $(this).closest('tr').find('.po_no').val()
@@ -863,6 +916,9 @@ $(document).ready(function(){
                 $("#del_note").val(res1.DEL_NOTE)
                 $("#del_date").val(res1.DEL_DATE)
                 $("#malt_shrt").val(res1.MTRL_SHORT)
+                $("#license_start").val(res1.LICENSE_START)
+                $("#license_month").val(res1.LICENSE_MONTH)
+                $("#license_exp").val(res1.LICENSE_EXP)
                 $("#war_start").val(res1.WAR_START)
                 $("#war_month").val(res1.WAR_MONTH)
                 $("#war_exp").val(res1.WAR_EXP)
@@ -1052,6 +1108,24 @@ $(document).ready(function(){
         }
     })
 
+    $("#close_btn1").click(function(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will be closed',
+            icon: 'question',
+            showCancelButton: true,
+            reverseButtons: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            confirmButtonColor: 'green',
+            cancelButtonColor: 'red'
+        }).then(confirm => {
+            if (confirm.isConfirmed) {
+                $("#po_dtls").modal('hide')
+            }
+        })
+    })
+
     $("#cancel_btn").click(function() {
         var po_no = $("#po_number").val();
         var po_item = $("#po_item").val()
@@ -1060,6 +1134,7 @@ $(document).ready(function(){
             input: 'textarea',
             icon: 'warning',
             showCancelButton: true,
+            reverseButtons: true,
             confirmButtonText: 'Submit',
             confirmButtonColor: 'green',
             cancelButtonText: 'Cancel',
@@ -1078,7 +1153,7 @@ $(document).ready(function(){
             if (result.isConfirmed) {
                 var reason = result.value;
                 Swal.fire({
-                    title: 'Are you sure you want to CANCEL?',
+                    title: 'Are you sure you?',
                     text: 'This asset will be CANCELLED',
                     icon: 'question',
                     showCancelButton: true,

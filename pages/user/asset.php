@@ -165,17 +165,21 @@ $username = $_SESSION['username'];
                         </button>
                     </form>
 
+                    <div class="card-header">
+                        <h2 class="m-0 font-weight-bold text-primary">Add Assets</h2>
+                    </div>
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
+                        <!-- <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
-                            </a>
+                            </a> -->
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                            <!-- <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                                 aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
@@ -190,7 +194,7 @@ $username = $_SESSION['username'];
                                     </div>
                                 </form>
                             </div>
-                        </li>
+                        </li> -->
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -277,11 +281,11 @@ $username = $_SESSION['username'];
                                 <div class="row mb-3" style="margin-left: 7px;">
                                     <div class="col-sm-8">
                                         <button class="btn" id="add_btn" type="button" style="background-color: #26d991; color: white">
-                                        <i class="fa-solid fa-plus"></i> Add New Item</button>
+                                        <i class="fa-solid fa-plus"></i> Add</button>
                                         <button class="btn btn-primary" id="edit_btn" type="button">
-                                        <i class="fa-solid fa-pen-to-square"></i> Edit Item</button>
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit</button>
                                         <button class="btn" id="remove_btn" type="button" style="background-color: #ff0000; color: white">
-                                        <i class="fa-solid fa-trash-can"></i> Remove Item</button>
+                                        <i class="fa-solid fa-trash-can"></i> Remove</button>
                                     </div>
                                 </div>
                                 <br>
@@ -301,7 +305,7 @@ $username = $_SESSION['username'];
                                                 <th style="width: 200px;">Hired Date</th>
                                                 <th style="width: 200px;">Personal Email</th>
                                                 <th style="width: 200px;">Business Email</th>
-                                                <th style="width: 200px;">Reference Person</th>
+                                                <th style="width: 200px;" hidden>Reference Person</th>
                                                 <th style="width: 200px;">PO Number</th>
                                                 <th style="max-width: 200px;">Supplier</th>
                                                 <th style="width: 200px;">Request Group</th>
@@ -789,7 +793,7 @@ $username = $_SESSION['username'];
 
                                 <div class="col-md-12">
                                     <button id="save_btn1" class="btn btn-success" type="button">
-                                    <i class="fa-solid fa-plus"></i> Save</button>
+                                        <i class="fa-solid fa-floppy-disk"></i> Save</button>
                                 </div>
                                 <br>
                             </div>
@@ -946,7 +950,7 @@ $username = $_SESSION['username'];
                                                         <input type="text" class="form-control" id="bus_email" placeholder=" " readonly style="background-color: #e6e6e6;">
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4" hidden>
                                                         <label class="form-label">Reference Person</label>
                                                         <input type="text" class="form-control" id="ref_person" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
@@ -1258,13 +1262,14 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Warranty Expiry Date *</label>
-                                                        <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">Warranty Expiry Date</label>
+                                                        <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="background-color: #e6e6e6;">
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-8">
                                                         <label class="form-label">Remarks *</label>
-                                                        <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        </textarea>
                                                     </div>
 
                                                     <!-- <div class="col-md-4">
@@ -1708,7 +1713,9 @@ $username = $_SESSION['username'];
 
                                             <div class="col-md-12">
                                                 <button id="add_btn1" class="btn btn-success" type="submit">
-                                                <i class="fa-solid fa-plus"></i> Add</button>
+                                                    <i class="fa-solid fa-plus"></i> Add</button>
+                                                <button id="close_btn" class="btn btn-warning" type="button">
+                                                    <i class="fa-solid fa-xmark"></i> Close</button>
                                             </div>
                                             <br>
                                         </div>
@@ -1863,7 +1870,7 @@ $username = $_SESSION['username'];
                                                         <input type="text" class="form-control" id="bus_email1" placeholder=" " readonly style="background-color: #e6e6e6;">
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4" hidden>
                                                         <label class="form-label">Reference Person</label>
                                                         <input type="text" class="form-control" id="ref_person1" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
@@ -2175,13 +2182,14 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Warranty Expiry Date *</label>
-                                                        <input id="war_exp1" name='war_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">Warranty Expiry Date</label>
+                                                        <input id="war_exp1" name='war_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="background-color: #e6e6e6;">
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-8">
                                                         <label class="form-label">Remarks *</label>
-                                                        <input id="remarks1" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <textarea id="remarks1" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        </textarea>
                                                     </div>
 
                                                     <!-- <div class="col-md-4">
@@ -2609,11 +2617,13 @@ $username = $_SESSION['username'];
                                             </div>
                                             <br>
 
-                                                <div class="col-md-12">
-                                                    <button id="update_btn" class="btn btn-primary" type="button">
+                                            <div class="col-md-12">
+                                                <button id="update_btn" class="btn btn-primary" type="button">
                                                     <i class="fa-solid fa-pen-to-square"></i> Update</button>
-                                                </div>
-                                                <br>
+                                                <button id="close_btn1" class="btn btn-warning" type="button">
+                                                    <i class="fa-solid fa-xmark"></i> Close</button>
+                                            </div>
+                                            <br>
                                         </div>
                                         <br>
                                     </form>
@@ -2640,28 +2650,36 @@ $username = $_SESSION['username'];
                                                     <thead>
                                                         <tr>
                                                             <th></th>
-                                                            <th>Po Number</th>
+                                                            <th>Po No</th>
+                                                            <th>PO ITEM</th>
                                                             <th>Plant</th>
                                                             <th>Vendor Name</th>
                                                             <th>Short Text</th>
                                                             <th>Po Item Text</th>
-                                                            <th>Po Quantity</th>
+                                                            <th>Po Qty</th>
                                                             <th>Order Unit</th>
                                                             <th>Po Item Price</th>
-                                                            <th>Po Document Date</th>
+                                                            <th>Po Doc Date</th>
                                                             <th>Po Status</th>
-                                                            <th>PO ITEM</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="td_body">
                                                         <tr>
-                                                            <td style='text-align: center'><img id='plusImg' class="add_po" src='../../assets/add-free-icon-font.png'></td>  
+                                                            <td style='text-align: center'><img id='plusImg' class="add_po" src='../../assets/add-button.png'></td>  
                                                             <td style='text-align: start; background-color: #FFFFFF	'>
                                                                 <input id="po_no" name='po_no[]' type="text" autocomplete="off" 
                                                                 style=" background-color: transparent">                                           
                                                                 
                                                                 <script>
                                                                     document.getElementById('po_no').value = "<?php echo ($_POST['po_no']);?>";
+                                                                </script>
+                                                            </td>
+                                                            <td style='text-align: start; background-color: #FFFFFF	'>
+                                                                <input id="po_item" name='po_item[]' type="text" autocomplete="off" 
+                                                                style=" background-color: transparent">                                           
+                                                                
+                                                                <script>
+                                                                    document.getElementById('po_item').value = "<?php echo ($_POST['po_item']);?>";
                                                                 </script>
                                                             </td>
                                                             <td style='text-align: start; background-color: #FFFFFF	'>
@@ -2734,14 +2752,6 @@ $username = $_SESSION['username'];
                                                                 
                                                                 <script>
                                                                     document.getElementById('po_stat').value = "<?php echo ($_POST['po_stat']);?>";
-                                                                </script>
-                                                            </td>
-                                                            <td style='text-align: start; background-color: #FFFFFF	'>
-                                                                <input id="po_item" name='po_item[]' type="text" autocomplete="off" 
-                                                                style=" background-color: transparent">                                           
-                                                                
-                                                                <script>
-                                                                    document.getElementById('po_item').value = "<?php echo ($_POST['po_item']);?>";
                                                                 </script>
                                                             </td>
                                                         </tr>
@@ -3309,6 +3319,43 @@ $username = $_SESSION['username'];
             })
         })
 
+        // close modal btn
+        $("#close_btn").click(function(){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be closed',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then( confirm => {
+                if(confirm.isConfirmed){
+                    $("#info").modal('hide')
+                }
+            })
+        })
+
+        $("#close_btn1").click(function(){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be closed',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then( confirm => {
+                if(confirm.isConfirmed){
+                    $("#edit_info").modal('hide')
+                }
+            })
+        })
+
         // add button in modal receiver and information
         var count_item = 0
         var imagebase64 = []
@@ -3719,7 +3766,7 @@ $username = $_SESSION['username'];
                     // let validfiles = ["image/jpeg", "image/jpg", "image/png"];
                     // if(validfiles.includes(filetype)){
                         Swal.fire({
-                            title: 'Are you sure you want to Save?',
+                            title: 'Are you sure?',
                             text: 'This will be saved in database',
                             icon: 'question',
                             showCancelButton: true,

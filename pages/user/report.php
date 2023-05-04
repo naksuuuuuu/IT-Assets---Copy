@@ -166,6 +166,10 @@ session_start();
                         </button>
                     </form>
 
+                    <div class="card-header">
+                        <h2 class="m-0 font-weight-bold text-primary">List of Data</h2>
+                    </div>
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
