@@ -48,6 +48,27 @@ else if (isset($_POST['empl_name1'])){
     'PERSONAL_EMAIL' => $details['PERSONELMAIL'], 'BUSINESS_EMAIL' => $details['BUSINESSMAIL']));
 }
 
+else if (isset($_POST['empl_name2'])){
+    $empl_name2 = $_POST['empl_name2'];
+    $sql = "SELECT a.*, d.DESCR as dept, b.LOCATION, b.EMPL_STATUS, c.DESCR from PERSON_TBL a, JobCur_ee b , 
+    location_tbl c, DEPARTMENT_TBL d
+    WHERE a.EMPLID = b.EMPLID
+    and b.LOCATION = c.LOCATION
+    AND b.DEPTID = d.DEPTID
+    and b.EMPL_STATUS = 'A'
+    and a.EMPLID = :empl_name2";
+
+    $result = oci_parse(connection1(),$sql);
+    oci_bind_by_name($result,':empl_name2', $empl_name2);
+    oci_execute($result);
+
+    $details = oci_fetch_assoc($result);
+    echo json_encode( array('DEPT' => $details['DEPT'], 'EMPLID'=> $details['EMPLID'], 
+    'ADDRESS' => $details['SOI'].$details['TAMBOL'].$details['AMPHUR'], 'LOCATION' => $details['DESCR'], 
+    'OFFICEPHONE' =>$details['OFFICEPHONE'], 'MOBILEPHONE' => $details['MOBILEPHONE'], 'HIREDDATE' => $details['HIRE_DATE'], 
+    'PERSONAL_EMAIL' => $details['PERSONELMAIL'], 'BUSINESS_EMAIL' => $details['BUSINESSMAIL']));
+}
+
 // add po button
 else if(isset($_POST['po_no'])){
     $po_no = $_POST['po_no'];

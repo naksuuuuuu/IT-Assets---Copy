@@ -93,6 +93,12 @@ session_start();
                     <span>Modify Assets</span></a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="../user/transfer_asset.php">
+                    <i class="fa-solid fa-right-left"></i>
+                    <span>Transfer Assets</span></a>
+            </li>
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -366,7 +372,7 @@ session_start();
                                                         FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
                                                         WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
                                                         AND A.VENDOR_CODE = C.VENDOR_CODE
-                                                        AND A.CANCEL_ASSET_FLAG is null
+                                                        AND B.CANCEL_ASSET_FLAG is null
                                                         ORDER BY A.DOCUMENT_NO DESC";
                                         
                                                 $result = oci_parse(connection(), $sql);
@@ -643,6 +649,11 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
+                                    <label class="form-label">Series *</label>
+                                    <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
                                     <label class="form-label">Price</label>
                                     <input id="price" name='price[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
                                 </div>
@@ -717,7 +728,7 @@ session_start();
                                     <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="background-color: #e6e6e6;">
                                 </div>
 
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <label class="form-label">Remarks *</label>
                                     <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                     </textarea>
@@ -729,11 +740,11 @@ session_start();
                                 </div> -->
                                 <div class="col-md-4" hidden>
                                     <label class="form-label">PO NUMBER</label>
-                                    <input id="po_number" name='po_number[]' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                    <input id="po_number" name='po_number' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
                                 <div class="col-md-4" hidden>
                                     <label class="form-label">Po Item</label>
-                                    <input id="po_item" name='po_item[]' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                    <input id="po_item" name='po_item' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                 </div>
                             </div>
                             <br>
@@ -907,6 +918,7 @@ $(document).ready(function(){
                 $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
                 $("#brand").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
                 $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
+                $("#series").val(res1.SERIES)
                 $("#price").val(res1.PRICE)
                 $("#ser_no1").val(res1.SER_NO1)
                 $("#ser_no2").val(res1.SER_NO2)
@@ -924,6 +936,7 @@ $(document).ready(function(){
                 $("#war_exp").val(res1.WAR_EXP)
                 $("#remarks").val(res1.REMARKS)
                 $("#po_number").val(res1.PO_NUMBER)
+                $("#po_item").val(res1.PO_ITEM)
                 // $("#attch").val(res1.ATTCH)
             }
         })
@@ -1169,20 +1182,13 @@ $(document).ready(function(){
                         data: {po_no: po_no, po_item:po_item, name: name, reason: reason},
                         success: function(res) {
                             if (res.success == 1) {
-                                Swal.fire({
-                                    title: 'Asset cancelled',
-                                    text: res.message,
-                                    icon: res.icon
-                                });
+                                notify(res.icon, res.message)
+
                                 setTimeout(function() {
                                     location.reload();
                                 }, 2000);
                             } else {
-                                Swal.fire({
-                                    title: 'Error',
-                                    text: res.message,
-                                    icon: res.icon
-                                });
+                                notify(res.icon, res.message)
                             }
                         },
                         failure: function(response){
@@ -1198,21 +1204,6 @@ $(document).ready(function(){
             }
         });
     });
-
-    // $("#cancel_btn").click(function(){
-    //     var po_no = $("#po_number").val();
-    //     Swal.fire({
-    //         title: 'Enter Reason',
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonText: 'Submit',
-    //         confirmButtonColor: 'green',
-    //         cancelButtonText: 'Cancel',
-    //         cancelButtonColor: 'red',
-    //         input: 'textarea',
-    //     })
-    // })
-
 })
 
     function notify(icon, message){

@@ -12,15 +12,15 @@ if(isset($_POST['po_no'])){
     $name = $_POST['name'];
     $reason = $_POST['reason'];
     
-    $update_query = "UPDATE IT_ASSET_HEADER1 SET CANCEL_ASSET_FLAG = 'Y', CANCEL_REASON = :reason, USER_CANCEL = :username, 
-        CANCEL_DATE = to_date(:cancel_date, 'DD/MM/YY HH:MI:SS am') WHERE PO_NUMBER = :po_no";
-        $update_result = oci_parse(connection(), $update_query);
-        oci_bind_by_name($update_result, ':reason', $reason);
-        oci_bind_by_name($update_result, ':username', $name);
-        oci_bind_by_name($update_result, ':cancel_date', $date);
-        oci_bind_by_name($update_result, ':po_no', $po_no);
+    // $update_query = "UPDATE IT_ASSET_HEADER1 SET CANCEL_ASSET_FLAG = 'Y', CANCEL_REASON = :reason, USER_CANCEL = :username, 
+    //     CANCEL_DATE = to_date(:cancel_date, 'DD/MM/YY HH:MI:SS am') WHERE PO_NUMBER = :po_no";
+    //     $update_result = oci_parse(connection(), $update_query);
+    //     oci_bind_by_name($update_result, ':reason', $reason);
+    //     oci_bind_by_name($update_result, ':username', $name);
+    //     oci_bind_by_name($update_result, ':cancel_date', $date);
+    //     oci_bind_by_name($update_result, ':po_no', $po_no);
 
-    if (oci_execute($update_result, OCI_NO_AUTO_COMMIT)) {
+    // if (oci_execute($update_result, OCI_NO_AUTO_COMMIT)) {
         $sql = "UPDATE IT_ASSET_DETAILS1 SET CANCEL_ASSET_FLAG = 'Y', CANCEL_REASON = :reason, USER_CANCEL = :username, 
         CANCEL_DATE = to_date(:cancel_date, 'DD/MM/YY HH:MI:SS am') WHERE PO_NUMBER = :po_no AND PO_ITEM = : po_item";
         $res = oci_parse(connection(), $sql);
@@ -38,11 +38,11 @@ if(isset($_POST['po_no'])){
             oci_rollback(connection());
             echo json_encode(array('success' => 0, 'message' => "ERROR updating CANCEL FLAG", 'icon' => "error"));
         }
-    } 
-    else {
-        oci_rollback(connection());
-        echo json_encode(array('success' => 0, 'message' => "ERROR updating CANCEL FLAG", 'icon' => "error"));
-    }
+    // } 
+    // else {
+    //     oci_rollback(connection());
+    //     echo json_encode(array('success' => 0, 'message' => "ERROR updating CANCEL FLAG", 'icon' => "error"));
+    // }
 }
 
 ?>

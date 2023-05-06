@@ -9,6 +9,7 @@
     if(isset($_POST['po_no'])){
         $po_no = $_POST['po_no'];
         $po_item = $_POST['po_item'];
+        $series = $_POST['series'];
         $name = $_POST['name'];
         $ser_no1  = $_POST['ser_no1'];
         $ass_code = $_POST['ass_code'];
@@ -26,13 +27,14 @@
             LICENSE_EXPIRE_DATE = to_date(:license_exp, 'DD/MM/YY'),
             WARRANTY_START_DATE = to_date(:war_start, 'DD/MM/YY'), WARRANTY_MONTH = :war_month, 
             WARRANTY_EXPIRE_DATE = to_date(:war_exp, 'DD/MM/YY'), REMARKS = :remarks, LAST_USER_UPDATE = :username, 
-            LAST_USER_UPDATE_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am') 
+            LAST_USER_UPDATE_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am'), SERIES = :series
             WHERE PO_NUMBER = :po_no AND PO_ITEM = :po_item";
             $res = oci_parse(connection(), $sql);
             oci_bind_by_name($res, ':username', $name);
             oci_bind_by_name($res, ':update_date', $date);
             oci_bind_by_name($res, ':po_no', $po_no);
             oci_bind_by_name($res, ':po_item', $po_item);
+            oci_bind_by_name($res, ':series', $series);
             oci_bind_by_name($res, ':ser_no1', $ser_no1);
             oci_bind_by_name($res, ':ass_code', $ass_code);
             oci_bind_by_name($res, ':del_note', $del_note);

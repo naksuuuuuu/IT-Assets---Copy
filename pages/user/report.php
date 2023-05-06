@@ -96,6 +96,12 @@ session_start();
                     <span>Modify Assets</span></a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="../user/transfer_asset.php">
+                    <i class="fa-solid fa-right-left"></i>
+                    <span>Transfer Assets</span></a>
+            </li>
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -451,8 +457,9 @@ session_start();
                                                 <thead>
                                                     <tr>
                                                         <th></th>
-                                                        <th>Document Number</th>
-                                                        <th>PO Number</th>
+                                                        <th>Doc NO</th>
+                                                        <th>Po Item</th>
+                                                        <th>PO NO</th>
                                                         <th>Employee Name</th>
                                                         <th>Department</th>
                                                         <th>Item</th>
@@ -497,7 +504,7 @@ session_start();
                                                         FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
                                                         WHERE A.PO_NUMBER = B.PO_NUMBER
                                                         AND A.VENDOR_CODE = C.VENDOR_CODE
-                                                        AND A.CANCEL_ASSET_FLAG is null
+                                                        AND B.CANCEL_ASSET_FLAG is null
                                                         ORDER BY A.DOCUMENT_NO DESC";
                                                 
                                                         $result = oci_parse(connection(), $sql);
@@ -519,6 +526,7 @@ session_start();
                                                             echo"<tr>
                                                                 <td><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></td>
                                                                     <td>".$row["DOCUMENT_NO"]."</td>
+                                                                    <td>".$row["PO_ITEM"]."</td>
                                                                     <td>".$row["PO_NUMBER"]."</td>
                                                                     <td>".$row1["NAMEENG"]."</td>
                                                                     <td>".$row1["DESCR"]."</td>
@@ -767,7 +775,7 @@ session_start();
 
     <!-- View Details modal -->
     <div class="modal fade" id="po_dtls" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
-        <div class="modal-dialog modal-xl" role="document" style="width: calc(98% - 250px); margin-left: 250px;">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form action="../../printouts/index.php" method="POST" target="_blank" class="needs-validation" novalidate method='POST' enctype='multipart/form-data' id='user_form'>
                     <div class="modal-header">
@@ -804,7 +812,7 @@ session_start();
                             <div class="row g-3" style="margin: auto">
                                 <div class="col-md-4">
                                     <label class="form-label">Department</label>
-                                    <input type="text" class="form-control" id="dept" readonly style="background-color: #e6e6e6;">
+                                    <input type="text" class="form-control" id="department" readonly style="background-color: #e6e6e6;">
                                 </div>
 
                                 <div class="col-md-4">
@@ -975,6 +983,11 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
+                                    <label class="form-label">Series *</label>
+                                    <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
                                     <label class="form-label">Price</label>
                                     <input id="price" name='price[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
                                 </div>
@@ -1055,9 +1068,11 @@ session_start();
                             <br>
                         </div>
                         <br>
-                        <div>
-                            <button class="btn btn-success" id="print_btn" type="submit" style="margin-right: 50px; margin-bottom:10px">
-                            <i class="fa-solid fa-print"></i> Print</button>
+                        <div class="col-md-12">
+                            <button class="btn btn-success" id="print_btn" type="submit">
+                                <i class="fa-solid fa-print"></i> Print</button>
+                            <button id="close_btn1" class="btn btn-warning" type="button">
+                               <i class="fa-solid fa-xmark"></i> Close</button>
                         </div> 
                     </div>
                     <br>
@@ -1154,7 +1169,7 @@ session_start();
                     keyboard: false
                 });
                 $("#empl_name").val(res1.EMP_ID)
-                $("#dept").val(res1.DEPT)
+                $("#department").val(res1.DEPT)
                 $("#emp_id").val(res1.EMP_ID)
                 $("#emp_add").val(res1.EMP_ADD)
                 $("#work_loc").val(res1.WORK_LOC)
@@ -1171,6 +1186,7 @@ session_start();
                 $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
                 $("#brand").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
                 $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
+                $("#series").val(res1.SERIES)
                 $("#price").val(res1.PRICE)
                 $("#ser_no11").val(res1.SER_NO1)
                 $("#ser_no2").val(res1.SER_NO2)
@@ -1187,6 +1203,24 @@ session_start();
                 $("#po_number").val(res1.PO_NUMBER)
                 $("#po_item").val(res1.PO_ITEM)
                 // $("#attch").val(res1.ATTCH)
+            }
+        })
+    })
+
+    $("#close_btn1").click(function(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will be closed',
+            icon: 'question',
+            showCancelButton: true,
+            reverseButtons: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            confirmButtonColor: 'green',
+            cancelButtonColor: 'red'
+        }).then(confirm => {
+            if(confirm.isConfirmed){
+                $("#po_dtls").modal('hide')
             }
         })
     })

@@ -95,6 +95,12 @@ $username = $_SESSION['username'];
                     <span>Modify Assets</span></a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="../user/transfer_asset.php">
+                    <i class="fa-solid fa-right-left"></i>
+                    <span>Transfer Assets</span></a>
+            </li>
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -314,6 +320,7 @@ $username = $_SESSION['username'];
                                                 <th style="width: 200px;">Asset Sub Group</th>
                                                 <th style="width: 200px;">Brand</th>
                                                 <th style="width: 200px;">Model</th>
+                                                <th style="width: 200px;">Series</th>
                                                 <th style="width: 200px;">Unit Price</th>
                                                 <th style="width: 200px;">Serial Number 1</th>
                                                 <th style="width: 200px;">Serial Number 2</th>
@@ -1189,6 +1196,11 @@ $username = $_SESSION['username'];
                                                         <select id="model" name='model[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                             <option selected=" ">Select Model...</option>
                                                         </select>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Series *</label>
+                                                        <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -2112,6 +2124,11 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
+                                                        <label class="form-label">Series *</label>
+                                                        <input id="series1" name='series1[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
                                                         <label class="form-label">Price</label>
                                                         <input id="price1" name='price[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
                                                     </div>
@@ -2883,7 +2900,7 @@ $username = $_SESSION['username'];
                $(row).find('td:nth-child(9)').attr('class', 'hired_date')
                $(row).find('td:nth-child(10)').attr('class', 'per_email')
                $(row).find('td:nth-child(11)').attr('class', 'bus_email')
-               $(row).find('td:nth-child(12)').attr('class', 'ref_per')
+               $(row).find('td:nth-child(12)').addClass('ref_per').attr('hidden', true);
                $(row).find('td:nth-child(13)').attr('class', 'po_num')
                $(row).find('td:nth-child(14)').attr('class', 'supp')
                $(row).find('td:nth-child(15)').attr('class', 'req_grp')
@@ -2892,36 +2909,37 @@ $username = $_SESSION['username'];
                $(row).find('td:nth-child(18)').attr('class', 'ass_sub_grp')
                $(row).find('td:nth-child(19)').attr('class', 'brand')
                $(row).find('td:nth-child(20)').attr('class', 'model')
-               $(row).find('td:nth-child(21)').attr('class', 'unit_price')
-               $(row).find('td:nth-child(22)').attr('class', 'ser_no1')
-               $(row).find('td:nth-child(23)').attr('class', 'ser_no2')
-               $(row).find('td:nth-child(24)').attr('class', 'ser_no3')
-               $(row).find('td:nth-child(25)').attr('class', 'ser_no4')
-               $(row).find('td:nth-child(26)').attr('class', 'ass_code')
-               $(row).find('td:nth-child(27)').attr('class', 'del_note')
-               $(row).find('td:nth-child(28)').attr('class', 'del_date')
-               $(row).find('td:nth-child(29)').attr('class', 'mtrl_short')
-               $(row).find('td:nth-child(30)').attr('class', 'lic_start')
-               $(row).find('td:nth-child(31)').attr('class', 'lic_month')
-               $(row).find('td:nth-child(32)').attr('class', 'lic_exp')
-               $(row).find('td:nth-child(33)').attr('class', 'war_start')
-               $(row).find('td:nth-child(34)').attr('class', 'war_month')
-               $(row).find('td:nth-child(35)').attr('class', 'war_exp')
-               $(row).find('td:nth-child(36)').attr('class', 'rem')
-               $(row).find('td:nth-child(37)').attr('class', 'attch')
-               $(row).find('td:nth-child(38)').attr('class', 'po_doc_date1')
-               $(row).find('td:nth-child(39)').attr('class', 'plant1')
-               $(row).find('td:nth-child(40)').attr('class', 'status')
-               $(row).find('td:nth-child(41)').attr('class', 'qty')
-               $(row).find('td:nth-child(42)').attr('class', 'unit')
-               $(row).find('td:nth-child(43)').attr('class', 'po_item1')
-               $(row).find('td:nth-child(44)').addClass('supp1').attr('hidden', true);
-               $(row).find('td:nth-child(45)').addClass('req_grp1').attr('hidden', true);
-               $(row).find('td:nth-child(46)').addClass('req_type1').attr('hidden', true);
-               $(row).find('td:nth-child(47)').addClass('ass_grp1').attr('hidden', true);
-               $(row).find('td:nth-child(48)').addClass('ass_sub_grp1').attr('hidden', true);
-               $(row).find('td:nth-child(49)').addClass('brand1').attr('hidden', true);
-               $(row).find('td:nth-child(50)').addClass('model1').attr('hidden', true);
+               $(row).find('td:nth-child(21)').attr('class', 'series')
+               $(row).find('td:nth-child(22)').attr('class', 'unit_price')
+               $(row).find('td:nth-child(23)').attr('class', 'ser_no1')
+               $(row).find('td:nth-child(24)').attr('class', 'ser_no2')
+               $(row).find('td:nth-child(25)').attr('class', 'ser_no3')
+               $(row).find('td:nth-child(26)').attr('class', 'ser_no4')
+               $(row).find('td:nth-child(27)').attr('class', 'ass_code')
+               $(row).find('td:nth-child(28)').attr('class', 'del_note')
+               $(row).find('td:nth-child(29)').attr('class', 'del_date')
+               $(row).find('td:nth-child(30)').attr('class', 'mtrl_short')
+               $(row).find('td:nth-child(31)').attr('class', 'lic_start')
+               $(row).find('td:nth-child(32)').attr('class', 'lic_month')
+               $(row).find('td:nth-child(33)').attr('class', 'lic_exp')
+               $(row).find('td:nth-child(34)').attr('class', 'war_start')
+               $(row).find('td:nth-child(35)').attr('class', 'war_month')
+               $(row).find('td:nth-child(36)').attr('class', 'war_exp')
+               $(row).find('td:nth-child(37)').attr('class', 'rem')
+               $(row).find('td:nth-child(38)').attr('class', 'attch')
+               $(row).find('td:nth-child(39)').attr('class', 'po_doc_date1')
+               $(row).find('td:nth-child(40)').attr('class', 'plant1')
+               $(row).find('td:nth-child(41)').attr('class', 'status')
+               $(row).find('td:nth-child(42)').attr('class', 'qty')
+               $(row).find('td:nth-child(43)').attr('class', 'unit')
+               $(row).find('td:nth-child(44)').attr('class', 'po_item1')
+               $(row).find('td:nth-child(45)').addClass('supp1').attr('hidden', true);
+               $(row).find('td:nth-child(46)').addClass('req_grp1').attr('hidden', true);
+               $(row).find('td:nth-child(47)').addClass('req_type1').attr('hidden', true);
+               $(row).find('td:nth-child(48)').addClass('ass_grp1').attr('hidden', true);
+               $(row).find('td:nth-child(49)').addClass('ass_sub_grp1').attr('hidden', true);
+               $(row).find('td:nth-child(50)').addClass('brand1').attr('hidden', true);
+               $(row).find('td:nth-child(51)').addClass('model1').attr('hidden', true);
 
             //    $(row).find('td:nth-child(50)').attr('class', 'model1' hidden)
             }
@@ -3399,6 +3417,7 @@ $username = $_SESSION['username'];
             var asset_sub_group = $("#asset_sub_group").find(":selected").text()
             var brand = $("#brand").find(":selected").text()
             var model = $("#model").find(":selected").text()
+            var series = $("#series").val()
             var price = $("#price").val()
             var ser_no = $("#ser_no").val()
             var ser_no2 = $("#ser_no2").val()
@@ -3428,7 +3447,7 @@ $username = $_SESSION['username'];
             // var attch = $("#attch").val()
 
            var rowdata = [count_item, empl_name, dept, emp_id, emp_add, work_loc, off_phone, mob_phone, hired_date,
-           per_email, bus_email, ref_person, po_no, supplier, req_grp, type, asset_group, asset_sub_group, brand, model,
+           per_email, bus_email, ref_person, po_no, supplier, req_grp, type, asset_group, asset_sub_group, brand, model, series,
            price, ser_no, ser_no2, ser_no3, ser_no4, ass_code, del_note, del_date, malt_shrt, license_start, license_month,
            license_exp, war_start, war_month, war_exp, remarks, uploadedFilename[0], po_doc_date, plant, status, qty, unit, item,
            supp1, req_grp1, type1, asset_group1, asset_sub_group1, brand1, model1]
@@ -3466,30 +3485,31 @@ $username = $_SESSION['username'];
                 var ass_sub_grp = $(tr_parent).find("td").eq(17).text()
                 var brand = $(tr_parent).find("td").eq(18).text()
                 var model = $(tr_parent).find("td").eq(19).text()
-                var price = $(tr_parent).find("td").eq(20).text()
-                var ser_no1 = $(tr_parent).find("td").eq(21).text()
-                var ser_no2 = $(tr_parent).find("td").eq(22).text()
-                var ser_no3 = $(tr_parent).find("td").eq(23).text()
-                var ser_no4 = $(tr_parent).find("td").eq(24).text()
-                var ass_code = $(tr_parent).find("td").eq(25).text()
-                var del_note = $(tr_parent).find("td").eq(26).text()
-                var del_date = $(tr_parent).find("td").eq(27).text()
-                var mtrl = $(tr_parent).find("td").eq(28).text()
-                var lic_start = $(tr_parent).find("td").eq(29).text()
-                var lic_month = $(tr_parent).find("td").eq(30).text()
-                var lic_exp = $(tr_parent).find("td").eq(31).text()
-                var war_start = $(tr_parent).find("td").eq(32).text()
-                var war_month = $(tr_parent).find("td").eq(33).text()
-                var war_exp = $(tr_parent).find("td").eq(34).text()
-                var rem = $(tr_parent).find("td").eq(35).text()
+                var series1 = $(tr_parent).find("td").eq(20).text()
+                var price = $(tr_parent).find("td").eq(21).text()
+                var ser_no1 = $(tr_parent).find("td").eq(22).text()
+                var ser_no2 = $(tr_parent).find("td").eq(23).text()
+                var ser_no3 = $(tr_parent).find("td").eq(24).text()
+                var ser_no4 = $(tr_parent).find("td").eq(25).text()
+                var ass_code = $(tr_parent).find("td").eq(26).text()
+                var del_note = $(tr_parent).find("td").eq(27).text()
+                var del_date = $(tr_parent).find("td").eq(28).text()
+                var mtrl = $(tr_parent).find("td").eq(29).text()
+                var lic_start = $(tr_parent).find("td").eq(30).text()
+                var lic_month = $(tr_parent).find("td").eq(31).text()
+                var lic_exp = $(tr_parent).find("td").eq(32).text()
+                var war_start = $(tr_parent).find("td").eq(33).text()
+                var war_month = $(tr_parent).find("td").eq(34).text()
+                var war_exp = $(tr_parent).find("td").eq(35).text()
+                var rem = $(tr_parent).find("td").eq(36).text()
                 // var attch = $(tr_parent).find('td:eq(36) input[type=file]').prop('files')[0];
-                var attch = $(tr_parent).find('td:eq(36) img').attr('src');
-                var po_doc_date = $(tr_parent).find("td").eq(37).text()
-                var plant = $(tr_parent).find("td").eq(38).text()
-                var status = $(tr_parent).find("td").eq(39).text()
-                var quantity = $(tr_parent).find("td").eq(40).text()
-                var unit = $(tr_parent).find("td").eq(41).text()
-                var po_item = $(tr_parent).find("td").eq(42).text()
+                var attch = $(tr_parent).find('td:eq(37) img').attr('src');
+                var po_doc_date = $(tr_parent).find("td").eq(38).text()
+                var plant = $(tr_parent).find("td").eq(39).text()
+                var status = $(tr_parent).find("td").eq(340).text()
+                var quantity = $(tr_parent).find("td").eq(41).text()
+                var unit = $(tr_parent).find("td").eq(42).text()
+                var po_item = $(tr_parent).find("td").eq(43).text()
 
                 // $("#empl_name1").val(emp_id);
                 var selectize = $('#empl_name1').selectize()
@@ -3513,6 +3533,7 @@ $username = $_SESSION['username'];
                 $("#asset_sub_group1").find(":selected").text(ass_sub_grp);
                 $("#brand1").find(":selected").text(brand);
                 $("#model1").find(":selected").text(model);
+                $("#series1").val(series1);
                 $("#price1").val(price);
                 $("#ser_no11").val(ser_no1);
                 $("#ser_no21").val(ser_no2);
@@ -3592,6 +3613,7 @@ $username = $_SESSION['username'];
             var asset_sub_group = $("#asset_sub_group1").find(":selected").text()
             var brand = $("#brand1").find(":selected").text()
             var model = $("#model1").find(":selected").text()
+            var series1 = $("#series1").val()
             var price = $("#price1").val()
             var ser_no1 = $("#ser_no11").val()
             var ser_no2 = $("#ser_no21").val()
@@ -3636,35 +3658,36 @@ $username = $_SESSION['username'];
             tr_parent.find("td").eq(17).text(asset_sub_group)
             tr_parent.find("td").eq(18).text(brand)
             tr_parent.find("td").eq(19).text(model)
-            tr_parent.find("td").eq(20).text(price)
-            tr_parent.find("td").eq(21).text(ser_no1)
-            tr_parent.find("td").eq(22).text(ser_no2)
-            tr_parent.find("td").eq(23).text(ser_no3)
-            tr_parent.find("td").eq(24).text(ser_no4)
-            tr_parent.find("td").eq(25).text(ass_code)
-            tr_parent.find("td").eq(26).text(del_note)
-            tr_parent.find("td").eq(27).text(del_date)
-            tr_parent.find("td").eq(28).text(malt_shrt)
-            tr_parent.find("td").eq(29).text(license_start)
-            tr_parent.find("td").eq(30).text(license_month)
-            tr_parent.find("td").eq(31).text(license_exp)
-            tr_parent.find("td").eq(32).text(war_start)
-            tr_parent.find("td").eq(33).text(war_month)
-            tr_parent.find("td").eq(34).text(war_exp)
-            tr_parent.find("td").eq(35).text(remarks)
+            tr_parent.find("td").eq(20).text(series1)
+            tr_parent.find("td").eq(21).text(price)
+            tr_parent.find("td").eq(22).text(ser_no1)
+            tr_parent.find("td").eq(23).text(ser_no2)
+            tr_parent.find("td").eq(24).text(ser_no3)
+            tr_parent.find("td").eq(25).text(ser_no4)
+            tr_parent.find("td").eq(26).text(ass_code)
+            tr_parent.find("td").eq(27).text(del_note)
+            tr_parent.find("td").eq(28).text(del_date)
+            tr_parent.find("td").eq(29).text(malt_shrt)
+            tr_parent.find("td").eq(30).text(license_start)
+            tr_parent.find("td").eq(31).text(license_month)
+            tr_parent.find("td").eq(32).text(license_exp)
+            tr_parent.find("td").eq(33).text(war_start)
+            tr_parent.find("td").eq(34).text(war_month)
+            tr_parent.find("td").eq(35).text(war_exp)
+            tr_parent.find("td").eq(36).text(remarks)
             // attchtr_parent).find('td:eq(36) input[type=file]').prop('files')[0];
             // attchtr_parent).find('td:eq(36) img').attr('src');
-            tr_parent.find("td").eq(37).text(po_doc_date)
-            tr_parent.find("td").eq(38).text(plant)
-            tr_parent.find("td").eq(39).text(status)
-            tr_parent.find("td").eq(40).text(qty)
-            tr_parent.find("td").eq(41).text(unit)
-            tr_parent.find("td").eq(42).text(item)
+            tr_parent.find("td").eq(38).text(po_doc_date)
+            tr_parent.find("td").eq(39).text(plant)
+            tr_parent.find("td").eq(40).text(status)
+            tr_parent.find("td").eq(41).text(qty)
+            tr_parent.find("td").eq(42).text(unit)
+            tr_parent.find("td").eq(43).text(item)
 
             if (attch) {
                 var reader = new FileReader();
                 reader.onload = function(event){
-                    tr_parent.find('td:eq(36) img').attr('src', event.target.result);
+                    tr_parent.find('td:eq(37) img').attr('src', event.target.result);
                 }
                 reader.onerror = function(event) {
                     console.error("FileReader error:", event.target.error);
@@ -3736,6 +3759,7 @@ $username = $_SESSION['username'];
                     var ass_sub_grp1 = []
                     var brand1 = []
                     var model1 = []
+                    var series = []
                     var unit_price = []
                     var ser_no1 = []
                     var ser_no2 = []
@@ -3826,6 +3850,11 @@ $username = $_SESSION['username'];
                                     model1.push(this.innerText)
                                 })
                                 // ajaxData.append("model1", model1)
+
+                                $(".series").each(function(){
+                                    series.push(this.innerText)
+                                })
+                                // ajaxData.append("series", series)
 
                                 $(".unit_price").each(function(){
                                     unit_price.push(this.innerText)
@@ -3951,7 +3980,7 @@ $username = $_SESSION['username'];
                                     type: 'POST',
                                     url: "../../logic/insert_new_po.php",
                                     data: {name:name, po_no:po_no, data:data, emp_id:emp_id, ref_per:ref_per, supp1:supp1, req_grp1:req_grp1,
-                                        req_type1:req_type1, ass_grp1:ass_grp1, ass_sub_grp1:ass_sub_grp1, brand1:brand1, model1:model1, 
+                                        req_type1:req_type1, ass_grp1:ass_grp1, ass_sub_grp1:ass_sub_grp1, brand1:brand1, model1:model1, series:series, 
                                         unit_price:unit_price, ser_no1:ser_no1, ser_no2:ser_no2, ser_no3:ser_no3, ser_no4:ser_no4, ass_code:ass_code, 
                                         del_note:del_note, del_date:del_date, mtrl_short:mtrl_short, lic_start:lic_start, lic_month:lic_month, lic_exp:lic_exp, 
                                         war_start:war_start, war_month:war_month, war_exp, rem:rem, po_doc_date1:po_doc_date1, plant1:plant1, status:status, 

@@ -94,6 +94,12 @@ session_start();
                     <span>Modify Assets</span></a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="../user/transfer_asset.php">
+                    <i class="fa-solid fa-right-left"></i>
+                    <span>Transfer Assets</span></a>
+            </li>
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -368,7 +374,7 @@ session_start();
                                                         FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
                                                         WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
                                                         AND A.VENDOR_CODE = C.VENDOR_CODE
-                                                        AND A.CANCEL_ASSET_FLAG is null
+                                                        AND B.CANCEL_ASSET_FLAG is null
                                                         ORDER BY A.DOCUMENT_NO DESC";
                                         
                                                 $result = oci_parse(connection(), $sql);
@@ -644,6 +650,11 @@ session_start();
                                 </div>
 
                                 <div class="col-md-4">
+                                    <label class="form-label">Series *</label>
+                                    <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                </div>
+
+                                <div class="col-md-4">
                                     <label class="form-label">Price</label>
                                     <input id="price" name='price[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
                                 </div>
@@ -718,7 +729,7 @@ session_start();
                                     <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="background-color: #e6e6e6;">
                                 </div>
 
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <label class="form-label">Remarks *</label>
                                     <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " 
                                         style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
@@ -951,6 +962,7 @@ $(document).ready(function(){
                 $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
                 $("#brand").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
                 $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
+                $("#series").val(res1.SERIES)
                 $("#price").val(res1.PRICE)
                 $("#ser_no1").val(res1.SER_NO1)
                 $("#ser_no2").val(res1.SER_NO2)
@@ -1176,6 +1188,7 @@ $(document).ready(function(){
     $("#save_btn1").click(function(){
         var po_no =  $("#po_number").val()
         var po_item = $("#po_item").val()
+        var series = $("#series").val()
         var ser_no1 = $(".ser_no1").val()
         var ass_code = $(".ass_code").val()
         var del_note = $(".del_note").val()
@@ -1202,7 +1215,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "../../logic/modified_po.php",
-                    data:{po_no:po_no, po_item:po_item, name:name, ser_no1:ser_no1, ass_code:ass_code, del_note:del_note,
+                    data:{po_no:po_no, po_item:po_item, series:series, name:name, ser_no1:ser_no1, ass_code:ass_code, del_note:del_note,
                         license_start:license_start, license_month:license_month, license_exp:license_exp, war_start:war_start,
                         war_month:war_month, war_exp:war_exp, remarks:remarks},
                     success: function(res){

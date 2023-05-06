@@ -88,6 +88,12 @@ session_start();
                     <span>Modify Assets</span></a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="../user/transfer_asset.php">
+                    <i class="fa-solid fa-right-left"></i>
+                    <span>Transfer Assets</span></a>
+            </li>
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -232,7 +238,7 @@ session_start();
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
                                                             // echo "<option value='".htmlspecialchars($result[0],ENT_IGNORE)."'>".htmlspecialchars($result[0],ENT_IGNORE)."</option>";
-                                                            echo "<p>".number_format($result[0], 2, '.', ',')."</p>";
+                                                            echo "<p>".number_format($result[0])."</p>";
                                                         ?>
                                                     </div>
                                                 </div>

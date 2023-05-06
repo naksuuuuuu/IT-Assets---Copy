@@ -31,6 +31,7 @@
             $ass_sub_grp1 = $_POST['ass_sub_grp1'][$key];
             $brand1 = $_POST['brand1'][$key];
             $model1 = $_POST['model1'][$key];
+            $series = $_POST['series'][$key];
             $unit_price = $_POST['unit_price'][$key];
             $ser_no1 = $_POST['ser_no1'][$key];
             $ser_no2 = $_POST['ser_no2'][$key];
@@ -66,12 +67,12 @@
                 $ass_id_sql = "SELECT max(ASSET_ID) from IT_ASSET_DETAILS1";
                     $stmt = oci_parse(connection(), $ass_id_sql);
                     oci_execute($stmt);
-                    $row = oci_fetch_row($stmt);
-                    if ($row[0] == '') {
+                    $ass_row = oci_fetch_row($stmt);
+                    if ($ass_row[0] == '') {
                         $ass_id = "0001";
                     }
                     else{
-                        $ass_id = $row[0];
+                        $ass_id = $ass_row[0];
                         $ass_id++;
                     }
 
@@ -86,13 +87,13 @@
                     SUB_ASSET_GROUP, BRAND, MODEL, SERIAL_NO1, SERIAL_NO2, SERIAL_NO3, SERIAL_NO4, ASS_CODE, UNIT,
                     QTY, PO_ITEM, UNIT_PRICE, LICENSE_START_DATE, LICENSE_MONTH, LICENSE_EXPIRE_DATE, 
                     WARRANTY_START_DATE, WARRANTY_MONTH, WARRANTY_EXPIRE_DATE, DEL_NOTE, MTRL_SHORT, REMARKS,
-                    REF_PERSON, EMPL_ID, USER_CREATE, USER_CREATED_DATE, ASSET_ID)
+                    REF_PERSON, EMPL_ID, USER_CREATE, USER_CREATED_DATE, ASSET_ID, SERIES)
                     VALUES 
                     (:doc_num, to_date(:doc_date, 'DD/MM/YY'), :po_no, to_date(:del_date, 'DD/MM/YY'), :req_grp1, :req_type1, :ass_grp1, 
                     :ass_sub_grp1, :brand1, :model1, :serial_no1, :serial_no2, :serial_no3, :serial_no4, :ass_code, :unit, 
                     :qty, :po_item, :unit_price, to_date(:lic_start, 'DD/MM/YY'), :lic_month, to_date(:lic_exp, 'DD/MM/YY'), 
                     to_date(:war_start, 'DD/MM/YY'), :war_month, to_date(:war_exp, 'DD/MM/YY'), :del_note, :mtrl_short, :rem,
-                    :ref_person,  :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :ass_id)";
+                    :ref_person, :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :ass_id, :series)";
 
                     $result= oci_parse(connection(), $det_sql);
 
@@ -106,6 +107,7 @@
                     oci_bind_by_name($result, ':ass_sub_grp1', $ass_sub_grp1);
                     oci_bind_by_name($result, ':brand1', $brand1);
                     oci_bind_by_name($result, ':model1', $model1);
+                    oci_bind_by_name($result, ':series', $series);
                     oci_bind_by_name($result, ':serial_no1', $ser_no1);
                     oci_bind_by_name($result, ':serial_no2', $ser_no2);
                     oci_bind_by_name($result, ':serial_no3', $ser_no3);
@@ -206,12 +208,12 @@
                     $ass_id_sql = "SELECT max(ASSET_ID) from IT_ASSET_DETAILS1";
                         $stmt = oci_parse(connection(), $ass_id_sql);
                         oci_execute($stmt);
-                        $row = oci_fetch_row($stmt);
-                        if ($row[0] == '') {
+                        $ass_row = oci_fetch_row($stmt);
+                        if ($ass_row[0] == '') {
                             $ass_id = "0001";
                         }
                         else{
-                            $ass_id = $row[0];
+                            $ass_id = $ass_row[0];
                             $ass_id++;
                         }
 
@@ -226,13 +228,13 @@
                     SUB_ASSET_GROUP, BRAND, MODEL, SERIAL_NO1, SERIAL_NO2, SERIAL_NO3, SERIAL_NO4, ASS_CODE, UNIT,
                     QTY, PO_ITEM, UNIT_PRICE, LICENSE_START_DATE, LICENSE_MONTH, LICENSE_EXPIRE_DATE, 
                     WARRANTY_START_DATE, WARRANTY_MONTH, WARRANTY_EXPIRE_DATE, DEL_NOTE, MTRL_SHORT, REMARKS,
-                    REF_PERSON, EMPL_ID, USER_CREATE, USER_CREATED_DATE, ASSET_ID)
+                    REF_PERSON, EMPL_ID, USER_CREATE, USER_CREATED_DATE, ASSET_ID, SERIES)
                     VALUES 
                     (:doc_num, to_date(:doc_date, 'DD/MM/YY'), :po_no, to_date(:del_date, 'DD/MM/YY'), :req_grp1, :req_type1, :ass_grp1, 
                     :ass_sub_grp1, :brand1, :model1, :serial_no1, :serial_no2, :serial_no3, :serial_no4, :ass_code, :unit, 
                     :qty, :po_item, :unit_price, to_date(:lic_start, 'DD/MM/YY'), :lic_month, to_date(:lic_exp, 'DD/MM/YY'), 
                     to_date(:war_start, 'DD/MM/YY'), :war_month, to_date(:war_exp, 'DD/MM/YY'), :del_note, :mtrl_short, :rem,
-                    :ref_person,  :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :ass_id)";
+                    :ref_person,  :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :ass_id, :series)";
 
                     $result= oci_parse(connection(), $det_sql);
 
@@ -246,6 +248,7 @@
                     oci_bind_by_name($result, ':ass_sub_grp1', $ass_sub_grp1);
                     oci_bind_by_name($result, ':brand1', $brand1);
                     oci_bind_by_name($result, ':model1', $model1);
+                    oci_bind_by_name($result, ':series', $series);
                     oci_bind_by_name($result, ':serial_no1', $ser_no1);
                     oci_bind_by_name($result, ':serial_no2', $ser_no2);
                     oci_bind_by_name($result, ':serial_no3', $ser_no3);
