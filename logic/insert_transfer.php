@@ -59,9 +59,10 @@
             
             // details
             if(oci_execute($res, OCI_NO_AUTO_COMMIT)){
-                $doc_num = "SELECT DOCUMENT_NO FROM IT_ASSET_TRANSFER_TRN_HDR WHERE PO_NUMBER = :po_no";
+                $doc_num = "SELECT DOCUMENT_NO FROM IT_ASSET_TRANSFER_TRN_HDR WHERE PO_NUMBER = :po_no AND PO_ITEM = :po_item";
                 $res_doc_num = oci_parse(connection(), $doc_num); 
                 oci_bind_by_name($res_doc_num, ':po_no', $po_number);
+                oci_bind_by_name($res_doc_num, ':po_item', $po_item);
                 oci_execute($res_doc_num);
                 $row1 = oci_fetch_row($res_doc_num);
 
@@ -87,14 +88,24 @@
 
                 if(oci_execute($res_dtl, OCI_NO_AUTO_COMMIT)){
 
-                    oci_commit(connection());
-                   
-                    echo json_encode(array('success' => 1, 'message' => "SAVED", 'icon' => "success"));
-                }
-                else{
-                    oci_rollback(connection());
-                    
-                    echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));
+                    $update = "UPDATE IT_ASSET_DETAILS1 SET EMPL_ID = :emp_id2, LAST_USER_UPDATE = :user_name, 
+                        LAST_USER_UPDATE_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am')
+                        WHERE PO_NUMBER = :po_no AND PO_ITEM = :po_item";
+                    $stmt = oci_parse(connection(), $update);
+                    oci_bind_by_name($stmt, ':emp_id2', $emp_id2);
+                    oci_bind_by_name($stmt, ':user_name', $name);
+                    oci_bind_by_name($stmt, ':update_date', $date);
+                    oci_bind_by_name($stmt, ':po_no', $po_number);
+                    oci_bind_by_name($stmt, ':po_item', $po_item);
+
+                    if (oci_execute($stmt, OCI_NO_AUTO_COMMIT)) {
+                        oci_commit(connection());
+                        echo json_encode(array('success' => 1, 'message' => "SAVED", 'icon' => "success"));
+                    }
+                    else {
+                        oci_rollback(connection());
+                        echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));
+                    }
                 }
                 oci_free_statement($res_dtl);
             }
