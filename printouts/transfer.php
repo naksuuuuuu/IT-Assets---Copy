@@ -4,39 +4,53 @@ require "../config/connection.php";
 require '../fpdf/mc_indent.php';
 
 if(isset($_POST['po_number'])){
-    $po_no = $_POST['po_number'];
-    $po_item = $_POST['po_item'];
+$empId = $_POST['employee_id'];
+$empId2 = $_POST['employee_id2'];
+$poNo = $_POST['po_number'];
+$poItem = $_POST['po_item'];
 
-    $sql = "SELECT A.TRANSFER_DATE, A.TRANSFER_FROM, A.TRANSFER_TO, D.ASSET_SUB_GROUP_NAME, E.BRAND_NAME, 
-        F.MODEL, B.SERIAL_1, B.SERIAL_2, C.ASS_CODE, C.MTRL_SHORT
-        FROM IT_ASSET_TRANSFER_TRN_HDR A, IT_ASSET_TRANSFER_TRN_DTL B, IT_ASSET_DETAILS1 C, IT_ASSET_SUB_GROUP D, 
-        IT_ASSET_BRAND E, IT_ASSET_MODEL F
-        WHERE A.REF_DOC_NO = C.DOCUMENT_NO
-        AND B.ASSET_SUB_GROUP = D.ASSET_SUB_GROUP_CODE
-        AND B.BRAND_CODE = E.BRAND_CODE
-        AND B.MODEL_CODE = F.MODEL_CODE
-        AND A.PO_NUMBER = :po_number
-        AND A.PO_ITEM = :po_item";
-    $res = oci_parse(connection(), $sql);
-    oci_bind_by_name($res, ':po_number', $po_no);
-    oci_bind_by_name($res, ':po_item', $po_item);
-    oci_execute($res);
+        $query = "SELECT a.SERIAL_NO1, a.SERIAL_NO2, a.SERIAL_NO3, a.SERIAL_NO4, b.BRAND_NAME, c.MODEL, d.ASSET_SUB_GROUP_NAME, to_date(e.TRANSFER_DATE, 'DD/MM/YY') as transfer_date
+        , a.ASS_CODE, a.MTRL_SHORT
+        from IT_ASSET_DETAILS1 a, IT_ASSET_BRAND b, IT_ASSET_MODEL c, IT_ASSET_SUB_GROUP d, IT_ASSET_TRANSFER_TRN_HDR e
+        where a.PO_NUMBER = :poNo
+        and a.PO_ITEM = :poItem
+        and a.MODEL = c.MODEL_CODE
+        and a.BRAND = b.BRAND_CODE
+        and a.SUB_ASSET_GROUP = d.ASSET_SUB_GROUP_CODE
+        and a.DOCUMENT_NO = e.REF_DOC_NO	";
+        
+        $stmt = oci_parse(connection(), $query);
+        oci_bind_by_name($stmt, ':poNo', $poNo);
+        oci_bind_by_name($stmt, ':poItem', $poItem);
+        oci_execute($stmt);
+        $row = oci_fetch_assoc($stmt);
 
-    while($row = oci_fetch_assoc($res)){
-        $empId = $row["TRANSFER_TO"];
-
-        $conn2 = "SELECT A.NAMEENG, d.DESCR, c.DESCR AS LOCATION from PERSON_TBL a, JobCur_ee b,  location_tbl c, DEPARTMENT_TBL d
+        $tranferFrom = "SELECT A.NAMEENG, d.DESCR, c.DESCR AS LOCATION from PERSON_TBL a, JobCur_ee b,  location_tbl c, DEPARTMENT_TBL d
             WHERE a.EMPLID = b.EMPLID
             and b.LOCATION = c.LOCATION
             AND b.DEPTID = d.DEPTID
             and b.EMPL_STATUS = 'A'
-            and a.EMPLID = :empl_name";
+            and a.EMPLID = :emp_id";
         
-        $res2 = oci_parse(connection1(), $conn2);
-        oci_bind_by_name($res2, ':empl_name', $empId);
+        $res2 = oci_parse(connection1(), $tranferFrom);
+        oci_bind_by_name($res2, ':emp_id', $empId);
         oci_execute($res2);
 
         $row2 = oci_fetch_assoc($res2);
+
+        $tranferTo = "SELECT A.NAMEENG, d.DESCR, c.DESCR AS LOCATION from PERSON_TBL a, JobCur_ee b,  location_tbl c, DEPARTMENT_TBL d
+        WHERE a.EMPLID = b.EMPLID
+        and b.LOCATION = c.LOCATION
+        AND b.DEPTID = d.DEPTID
+        and b.EMPL_STATUS = 'A'
+        and a.EMPLID = :emp_id";
+    
+    $res3 = oci_parse(connection1(), $tranferTo);
+    oci_bind_by_name($res3, ':emp_id', $empId2);
+    oci_execute($res3);
+
+    $row3 = oci_fetch_assoc($res3);
+
             
         $pdf = new PDF('P', 'mm', 'A4');
         $pdf -> AddFont('Gothic', "", 'CenturyGothic.php');
@@ -89,15 +103,15 @@ if(isset($_POST['po_number'])){
         $pdf -> SetFont('Gothic','',8);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Transferred To/New Custodian:', 0,0,'L');
-        $pdf -> Cell(135,5,$row2["NAMEENG"], 1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row3["NAMEENG"], 1,1,'C'); //dynamic
         $pdf -> Ln(3);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Department/ Position:', 0,0,'L');
-        $pdf -> Cell(135,5,$row2['DESCR'], 1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row3['DESCR'], 1,1,'C'); //dynamic
         $pdf -> Ln(3);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Location:', 0,0,'L');
-        $pdf -> MultiCell(135,5,$row2['LOCATION'],1,'L',false,0); //dynamic
+        $pdf -> MultiCell(135,5,$row3['LOCATION'],1,'L',false,0); //dynamic
         $pdf -> Ln(3);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Signature:', 0,0,'L');
@@ -163,10 +177,10 @@ if(isset($_POST['po_number'])){
         $pdf -> Cell(135,5,$row["MODEL"],1,1,'C'); //dynamic
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5, 'Serial Number 1:',0,0,'L');
-        $pdf -> Cell(135,5,$row["SERIAL_1"],1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row["SERIAL_NO1"],1,1,'C'); //dynamic
         $pdf -> SetX($x+5); 
         $pdf -> Cell(50,5, 'Serial Number 2:',0,0,'L');
-        $pdf -> Cell(135,5,$row["SERIAL_2"],1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row["SERIAL_NO2"],1,1,'C'); //dynamic
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5, 'Asset Code:',0,0,'L');
         $pdf -> Cell(135,5,$row["ASS_CODE"],1,1,'C'); //dynamic
@@ -215,6 +229,4 @@ if(isset($_POST['po_number'])){
         $pdf -> Cell(95,5,'__________/__________/__________',0,1,'C');
 
         $pdf->Output('transfer.pdf', 'I');
-    }
 }
-

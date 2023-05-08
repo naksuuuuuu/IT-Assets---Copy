@@ -346,7 +346,7 @@ $username = $_SESSION['username'];
                                         </tr>
                                     </thead>
                                     <tbody id="doc_tbody">
-                                        <?php
+                                    <?php
                                             $query = "SELECT a.DOCUMENT_NO, b.ASSET_ID, b.EMPL_ID, b.sub_ASSET_GROUP, c.MODEL, d.BRAND_NAME, b.PO_item, 
                                                 b.PO_NUMBER, e.ASSET_SUB_GROUP_NAME  
                                                 FROM IT_ASSET_HEADER1 a, IT_ASSET_DETAILS1 b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e
@@ -417,7 +417,7 @@ $username = $_SESSION['username'];
     <div class="modal fade" id="empl_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <form method="POST" class="needs-validation" novalidate enctype='multipart/form-data' id='print_form'>
+                <form action="../../printouts/transfer.php" target="_blank" method="POST" class="needs-validation" novalidate enctype='multipart/form-data' id='print_form'>
                     <div class="modal-header">
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -425,209 +425,215 @@ $username = $_SESSION['username'];
                     </div>
                     <br>
                     <div class="container-fluid">
-                        <div class="card" style="border: 2px solid #e6e6e6">
-                            <div class="card-header py-2" style="background-color: #e6e6e6">
-                                <div class="row" style="margin: auto">
-                                    <div class="col">
-                                        <h2 class="m-0 font-weight-bold" style="color: #000">Item Information</h2>
-                                    </div>
-                                    <div class="col" style="margin-right: -650px; margin-top: 10px">
-                                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </button>
+                        
+                            <div class="card" style="border: 2px solid #e6e6e6">
+                                <div class="card-header py-2" style="background-color: #e6e6e6">
+                                    <div class="row" style="margin: auto">
+                                        <div class="col">
+                                            <h2 class="m-0 font-weight-bold" style="color: #000">Item Information</h2>
+                                        </div>
                                     </div>
                                 </div>
+                                <br>
+                                <!-- <div class="collapse" id="collapseExample"> -->
+                                    <div class="row g-3" style="margin: auto">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Asset Sub Group *</label>
+                                            <select id="asset_sub_group" name='asset_sub_group' type="text" readonly autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                <!-- <option selected=" ">Select Asset Sub Group...</option> -->
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Brand *</label>
+                                            <select id="brand" name='brand' type="text" autocomplete="off" readonly class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    <!-- <option selected=" ">Select Brand...</option> -->
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Model *</label>
+                                            <select id="model" name='model' type="text" autocomplete="off" readonly class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                <!-- <option selected=" ">Select Model...</option> -->
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Series *</label>
+                                            <input id="series" name='series' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Price</label>
+                                            <input id="price" name='price' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Serial Number 1 *</label>
+                                            <input id="ser_no1" name='ser_no' type="text" autocomplete="off" readonly class="form-control ser_no1" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Serial Number 2</label>
+                                            <input id="ser_no2" name='ser_no2' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Serial Number 3</label>
+                                            <input id="ser_no3" name='ser_no3' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Serial Number 4</label>
+                                            <input id="ser_no4" name='ser_no4' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label class="form-label">Remarks *</label>
+                                            <textarea id="remarks" name='remarks' type="text" autocomplete="off" readonly class="form-control remarks" required placeholder=" " 
+                                                style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                            </textarea>
+                                        </div>
+
+                                        <!-- <div class="col-md-4">
+                                            <label class="form-label">Attachment *</label>
+                                            <input id="attch" name='attch' type="file" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        </div> -->
+                                        <div class="col-md-4" hidden>
+                                            <label class="form-label">PO NUMBER</label>
+                                            <input id="po_number" name='po_number' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        </div>
+                                        <div class="col-md-4" hidden>
+                                            <label class="form-label">PO Item</label>
+                                            <input id="po_item" name='po_item' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        </div>
+
+                                        <div class="col-md-4" hidden>
+                                            <label class="form-label">Doc No</label>
+                                            <input id="ref_doc_no" name='ref_doc_no' type="text" type="text" readonly autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        </div>
+
+                                        <div class="col-md-4" hidden>
+                                            <label class="form-label">Ass ID</label>
+                                            <input id="ass_id" name='ass_id' type="text" type="text" readonly autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        </div>
+
+                                    </div>
+                                <!-- </div> -->
+                                <br>
                             </div>
                             <br>
-                            <!-- <div class="collapse" id="collapseExample"> -->
+                        
+                            <div class="card" style="border: 2px solid #e6e6e6">
+                                <div class="card-header py-2" style="background-color: #e6e6e6">
+                                    <h2 class="m-0 font-weight-bold" style="color: #000">Current Asset User</h2>
+                                </div>
+                                <br>
+                                <div class="col-md-4">
+                                    <label class="form-label">Employee Name *</label>
+                                    <select type="text" class="form-select" id="empl_name" placeholder=" " disabled required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        <option value="">Select Name....</option>
+                                        <?php 
+                                            $sql = "SELECT A.NAMEENG, A.EMPLID FROM PERSON_TBL A, JOBCUR_EE B 
+                                            WHERE B.EMPLID = A.EMPLID
+                                            and B.EMPL_STATUS = 'A'
+                                            ORDER BY A.NAMEENG ASC";
+                                            $result = oci_parse(connection1(), $sql);
+                                            oci_execute($result);
+                                            while ($row = oci_fetch_row($result)){
+                                                echo "<option value='$row[1]'>".htmlspecialchars($row[0], ENT_IGNORE)."</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+
                                 <div class="row g-3" style="margin: auto">
                                     <div class="col-md-4">
-                                        <label class="form-label">Asset Sub Group *</label>
-                                        <select id="asset_sub_group" name='asset_sub_group' type="text" readonly autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                            <!-- <option selected=" ">Select Asset Sub Group...</option> -->
-                                        </select>
+                                        <label class="form-label">Department</label>
+                                        <input type="text" class="form-control" id="dept" readonly style="background-color: #e6e6e6;">
                                     </div>
 
                                     <div class="col-md-4">
-                                        <label class="form-label">Brand *</label>
-                                        <select id="brand" name='brand' type="text" autocomplete="off" readonly class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                <!-- <option selected=" ">Select Brand...</option> -->
-                                        </select>
+                                        <label class="form-label">Employee ID</label>
+                                        <input type="text" class="form-control" name="employee_id" id="emp_id" placeholder=" " readonly style="background-color: #e6e6e6;">
                                     </div>
 
                                     <div class="col-md-4">
-                                        <label class="form-label">Model *</label>
-                                        <select id="model" name='model' type="text" autocomplete="off" readonly class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                            <!-- <option selected=" ">Select Model...</option> -->
-                                        </select>
+                                        <label class="form-label">Working Location</label>
+                                        <input type="text" class="form-control" id="work_loc" placeholder=" " readonly style="background-color: #e6e6e6;">
                                     </div>
 
                                     <div class="col-md-4">
-                                        <label class="form-label">Series *</label>
-                                        <input id="series" name='series' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                        <label class="form-label">Business Email</label>
+                                        <input type="text" class="form-control" id="bus_email" placeholder=" " readonly style="background-color: #e6e6e6;">
                                     </div>
+                                </div>
+                                <br>
+                            </div>
+                            <br>
 
-                                    <div class="col-md-4">
-                                        <label class="form-label">Price</label>
-                                        <input id="price" name='price' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label class="form-label">Serial Number 1 *</label>
-                                        <input id="ser_no1" name='ser_no' type="text" autocomplete="off" readonly class="form-control ser_no1" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label class="form-label">Serial Number 2</label>
-                                        <input id="ser_no2" name='ser_no2' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label class="form-label">Serial Number 3</label>
-                                        <input id="ser_no3" name='ser_no3' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label class="form-label">Serial Number 4</label>
-                                        <input id="ser_no4" name='ser_no4' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <label class="form-label">Remarks *</label>
-                                        <textarea id="remarks" name='remarks' type="text" autocomplete="off" readonly class="form-control remarks" required placeholder=" " 
-                                            style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                        </textarea>
-                                    </div>
-
-                                    <!-- <div class="col-md-4">
-                                        <label class="form-label">Attachment *</label>
-                                        <input id="attch" name='attch' type="file" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <div class="card" style="border: 2px solid #e6e6e6">
+                                    <!-- <div class="card-header py-2" style="background-color: #e6e6e6">
+                                        <h2 class="m-0 font-weight-bold" style="color: #000">Transfer Asset To</h2>
                                     </div> -->
-                                    <div class="col-md-4" hidden>
-                                        <label class="form-label">PO NUMBER</label>
-                                        <input id="po_number" name='po_number' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                    </div>
-                                    <div class="col-md-4" hidden>
-                                        <label class="form-label">PO Item</label>
-                                        <input id="po_item" name='po_item' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                    </div>
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" id="collapse" type="button" data-bs-toggle="collapse" data-bs-target="#info" aria-expanded="false" aria-controls="flush-collapseThree">
+                                            Transfer To
+                                        </button>
+                                    </h2>
+                                    <div id="info" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Employee Name *</label>
+                                            <select type="text" class="form-select" id="empl_name2" placeholder=" " required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                <option value="">Select Name....</option>
+                                                <?php 
+                                                    $sql = "SELECT A.NAMEENG, A.EMPLID FROM PERSON_TBL A, JOBCUR_EE B 
+                                                    WHERE B.EMPLID = A.EMPLID
+                                                    and B.EMPL_STATUS = 'A'
+                                                    ORDER BY A.NAMEENG ASC";
+                                                    $result = oci_parse(connection1(), $sql);
+                                                    oci_execute($result);
+                                                    while ($row = oci_fetch_row($result)){
+                                                        echo "<option value='$row[1]'>".htmlspecialchars($row[0], ENT_IGNORE)."</option>";
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
 
-                                    <div class="col-md-4" hidden>
-                                        <label class="form-label">Doc No</label>
-                                        <input id="ref_doc_no" name='ref_doc_no' type="text" type="text" readonly autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                    </div>
+                                        <div class="row g-3" style="margin: auto">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Department</label>
+                                                <input type="text" class="form-control" id="dept2" readonly style="background-color: #e6e6e6;">
+                                            </div>
 
-                                    <div class="col-md-4" hidden>
-                                        <label class="form-label">Ass ID</label>
-                                        <input id="ass_id" name='ass_id' type="text" type="text" readonly autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                    </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Employee ID</label>
+                                                <input type="text" class="form-control" name="employee_id2" id="emp_id2" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                            </div>
 
+                                            <div class="col-md-4">
+                                                <label class="form-label">Working Location</label>
+                                                <input type="text" class="form-control" id="work_loc2" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Business Email</label>
+                                                <input type="text" class="form-control" id="bus_email2" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                            </div>
+
+                                            <!-- <div class="col-md-4">
+                                                <label class="form-label">Reference Person</label>
+                                                <input type="text" class="form-control" id="ref_person" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                            </div> -->
+                                        </div>
+                                        <br>
+                                    </div>
                                 </div>
-                            <!-- </div> -->
-                            <br>
+                                <br>
+                            </div>
                         </div>
-                        <br>
-                    
-                        <div class="card" style="border: 2px solid #e6e6e6">
-                            <div class="card-header py-2" style="background-color: #e6e6e6">
-                                <h2 class="m-0 font-weight-bold" style="color: #000">Current Asset User</h2>
-                            </div>
-                            <br>
-                            <div class="col-md-4">
-                                <label class="form-label">Employee Name *</label>
-                                <select type="text" class="form-select" name="employee_name" id="empl_name" placeholder=" " disabled required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                    <option value="">Select Name....</option>
-                                    <?php 
-                                        $sql = "SELECT A.NAMEENG, A.EMPLID FROM PERSON_TBL A, JOBCUR_EE B 
-                                        WHERE B.EMPLID = A.EMPLID
-                                        and B.EMPL_STATUS = 'A'
-                                        ORDER BY A.NAMEENG ASC";
-                                        $result = oci_parse(connection1(), $sql);
-                                        oci_execute($result);
-                                        while ($row = oci_fetch_row($result)){
-                                            echo "<option value='$row[1]'>".htmlspecialchars($row[0], ENT_IGNORE)."</option>";
-                                        }
-                                    ?>
-                                </select>
-                            </div>
-
-                            <div class="row g-3" style="margin: auto">
-                                <div class="col-md-4">
-                                    <label class="form-label">Department</label>
-                                    <input type="text" class="form-control" id="dept" readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Employee ID</label>
-                                    <input type="text" class="form-control" name="employee_id" id="emp_id" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Working Location</label>
-                                    <input type="text" class="form-control" id="work_loc" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Business Email</label>
-                                    <input type="text" class="form-control" id="bus_email" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-                            </div>
-                            <br>
-                        </div>
-                    <br>
-
-                    <div class="card" style="border: 2px solid #e6e6e6">
-                            <div class="card-header py-2" style="background-color: #e6e6e6">
-                                <h2 class="m-0 font-weight-bold" style="color: #000">Transfer Asset To</h2>
-                            </div>
-                            <br>
-                            <div class="col-md-4">
-                                <label class="form-label">Employee Name *</label>
-                                <select type="text" class="form-select" name="employee_name2" id="empl_name2" placeholder=" " required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                    <option value="">Select Name....</option>
-                                    <?php 
-                                        $sql = "SELECT A.NAMEENG, A.EMPLID FROM PERSON_TBL A, JOBCUR_EE B 
-                                        WHERE B.EMPLID = A.EMPLID
-                                        and B.EMPL_STATUS = 'A'
-                                        ORDER BY A.NAMEENG ASC";
-                                        $result = oci_parse(connection1(), $sql);
-                                        oci_execute($result);
-                                        while ($row = oci_fetch_row($result)){
-                                            echo "<option value='$row[1]'>".htmlspecialchars($row[0], ENT_IGNORE)."</option>";
-                                        }
-                                    ?>
-                                </select>
-                            </div>
-
-                            <div class="row g-3" style="margin: auto">
-                                <div class="col-md-4">
-                                    <label class="form-label">Department</label>
-                                    <input type="text" class="form-control" id="dept2" readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Employee ID</label>
-                                    <input type="text" class="form-control" name="employee_id2" id="emp_id2" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Working Location</label>
-                                    <input type="text" class="form-control" id="work_loc2" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Business Email</label>
-                                    <input type="text" class="form-control" id="bus_email2" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <!-- <div class="col-md-4">
-                                    <label class="form-label">Reference Person</label>
-                                    <input type="text" class="form-control" id="ref_person" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                </div> -->
-                            </div>
-                            <br>
-                        </div>
-                        <br>
                         <div class="col-md-12">
                             <button id="trans_btn" class="btn btn-success" type="button">
                                 <i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer</button>
@@ -636,6 +642,7 @@ $username = $_SESSION['username'];
                             <button id="close_btn" class="btn btn-warning" type="button">
                                 <i class="fa-solid fa-xmark"></i> Close</button>
                         </div>
+                    </div>
                     <br>
                 </form>
             </div>
@@ -727,6 +734,10 @@ $username = $_SESSION['username'];
                         $("#bus_email2").val(res.BUSINESS_EMAIL)
                     }
                 })
+            })
+
+            $("#collapse").click(function(){
+
             })
 
             $('#close_btn').click(function() {
@@ -1014,10 +1025,25 @@ $username = $_SESSION['username'];
                                 ref_doc_no:ref_doc_no, ass_id:ass_id, emp_id:emp_id, emp_id2:emp_id2},
                             success: function(res){
                                 if(res.success == 1){
-                                    notify(res.icon, res.message)
-                                    window.setInterval(function(){
-                                        location.reload();	
-                                    },2000)
+                                    Swal.fire({
+                                        title: 'Are you sure',
+                                        text: 'This item will be print',
+                                        icon: 'question',
+                                        showCancelButton: true,
+                                        reverseButtons: true,
+                                        cancelButtonText: 'No',
+                                        confirmButtonText: 'Yes',
+                                        confirmButtonColor: 'green',
+                                        cancelButtonColor: 'red'
+                                    }).then(confirm => {
+                                        if(confirm.isConfirmed){
+                                            $("#print_form").submit()
+                                            notify(res.icon, res.message)
+                                            window.setInterval(function(){
+                                                location.reload();	
+                                            },2000)
+                                        }
+                                    })
                                 }
                                 else{
                                     notify(res.icon, res.message)

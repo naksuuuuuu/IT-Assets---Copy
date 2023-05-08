@@ -72,7 +72,7 @@ if(isset($_POST['po_num']) and !isset($_POST['po_item1'])){
     while($PO = oci_fetch_assoc($stmt)){
         // array_push($array, array('VENDOR_NAME' => htmlspecialchars($PO['VENDOR_NAME'],ENT_IGNORE)));
         $result.="<tr>
-                    <td style='text-align: center'><i class='fa-solid fa-ban cancel_item' id='plusImg' style='color: red'></i></td>
+                    <td style='text-align: center'><img id='plusImg' class='add_po' src='../../assets/add-button.png'></i></td>
                     <td><input class='po_num form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_NO']."'></td>
                     <td><input class='po_item form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
                     <td><input class='plant form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PLANT']."'></td>
