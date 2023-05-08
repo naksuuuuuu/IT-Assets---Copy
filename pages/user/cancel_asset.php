@@ -36,6 +36,7 @@ session_start();
     <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="../../datatable/datatables.css">
     <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
+    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
     <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
@@ -242,6 +243,74 @@ session_start();
                     .form-select, .form-label, .form-control{
                         color: #666666;
                     }
+
+                    .main-section{
+                        margin:0 auto;
+                        padding: 20px;
+                        margin-top: 20px;
+                        height: auto;
+                        width: auto;
+                        background-color: #fff;
+                        box-shadow: 0px 0px 20px #c1c1c1;
+                    }
+                    .fileinput-remove, .fileinput-upload{
+                        display: none;
+                    }
+
+                    .panel-default>.panel-heading {
+                        color: #333;
+                        text-decoration: none;
+                        background-color: #e6e6e6;
+                        border-color: #e4e5e7;
+                        padding: 0;
+                        -webkit-user-select: none;
+                        -moz-user-select: none;
+                        -ms-user-select: none;
+                        user-select: none;
+                        }
+
+                    .panel-default>.panel-heading a {
+                        color: black;
+                        display: block;
+                        padding: 10px 15px;
+                        text-decoration: none;
+                    }
+
+                    .panel-default>.panel-heading a:after {
+                        content: "";
+                        position: relative;
+                        top: 1px;
+                        display: inline-block;
+                        font-family: 'Arial';
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 1;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        float: right;
+                        transition: transform .25s linear;
+                        -webkit-transition: -webkit-transform .25s linear;
+                    }
+
+                    .panel-default>.panel-heading a[aria-expanded="true"] {
+                        background-color: #e6e6e6;
+                    }
+
+                    .panel-default>.panel-heading a[aria-expanded="true"]:after {
+                        content: "\2212";
+                        -webkit-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                        font-weight: 900;
+                    }
+
+                    .panel-default>.panel-heading a[aria-expanded="false"]:after {
+                        content: "\002b";
+                        -webkit-transform: rotate(90deg);
+                        transform: rotate(90deg);
+                        font-weight: 900;
+                    }
+                    h1 { font-size: 28px; }
+                    h4, modal-title { font-size: 18px; font-weight: bold; }
                 </style>
 
                 <!-- Begin Page Content -->
@@ -452,345 +521,360 @@ session_start();
                     <br>
 
                     <div class="container-fluid">
-                        <div class="card" style="border: 2px solid #e6e6e6">
-                            <div class="card-header py-2" style="background-color: #e6e6e6">
-                                <h2 class="m-0 font-weight-bold" style="color: #000">Receiver Information</h2>
-                            </div>
-                            <br>
-                            <div class="col-md-4">
-                                <label class="form-label">Employee Name *</label>
-                                <select type="text" class="form-select" id="empl_name" placeholder=" " required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                    <option value="">Select Name....</option>
-                                    <?php 
-                                        $sql = "SELECT A.NAMEENG, A.EMPLID FROM PERSON_TBL A, JOBCUR_EE B 
-                                        WHERE B.EMPLID = A.EMPLID
-                                        and B.EMPL_STATUS = 'A'
-                                        ORDER BY A.NAMEENG ASC";
-                                        $result = oci_parse(connection1(), $sql);
-                                        oci_execute($result);
-                                        while ($row = oci_fetch_row($result)){
-                                            echo "<option value='$row[1]'>".htmlspecialchars($row[0], ENT_IGNORE)."</option>";
-                                        }
-                                    ?>
-                                </select>
-                            </div>
-
-                            <div class="row g-3" style="margin: auto">
-                                <div class="col-md-4">
-                                    <label class="form-label">Department</label>
-                                    <input type="text" class="form-control" id="dept" readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Employee ID</label>
-                                    <input type="text" class="form-control" id="emp_id" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Employee Address</label>
-                                    <input type="text" class="form-control" id="emp_add" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Working Location</label>
-                                    <input type="text" class="form-control" id="work_loc" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Offcie Phone</label>
-                                    <input type="text" class="form-control" id="off_phone" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Mobile Phone</label>
-                                    <input type="text" class="form-control" id="mob_phone" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Hired Date</label>
-                                    <input type="text" class="form-control" id="hired_date" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Personal Email</label>
-                                    <input type="text" class="form-control" id="per_email" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Business Email</label>
-                                    <input type="text" class="form-control" id="bus_email" placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <!-- <div class="col-md-4">
-                                    <label class="form-label">Reference Person</label>
-                                    <input type="text" class="form-control" id="ref_person" placeholder=" " style="background-color: #e6e6e6;">
-                                </div> -->
-                            </div>
-                            <br>
-                        </div>
-                    <br>
-
-                    <!-- <div id="filter" class='card container' style="width: calc(100% - 40px);"> -->
-                        <div class="card" style="border: 2px solid #e6e6e6">
-                            <div class="card-header py-2" style="background-color: #e6e6e6">
-                                <h2 class="m-0 font-weight-bold" style="color: #000">Item Information</h2>
-                            </div>
-                            <br>
-                            
-                            <!-- hidden input -->
-                            <div class="row mb-3" style="margin-left: 40px;" hidden>
-                                <div class="col-sm-3" style="margin-left: 40px;">
-                                    <label for="">Po Doc Date</label>
-                                    <input type="date" class="form-control" id="po_doc_date" name="po_doc_date[]" required>
-                                </div>
-
-                                <div class="col-sm-3" style="margin-left: 40px;" >
-                                    <label for="">Plant</label>
-                                    <input type="text" class="form-control" id="plant" name="plant[]" required>
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-3" style="margin-left: 40px;" hidden>
-                                <div class="col-sm-3" style="margin-left: 40px;">
-                                    <label for="">Status</label>
-                                    <input type="text" class="form-control" id="status" name="status[]" required>
-                                </div>
-
-                                <div class="col-sm-3" style="margin-left: 40px;">
-                                    <label for="">Po Name</label>
-                                    <input type="text" class="form-control" id="po_name" name="po_name[]" required>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3" style="margin-left: 40px;" hidden>
-                                <div class="col-sm-2" style="margin-left: 40px;">
-                                    <label for="">QUANTITY</label>
-                                    <input type="text" class="form-control" id="qty" name="qty[]" required>
-                                </div>
-
-                                <div class="col-sm-2" style="margin-left: 40px;">
-                                    <label for="">UNIT</label>
-                                    <input type="text" class="form-control" id="unit" name="unit[]" required>
-                                </div>
-
-                                <div class="col-sm-2" style="margin-left: 40px;">
-                                    <label for="">PO ITEM</label>
-                                    <input type="text" class="form-control" id="item" name="item[]" required>
-                                </div>
-                            </div>
-                            <!-- end of hidden input -->
-
-                            <div class="row g-3" style="margin: auto">
-                                <div class="col-md-4">
-                                    <label class="form-label">Supplier</label>
-                                    <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" placeholder=" " required style="background-color: #e6e6e6;">
-                                        <!-- <option selected=" ">Select Suppliers...</option> -->
-                                            <?php 
-                                                $sql = "SELECT DISTINCT VENDOR_CODE, VENDOR_NAME FROM IT_ASSET_VENDORS";
-                                                $res = oci_parse(connection(), $sql);
-                                                oci_execute($res);
-
-                                                while($row = oci_fetch_row($res)){
-                                                    echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                                }
-                                            ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Request Group *</label>
-                                    <select class="form-select" id="req_grp" name='req_grp[]' type="text" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                        <!-- <option selected=" ">Select Request Group...</option> -->
-                                        <?php 
-                                            $sql = "SELECT REQ_GROUP_ID, REQ_GROUP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GROUP_ID";
-                                            $res = oci_parse(connection(), $sql);
-                                            oci_execute($res);
-
-                                            while($row = oci_fetch_row($res)){
-                                                echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Request Type *</label>
-                                    <select id="type" name='type[]' type="text" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                            <!-- <option selected=" ">Select Request Type...</option> -->
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Asset Group *</label>
-                                    <select id="asset_group" name='asset_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                        <!-- <option selected=" ">Select Asset...</option> -->
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Asset Sub Group *</label>
-                                    <select id="asset_sub_group" name='asset_sub_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                        <!-- <option selected=" ">Select Asset Sub Group...</option> -->
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Brand *</label>
-                                    <select id="brand" name='brand[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                            <!-- <option selected=" ">Select Brand...</option> -->
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Model *</label>
-                                    <select id="model" name='model[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                        <!-- <option selected=" ">Select Model...</option> -->
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Series *</label>
-                                    <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Price</label>
-                                    <input id="price" name='price[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Serial Number 1 *</label>
-                                    <input id="ser_no1" name='ser_no[]' type="text" autocomplete="off" class="form-control ser_no1" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Serial Number 2</label>
-                                    <input id="ser_no2" name='ser_no2[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Serial Number 3</label>
-                                    <input id="ser_no3" name='ser_no3[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Serial Number 4</label>
-                                    <input id="ser_no4" name='ser_no4[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Asset Code *</label>
-                                    <input id="ass_code" name='ass_code[]' type="text" autocomplete="off" class="form-control ass_code" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Delivery Note *</label>
-                                    <input id="del_note" name='del_note[]' type="text" autocomplete="off" class="form-control del_note" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Delivery Date</label>
-                                    <input id="del_date" name='del_date[]' type="date" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Material Short</label>
-                                    <input id="malt_shrt" name='malt_shrt[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">License Month Start</label>
-                                    <input id="license_start" name='license_start[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">License Month</label>
-                                    <input id="license_month" name='license_month[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">License Expiry Date</label>
-                                    <input id="license_exp" name='license_exp[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Warranty Month Start *</label>
-                                    <input id="war_start" name='war_start[]' type="date" autocomplete="off" class="form-control war_start" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Warranty Month *</label>
-                                    <input id="war_month" name='war_month[]' type="text" autocomplete="off" class="form-control war_month" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label">Warranty Expiry Date</label>
-                                    <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="background-color: #e6e6e6;">
-                                </div>
-
-                                <div class="col-md-12">
-                                    <label class="form-label">Remarks *</label>
-                                    <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                    </textarea>
-                                </div>
-
-                                <!-- <div class="col-md-4">
-                                    <label class="form-label">Attachment *</label>
-                                    <input id="attch" name='attch[]' type="file" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div> -->
-                                <div class="col-md-4" hidden>
-                                    <label class="form-label">PO NUMBER</label>
-                                    <input id="po_number" name='po_number' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
-                                <div class="col-md-4" hidden>
-                                    <label class="form-label">Po Item</label>
-                                    <input id="po_item" name='po_item' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                </div>
-                            </div>
-                            <br>
-                        </div>
-                        <br>
-                        <style>
-                            .main-section{
-                            margin:0 auto;
-                            padding: 20px;
-                            margin-top: 50px;
-                            height: auto;
-                            width: auto;
-                            background-color: #fff;
-                            box-shadow: 0px 0px 20px #c1c1c1;
-                            }
-                            .fileinput-remove,
-                            .fileinput-upload{
-                            display: none;
-                            }
-                        </style>
-                        <div class="card" style="border: 2px solid #e6e6e6">
-                            <div class="card-header py-2" style="background-color: #e6e6e6">
-                                <h2 class="m-0 font-weight-bold" style="color: #000">Attachment</h2>
-                            </div>
-                            <!-- <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-8 col-sm-12 col-11 main-section">
-                                        <h2 class="text-center text-danger">Attachment</h2><br>
-                                        <form enctype="multipart/form-data">
-                                            <div class="form-group">
-                                                <div class="file-loading">
-                                                    <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                        <div class="body-message">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div class="card" style="border: 2px solid #e6e6e6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingOne">
+                                            <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Receiver Information
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingOne">
+                                            <div class="panel-body">
+                                                <div class="col-md-4">
+                                                    <label class="form-label">Employee Name *</label>
+                                                    <select type="text" class="form-select" id="empl_name" placeholder=" " required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <option value="">Select Name....</option>
+                                                        <?php 
+                                                            $sql = "SELECT A.NAMEENG, A.EMPLID FROM PERSON_TBL A, JOBCUR_EE B 
+                                                            WHERE B.EMPLID = A.EMPLID
+                                                            and B.EMPL_STATUS = 'A'
+                                                            ORDER BY A.NAMEENG ASC";
+                                                            $result = oci_parse(connection1(), $sql);
+                                                            oci_execute($result);
+                                                            while ($row = oci_fetch_row($result)){
+                                                                echo "<option value='$row[1]'>".htmlspecialchars($row[0], ENT_IGNORE)."</option>";
+                                                            }
+                                                        ?>
+                                                    </select>
                                                 </div>
+
+                                                <div class="row g-3" style="margin: auto">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Department</label>
+                                                        <input type="text" class="form-control" id="dept" readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Employee ID</label>
+                                                        <input type="text" class="form-control" id="emp_id" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Employee Address</label>
+                                                        <input type="text" class="form-control" id="emp_add" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Working Location</label>
+                                                        <input type="text" class="form-control" id="work_loc" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Offcie Phone</label>
+                                                        <input type="text" class="form-control" id="off_phone" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Mobile Phone</label>
+                                                        <input type="text" class="form-control" id="mob_phone" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Hired Date</label>
+                                                        <input type="text" class="form-control" id="hired_date" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Personal Email</label>
+                                                        <input type="text" class="form-control" id="per_email" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Business Email</label>
+                                                        <input type="text" class="form-control" id="bus_email" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <!-- <div class="col-md-4">
+                                                        <label class="form-label">Reference Person</label>
+                                                        <input type="text" class="form-control" id="ref_person" placeholder=" " style="background-color: #e6e6e6;">
+                                                    </div> -->
+                                                </div>
+                                                <br>
                                             </div>
-                                        </form>            
+                                        </div>
                                     </div>
                                 </div>
-                            </div> -->
-                            <br>
-                        </div>
-                        <br>
-                        <div class="col-md-12">
-                            <button id="cancel_btn" class="btn btn-danger" type="button">
-                                <i class="fa-solid fa-ban"></i> Cancel</button>
-                            <button id="close_btn1" class="btn btn-warning" type="button">
-                                <i class="fa-solid fa-xmark"></i> Close</button>
+                                <br>
+
+                                <div class="card" style="border: 2px solid #e6e6e6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="heading_Two">
+                                            <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_Two" aria-expanded="false" aria-controls="collapse_Two">
+                                                    Item Information
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        
+                                        <div id="collapse_Two" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_Two">
+                                            <div class="panel-body">      
+                                                <!-- hidden input -->
+                                                <div class="row mb-3" style="margin-left: 40px;" hidden>
+                                                    <div class="col-sm-3" style="margin-left: 40px;">
+                                                        <label for="">Po Doc Date</label>
+                                                        <input type="date" class="form-control" id="po_doc_date" name="po_doc_date[]" required>
+                                                    </div>
+
+                                                    <div class="col-sm-3" style="margin-left: 40px;" >
+                                                        <label for="">Plant</label>
+                                                        <input type="text" class="form-control" id="plant" name="plant[]" required>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row mb-3" style="margin-left: 40px;" hidden>
+                                                    <div class="col-sm-3" style="margin-left: 40px;">
+                                                        <label for="">Status</label>
+                                                        <input type="text" class="form-control" id="status" name="status[]" required>
+                                                    </div>
+
+                                                    <div class="col-sm-3" style="margin-left: 40px;">
+                                                        <label for="">Po Name</label>
+                                                        <input type="text" class="form-control" id="po_name" name="po_name[]" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-3" style="margin-left: 40px;" hidden>
+                                                    <div class="col-sm-2" style="margin-left: 40px;">
+                                                        <label for="">QUANTITY</label>
+                                                        <input type="text" class="form-control" id="qty" name="qty[]" required>
+                                                    </div>
+
+                                                    <div class="col-sm-2" style="margin-left: 40px;">
+                                                        <label for="">UNIT</label>
+                                                        <input type="text" class="form-control" id="unit" name="unit[]" required>
+                                                    </div>
+
+                                                    <div class="col-sm-2" style="margin-left: 40px;">
+                                                        <label for="">PO ITEM</label>
+                                                        <input type="text" class="form-control" id="item" name="item[]" required>
+                                                    </div>
+                                                </div>
+                                                <!-- end of hidden input -->
+
+                                                <div class="row g-3" style="margin: auto">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Supplier</label>
+                                                        <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" placeholder=" " required style="background-color: #e6e6e6;">
+                                                            <!-- <option selected=" ">Select Suppliers...</option> -->
+                                                                <?php 
+                                                                    $sql = "SELECT DISTINCT VENDOR_CODE, VENDOR_NAME FROM IT_ASSET_VENDORS";
+                                                                    $res = oci_parse(connection(), $sql);
+                                                                    oci_execute($res);
+
+                                                                    while($row = oci_fetch_row($res)){
+                                                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
+                                                                    }
+                                                                ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Request Group *</label>
+                                                        <select class="form-select" id="req_grp" name='req_grp[]' type="text" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                            <!-- <option selected=" ">Select Request Group...</option> -->
+                                                            <?php 
+                                                                $sql = "SELECT REQ_GROUP_ID, REQ_GROUP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GROUP_ID";
+                                                                $res = oci_parse(connection(), $sql);
+                                                                oci_execute($res);
+
+                                                                while($row = oci_fetch_row($res)){
+                                                                    echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Request Type *</label>
+                                                        <select id="type" name='type[]' type="text" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                                <!-- <option selected=" ">Select Request Type...</option> -->
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Asset Group *</label>
+                                                        <select id="asset_group" name='asset_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                            <!-- <option selected=" ">Select Asset...</option> -->
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Asset Sub Group *</label>
+                                                        <select id="asset_sub_group" name='asset_sub_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                            <!-- <option selected=" ">Select Asset Sub Group...</option> -->
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Brand *</label>
+                                                        <select id="brand" name='brand[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                                <!-- <option selected=" ">Select Brand...</option> -->
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Model *</label>
+                                                        <select id="model" name='model[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                            <!-- <option selected=" ">Select Model...</option> -->
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Series *</label>
+                                                        <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Price</label>
+                                                        <input id="price" name='price[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Serial Number 1 *</label>
+                                                        <input id="ser_no1" name='ser_no[]' type="text" autocomplete="off" class="form-control ser_no1" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Serial Number 2</label>
+                                                        <input id="ser_no2" name='ser_no2[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Serial Number 3</label>
+                                                        <input id="ser_no3" name='ser_no3[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Serial Number 4</label>
+                                                        <input id="ser_no4" name='ser_no4[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Asset Code *</label>
+                                                        <input id="ass_code" name='ass_code[]' type="text" autocomplete="off" class="form-control ass_code" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Delivery Note *</label>
+                                                        <input id="del_note" name='del_note[]' type="text" autocomplete="off" class="form-control del_note" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Delivery Date</label>
+                                                        <input id="del_date" name='del_date[]' type="date" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Material Short</label>
+                                                        <input id="malt_shrt" name='malt_shrt[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">License Month Start</label>
+                                                        <input id="license_start" name='license_start[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">License Month</label>
+                                                        <input id="license_month" name='license_month[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">License Expiry Date</label>
+                                                        <input id="license_exp" name='license_exp[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Warranty Month Start *</label>
+                                                        <input id="war_start" name='war_start[]' type="date" autocomplete="off" class="form-control war_start" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Warranty Month *</label>
+                                                        <input id="war_month" name='war_month[]' type="text" autocomplete="off" class="form-control war_month" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Warranty Expiry Date</label>
+                                                        <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Remarks *</label>
+                                                        <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        </textarea>
+                                                    </div>
+
+                                                    <!-- <div class="col-md-4">
+                                                        <label class="form-label">Attachment *</label>
+                                                        <input id="attch" name='attch[]' type="file" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div> -->
+                                                    <div class="col-md-4" hidden>
+                                                        <label class="form-label">PO NUMBER</label>
+                                                        <input id="po_number" name='po_number' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+                                                    <div class="col-md-4" hidden>
+                                                        <label class="form-label">Po Item</label>
+                                                        <input id="po_item" name='po_item' type="text" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="card" style="border: 2px solid #e6e6e6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingThree">
+                                            <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    Attachment
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                            <div class="panel-body">   
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-8 col-sm-12 col-11 main-section">
+                                                            <form enctype="multipart/form-data">
+                                                                <div class="form-group">
+                                                                    <div class="file-loading">
+                                                                        <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                                                                    </div>
+                                                                </div>
+                                                            </form>            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-md-12">
+                                    <button id="cancel_btn" class="btn btn-danger" type="button">
+                                        <i class="fa-solid fa-ban"></i> Cancel</button>
+                                    <button id="close_btn1" class="btn btn-warning" type="button">
+                                        <i class="fa-solid fa-xmark"></i> Close</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <br>
@@ -831,6 +915,7 @@ session_start();
 
     <!-- Page level plugins -->
     <script src="../../datatable/datatables.js"></script>
+    <script src="../../assets/file_input/js/fileinput.js"></script>
 
     <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
     <script src="../../assets/selectize/dist/js/selectize.js"></script>

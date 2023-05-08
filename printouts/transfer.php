@@ -9,8 +9,8 @@ $empId2 = $_POST['employee_id2'];
 $poNo = $_POST['po_number'];
 $poItem = $_POST['po_item'];
 
-        $query = "SELECT a.SERIAL_NO1, a.SERIAL_NO2, a.SERIAL_NO3, a.SERIAL_NO4, b.BRAND_NAME, c.MODEL, d.ASSET_SUB_GROUP_NAME, to_date(e.TRANSFER_DATE, 'DD/MM/YY') as transfer_date
-        , a.ASS_CODE, a.MTRL_SHORT
+        $query = "SELECT a.SERIAL_NO1, a.SERIAL_NO2, a.SERIAL_NO3, a.SERIAL_NO4, b.BRAND_NAME, c.MODEL, d.ASSET_SUB_GROUP_NAME, 
+        to_date(e.TRANSFER_DATE, 'DD/MM/YY') as transfer_date, a.ASS_CODE, a.MTRL_SHORT
         from IT_ASSET_DETAILS1 a, IT_ASSET_BRAND b, IT_ASSET_MODEL c, IT_ASSET_SUB_GROUP d, IT_ASSET_TRANSFER_TRN_HDR e
         where a.PO_NUMBER = :poNo
         and a.PO_ITEM = :poItem
@@ -35,7 +35,6 @@ $poItem = $_POST['po_item'];
         $res2 = oci_parse(connection1(), $tranferFrom);
         oci_bind_by_name($res2, ':emp_id', $empId);
         oci_execute($res2);
-
         $row2 = oci_fetch_assoc($res2);
 
         $tranferTo = "SELECT A.NAMEENG, d.DESCR, c.DESCR AS LOCATION from PERSON_TBL a, JobCur_ee b,  location_tbl c, DEPARTMENT_TBL d
@@ -48,16 +47,23 @@ $poItem = $_POST['po_item'];
     $res3 = oci_parse(connection1(), $tranferTo);
     oci_bind_by_name($res3, ':emp_id', $empId2);
     oci_execute($res3);
-
     $row3 = oci_fetch_assoc($res3);
 
-            
+    $max_doc = "SELECT max(DOCUMENT_NO) AS DOCUMENT_NO FROM IT_ASSET_TRANSFER_TRN_HDR";
+    $res4 = oci_parse(connection(), $max_doc);
+    oci_execute($res4);
+    $row4 = oci_fetch_assoc($res4);
+                
         $pdf = new PDF('P', 'mm', 'A4');
         $pdf -> AddFont('Gothic', "", 'CenturyGothic.php');
         $pdf -> AddFont('Gothic', "B", 'GOTHICB0.php');
         $pdf -> AddPage();
         $pdf -> SetLeftMargin(4);
+        $x = $pdf -> GetX();
+        $pdf -> SetFont('Gothic','B',10);
+        $pdf -> Cell(0,5,'Doc No: '.$row4['DOCUMENT_NO'],0,0,'R'); //doc no
         $pdf -> Image('itcenter.png', 17,7,35,0,'PNG');
+        $pdf -> SetX($x+5);
         $pdf -> SetFont('Gothic','B',14);
         $pdf -> Cell(0,15,'ASSET TRANSFER NOTIFICATION', 0,1,'C');
         $x = $pdf -> GetX();
@@ -73,11 +79,11 @@ $poItem = $_POST['po_item'];
         $pdf -> SetFont('Gothic','',8);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Transferred By:', 0,0,'L');
-        $pdf -> Cell(135,5,$row2["NAMEENG"], 1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row2["NAMEENG"], 1,1,'L'); //dynamic
         $pdf -> Ln(3);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Department/Position:', 0,0,'L');
-        $pdf -> Cell(135,5,$row2['DESCR'], 1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row2['DESCR'], 1,1,'L'); //dynamic
         $pdf -> Ln(3);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Location:', 0,0,'L');
@@ -103,11 +109,11 @@ $poItem = $_POST['po_item'];
         $pdf -> SetFont('Gothic','',8);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Transferred To/New Custodian:', 0,0,'L');
-        $pdf -> Cell(135,5,$row3["NAMEENG"], 1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row3["NAMEENG"], 1,1,'L'); //dynamic
         $pdf -> Ln(3);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Department/ Position:', 0,0,'L');
-        $pdf -> Cell(135,5,$row3['DESCR'], 1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row3['DESCR'], 1,1,'L'); //dynamic
         $pdf -> Ln(3);
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Location:', 0,0,'L');
@@ -134,7 +140,7 @@ $poItem = $_POST['po_item'];
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5,'Asset Type:', 0,0,'L');
         $pdf -> SetFont('Gothic','',8);
-        $pdf -> Cell(40,5,$row["ASSET_SUB_GROUP_NAME"],'B',1,'L'); //dynamic
+        $pdf -> Cell(40,5,$row["ASSET_SUB_GROUP_NAME"],'B',1,'C'); //dynamic
         // $x = $pdf -> GetX();
         // $pdf -> SetX($x+18);
         // $pdf -> Cell(45,5,'Desktop', 0,0,'L');
@@ -171,19 +177,19 @@ $poItem = $_POST['po_item'];
         $pdf -> SetX($x+5);
         $pdf -> SetFont('Gothic','',8);
         $pdf -> Cell(50,5, 'Brand:',0,0,'L');
-        $pdf -> Cell(135,5,$row['BRAND_NAME'],1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row['BRAND_NAME'],1,1,'L'); //dynamic
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5, 'Model:',0,0,'L');
-        $pdf -> Cell(135,5,$row["MODEL"],1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row["MODEL"],1,1,'L'); //dynamic
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5, 'Serial Number 1:',0,0,'L');
-        $pdf -> Cell(135,5,$row["SERIAL_NO1"],1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row["SERIAL_NO1"],1,1,'L'); //dynamic
         $pdf -> SetX($x+5); 
         $pdf -> Cell(50,5, 'Serial Number 2:',0,0,'L');
-        $pdf -> Cell(135,5,$row["SERIAL_NO2"],1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row["SERIAL_NO2"],1,1,'L'); //dynamic
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5, 'Asset Code:',0,0,'L');
-        $pdf -> Cell(135,5,$row["ASS_CODE"],1,1,'C'); //dynamic
+        $pdf -> Cell(135,5,$row["ASS_CODE"],1,1,'L'); //dynamic
         $pdf -> SetX($x+5);
         $pdf -> Cell(50,5, 'Item Description(s):',0,0,'L');
         $pdf -> MultiCell(135,5,$row["MTRL_SHORT"],1,'L',false,0); //dynamic
