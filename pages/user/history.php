@@ -20,7 +20,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ITAMS - Report</title>
+    <title>ITAMS - History</title>
 
     <!-- Custom fonts for this template -->
     <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -107,7 +107,7 @@ session_start();
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Set-Up</span>
+                    <span>Set-Up Master</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -133,9 +133,10 @@ session_start();
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="../user/report.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Report</span></a>
+                <a class="nav-link" href="../user/history.php">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
+                </a>
             </li>
 
             <!-- Nav Item - Charts -->
@@ -343,7 +344,9 @@ session_start();
                                                 <select type="text" name="po_num" id='po_num' class='form-select' required style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                 <?php  
-                                                    $sql = "SELECT DISTINCT PO_NUMBER FROM IT_ASSET_HEADER1 WHERE CANCEL_ASSET_FLAG is null";
+                                                    $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
+                                                        WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                        AND B.CANCEL_ASSET_FLAG is null";
                                                     $res = oci_parse(connection(), $sql);
                                                     oci_execute($res);
 
@@ -585,7 +588,6 @@ session_start();
                                                         FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
                                                         WHERE A.PO_NUMBER = B.PO_NUMBER
                                                         AND A.VENDOR_CODE = C.VENDOR_CODE
-                                                        AND B.CANCEL_ASSET_FLAG is null
                                                         ORDER BY A.DOCUMENT_NO DESC";
                                                 
                                                         $result = oci_parse(connection(), $sql);
@@ -1140,7 +1142,7 @@ session_start();
                                                         <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
-                                                    <div class="col-md12">
+                                                    <div class="col-md-12">
                                                         <label class="form-label">Remarks *</label>
                                                         <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>

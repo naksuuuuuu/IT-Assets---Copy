@@ -106,7 +106,7 @@ $username = $_SESSION['username'];
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Set-Up</span>
+                    <span>Set-Up Master</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -132,9 +132,10 @@ $username = $_SESSION['username'];
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="../user/report.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Report</span></a>
+                <a class="nav-link" href="../user/history.php">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
+                </a>
             </li>
 
             <!-- Nav Item - Charts -->
@@ -1395,6 +1396,15 @@ $username = $_SESSION['username'];
                                                                             <label class="form-label">Warranty Expiry Date</label>
                                                                             <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="background-color: #e6e6e6;">
                                                                         </div>
+
+                                                                        <!-- <div class="col-md-4">
+                                                                            <label class="form-label">Asset Flag</label>
+                                                                            <select id="ass_flag" name='ass_flag' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                                                <option selected=" ">Select Asset Sub Group...</option>
+                                                                                <option value="asset">Asset</option>
+                                                                                <option value="expense">Expense</option>
+                                                                            </select>
+                                                                        </div> -->
 
                                                                         <div class="col-md-12">
                                                                             <label class="form-label">Remarks *</label>
@@ -4002,8 +4012,6 @@ $username = $_SESSION['username'];
                                 })
                                 // ajaxData.append("po_item1", po_item1)
 
-                                
-
                                 // console.log(emp_id + ' ' + ref_per + ' ' + supp1 + ' ' + req_grp1 + ' ' + req_type1 + ' ' + ass_grp1 + ' ' +
                                 //  ass_sub_grp1 + ' ' + brand1 + ' ' + model1  + ' ' + unit_price + ' ' + ser_no1 + ' ' + ser_no2 + ' ' +
                                 //  ser_no3 + ' ' + ser_no4 + ' ' + ass_code + ' ' + del_note + ' ' + del_date + ' ' + mtrl_short 
@@ -4017,10 +4025,10 @@ $username = $_SESSION['username'];
                                         unit_price:unit_price, ser_no1:ser_no1, ser_no2:ser_no2, ser_no3:ser_no3, ser_no4:ser_no4, ass_code:ass_code, 
                                         del_note:del_note, del_date:del_date, mtrl_short:mtrl_short, lic_start:lic_start, lic_month:lic_month, lic_exp:lic_exp, 
                                         war_start:war_start, war_month:war_month, war_exp, rem:rem, po_doc_date1:po_doc_date1, plant1:plant1, status:status, 
-                                        qty:qty, unit:unit, po_item1:po_item1} ,
+                                        qty:qty, unit:unit, po_item1:po_item1, },
                                     success: function(res){
+                                        // console.log(res)
                                         if(res.success == 1){
-                                            // console.log(res)
                                             notify(res.icon, res.message)
                                             window.setInterval(function(){
                                                 location.reload();	

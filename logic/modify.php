@@ -35,6 +35,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["DOCUMENT_DATE"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row["PO_DOCUMENT_DATE"]."</td>
@@ -80,6 +81,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["DOCUMENT_DATE"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row["PO_DOCUMENT_DATE"]."</td>
@@ -128,6 +130,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["DOCUMENT_DATE"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row["PO_DOCUMENT_DATE"]."</td>
@@ -173,6 +176,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["DOCUMENT_DATE"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row["PO_DOCUMENT_DATE"]."</td>

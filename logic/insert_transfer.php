@@ -26,6 +26,7 @@
         $ass_id = $_POST['ass_id'];
         $emp_id = $_POST['emp_id'];
         $emp_id2 = $_POST['emp_id2'];
+        $remarks_1 = $_POST['remarks_1'];
 
         // header
         $maxDoc = "SELECT max(DOCUMENT_NO) from IT_ASSET_TRANSFER_TRN_HDR";
@@ -68,10 +69,10 @@
 
                 $dtl_sql = "INSERT INTO IT_ASSET_TRANSFER_TRN_DTL 
                     (DOCUMENT_NO, ASSET_ID, ASSET_SUB_GROUP, BRAND_CODE, MODEL_CODE, SERIAL_1, SERIAL_2, SERIAL_3, SERIAL_4,
-                    REMARKS, USER_CREATE, CREATE_DATE)
+                    REMARKS, USER_CREATE, CREATE_DATE, TRANSFER_REMARKS)
                     VALUES
                     (:doc_no, :ass_id, :ass_sub_grp, :brand, :model, :ser_no1, :ser_no2, :ser_no3, :ser_no4,
-                    :remarks, :user_name, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'))";
+                    :remarks, :user_name, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :transfer_remarks)";
                 $res_dtl = oci_parse(connection(), $dtl_sql);
                 oci_bind_by_name($res_dtl, ':doc_no', $row1[0]);
                 oci_bind_by_name($res_dtl, ':ass_id', $ass_id);
@@ -85,6 +86,7 @@
                 oci_bind_by_name($res_dtl, ':remarks', $remarks);
                 oci_bind_by_name($res_dtl, ':user_name', $name);
                 oci_bind_by_name($res_dtl, ':user_date', $date);
+                oci_bind_by_name($res_dtl, ':transfer_remarks', $remarks_1);
 
                 if(oci_execute($res_dtl, OCI_NO_AUTO_COMMIT)){
 

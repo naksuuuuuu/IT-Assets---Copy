@@ -11,7 +11,7 @@ if (isset($_POST['data'])){
 
             $po_num = $_POST['po_num'];
 
-            $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, C.VENDOR_NAME, B.EMPL_ID, B.MTRL_SHORT
+            $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.PO_ITEM, C.VENDOR_NAME, B.EMPL_ID, B.MTRL_SHORT
             FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
             WHERE A.PO_NUMBER = B.PO_NUMBER
             AND A.VENDOR_CODE = C.VENDOR_CODE
@@ -38,6 +38,7 @@ if (isset($_POST['data'])){
                 $result.="<tr>
                             <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                             <td>".$row["DOCUMENT_NO"]."</td>
+                            <td>".$row["PO_ITEM"]."</td>
                             <td>".$row["PO_NUMBER"]."</td>
                             <td>".$row1["NAMEENG"]."</td>
                             <td>".$row1["DESCR"]."</td>
@@ -57,8 +58,7 @@ if (isset($_POST['data'])){
 
         $emp_name = $_POST['emp_name'];
 
-        $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, C.VENDOR_NAME, 
-                B.EMPL_ID, B.MTRL_SHORT
+        $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.PO_ITEM, C.VENDOR_NAME, B.EMPL_ID, B.MTRL_SHORT
                 FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
                 WHERE A.PO_NUMBER = B.PO_NUMBER
                 AND A.VENDOR_CODE = C.VENDOR_CODE
@@ -85,6 +85,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
                         <td>".$row1["DESCR"]."</td>
@@ -104,8 +105,7 @@ if (isset($_POST['data'])){
 
         $brand = $_POST['brand'];
 
-        $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, C.VENDOR_NAME, 
-                B.EMPL_ID, B.MTRL_SHORT
+        $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.PO_ITEM, C.VENDOR_NAME, B.EMPL_ID, B.MTRL_SHORT
                 FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
                 WHERE A.PO_NUMBER = B.PO_NUMBER
                 AND A.VENDOR_CODE = C.VENDOR_CODE
@@ -132,6 +132,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
                         <td>".$row1["DESCR"]."</td>
@@ -238,7 +239,7 @@ if (isset($_POST['data'])){
                 else{
                     $po_num = $row1['PO_NUMBER'];
 
-                    $head_sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.MTRL_SHORT, C.VENDOR_NAME FROM IT_ASSET_HEADER1 A 
+                    $head_sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.MTRL_SHORT, B.PO_ITEM, C.VENDOR_NAME FROM IT_ASSET_HEADER1 A 
                                 INNER JOIN IT_ASSET_VENDORS C ON A.VENDOR_CODE = C.VENDOR_CODE 
                                 INNER JOIN IT_ASSET_DETAILS1 B ON A.PO_NUMBER = B.PO_NUMBER
                                 WHERE A.PO_NUMBER = :po";
@@ -252,6 +253,7 @@ if (isset($_POST['data'])){
                     $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></td>
                         <td>".$row2["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row1["PO_NUMBER"]."</td>
                         <td>".$row["NAMEENG"]."</td>
                         <td>".$row["DESCR"]."</td>
@@ -273,8 +275,7 @@ if (isset($_POST['data'])){
 
         $vendor = $_POST['vendor'];
 
-        $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, C.VENDOR_NAME, 
-                B.EMPL_ID, B.MTRL_SHORT
+        $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.PO_ITEM, C.VENDOR_NAME, B.EMPL_ID, B.MTRL_SHORT
                 FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
                 WHERE A.PO_NUMBER = B.PO_NUMBER
                 AND A.VENDOR_CODE = C.VENDOR_CODE
@@ -301,6 +302,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
                         <td>".$row1["DESCR"]."</td>
@@ -320,7 +322,7 @@ if (isset($_POST['data'])){
         $from_date = date_format(date_create($_POST['from_date']), 'd/m/Y');
         $to_date = date_format(date_create($_POST['to_date']), 'd/m/Y');
 
-        $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, A.PO_DOCUMENT_DATE, C.VENDOR_NAME, 
+        $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.PO_ITEM, C.VENDOR_NAME, 
         B.EMPL_ID, B.MTRL_SHORT 
         FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
         WHERE A.PO_NUMBER = B.PO_NUMBER AND A.VENDOR_CODE = C.VENDOR_CODE AND A.PO_DOCUMENT_DATE
@@ -348,6 +350,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
                         <td>".$row1["DESCR"]."</td>
@@ -367,7 +370,7 @@ if (isset($_POST['data'])){
 
        $ser_no1 = $_POST['ser_no1'];
 
-        $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, A.PO_DOCUMENT_DATE, C.VENDOR_NAME, 
+        $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, B.PO_ITEM, A.PO_DOCUMENT_DATE, C.VENDOR_NAME, 
         B.EMPL_ID, B.MTRL_SHORT 
         FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
         WHERE A.PO_NUMBER = B.PO_NUMBER 
@@ -395,6 +398,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
                         <td>".$row1["DESCR"]."</td>
@@ -414,7 +418,7 @@ if (isset($_POST['data'])){
 
        $rem = $_POST['rem'];
 
-        $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, A.PO_DOCUMENT_DATE, C.VENDOR_NAME, 
+        $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, B.PO_ITEM, A.PO_DOCUMENT_DATE, C.VENDOR_NAME, 
         B.EMPL_ID, B.MTRL_SHORT 
         FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
         WHERE A.PO_NUMBER = B.PO_NUMBER 
@@ -442,6 +446,7 @@ if (isset($_POST['data'])){
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
                         <td>".$row1["DESCR"]."</td>

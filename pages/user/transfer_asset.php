@@ -99,7 +99,7 @@ $username = $_SESSION['username'];
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Set-Up</span>
+                    <span>Set-Up Master</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -125,9 +125,10 @@ $username = $_SESSION['username'];
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="../user/report.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Report</span></a>
+                <a class="nav-link" href="../user/history.php">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
+                </a>
             </li>
 
             <!-- Nav Item - Charts -->
@@ -367,7 +368,7 @@ $username = $_SESSION['username'];
                                                 oci_execute($stmt1);
                                                 $row1 = oci_fetch_assoc($stmt1);
                                                 echo "<tr>
-                                                        <td><img id='plusImg' src='../../assets/add-free-icon-font.png' class='plusBtn'></td>
+                                                        <td><img id='plusImg' src='../../assets/add-free-icon-font.png' class='view_dtl'></td>
                                                         <td>" . $row['DOCUMENT_NO'] . "</td>
                                                         <td>" . $row['PO_ITEM'] . "</td>
                                                         <td>" . $row['ASSET_ID'] . "</td>
@@ -694,6 +695,11 @@ $username = $_SESSION['username'];
                                                         <label class="form-label">Reference Person</label>
                                                         <input type="text" class="form-control" id="ref_person" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div> -->
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Remarks *</label>
+                                                        <textarea id="remarks_1" name='remarks_1[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        </textarea>
+                                                    </div>
                                                 </div>
                                                 <br>
                                             </div>
@@ -837,7 +843,7 @@ $username = $_SESSION['username'];
                     }
                 })
             })
-            $("#myTable").on("click", ".plusBtn", function(){
+            $("#myTable").on("click", ".view_dtl", function(){
                 var po_number = $(this).closest('tr').find('.po_no').val()
                 var po_item = $(this).closest('tr').find('.po_item').val()
                 $.ajax({
@@ -909,7 +915,7 @@ $username = $_SESSION['username'];
                     })
                     $.ajax({
                         type:"POST",
-                        url: "../../logic/modify.php",
+                        url: "../../logic/transfer_search.php",
                         data:{data:data, po_no:po_no, },
                         success: function(res){   
                             Swal.hideLoading()
@@ -950,7 +956,7 @@ $username = $_SESSION['username'];
                     })
                     $.ajax({
                         type:"POST",
-                        url: "../../logic/modify.php",
+                        url: "../../logic/transfer_search.php",
                         data:{data:data, ser_no:ser_no},
                         success: function(res){   
                             Swal.hideLoading()
@@ -991,7 +997,7 @@ $username = $_SESSION['username'];
                     })
                     $.ajax({
                         type:"POST",
-                        url: "../../logic/modify.php",
+                        url: "../../logic/transfer_search.php",
                         data:{data:data, from_date:from_date, to_date:to_date},
                         success: function(res){   
                             Swal.hideLoading()
@@ -1032,7 +1038,7 @@ $username = $_SESSION['username'];
                     })
                     $.ajax({
                         type:"POST",
-                        url: "../../logic/modify.php",
+                        url: "../../logic/transfer_search.php",
                         data:{data:data, emp_name:emp_name},
                         success: function(res){   
                             Swal.hideLoading()
@@ -1085,6 +1091,7 @@ $username = $_SESSION['username'];
                 var ass_id = $("#ass_id").val()
                 var emp_id = $("#emp_id").val()
                 var emp_id2 = $("#emp_id2").val()
+                var remarks_1 = $("#remarks_1").val()
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'This will be transferred',
@@ -1102,7 +1109,7 @@ $username = $_SESSION['username'];
                             url:'../../logic/insert_transfer.php',
                             data:{data:data, name:name, po_number:po_number, po_item:po_item, asset_sub_group:asset_sub_group, brand:brand,
                                 model:model, ser_no1:ser_no1, ser_no2:ser_no2, ser_no3:ser_no3, ser_no4:ser_no4, remarks:remarks,
-                                ref_doc_no:ref_doc_no, ass_id:ass_id, emp_id:emp_id, emp_id2:emp_id2},
+                                ref_doc_no:ref_doc_no, ass_id:ass_id, emp_id:emp_id, emp_id2:emp_id2, remarks_1:remarks_1},
                             success: function(res){
                                 if(res.success == 1){
                                     Swal.fire({
