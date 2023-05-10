@@ -75,24 +75,24 @@ $username = $_SESSION['username'];
             <li class="nav-item">
                 <a class="nav-link" href="../user/asset.php">
                     <i class="fas fa-plus-circle"></i>
-                    <span>Add Assets</span></a>
+                    <span>Add Asset</span></a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="../user/cancel_asset.php">
                     <i class="fas fa-ban"></i>
-                    <span>Cancel Assets</span></a>
+                    <span>Cancel Asset</span></a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="../user/modify_asset.php">
                     <i class="fa-solid fa-pen-to-square"></i>
-                    <span>Modify Assets</span></a>
+                    <span>Modify Asset</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../user/transfer_asset.php">
                     <i class="fa-solid fa-right-left"></i>
-                    <span>Transfer Assets</span></a>
+                    <span>Transfer Asset</span></a>
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -242,8 +242,8 @@ $username = $_SESSION['username'];
 
                 
                 <div class="container-fluid">
-                    <div class="card-header">
-                        <h2 class="m-0 font-weight-bold text-primary">Transfer Asset</h2>
+                    <div class="card-header" style="background-color: #4e73df;">
+                        <h2 class="m-0 font-weight-bold" style="color: white; text-align: center">Transferred Asset</h2>
                     </div>
                     <br>
                     <div class="card shadow mb-4">
@@ -654,12 +654,12 @@ $username = $_SESSION['username'];
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="headingThree">
                                             <h3 class="panel-title font-weight-bold" style="color: #000">
-                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_Three" aria-expanded="false" aria-controls="collapse_Three">
                                                     Transfer To
                                                 </a>
                                             </h3>
                                         </div>
-                                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                        <div id="collapse_Three" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">
                                                 <div class="col-md-4">
                                                     <label class="form-label">Employee Name *</label>

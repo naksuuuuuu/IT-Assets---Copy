@@ -75,25 +75,25 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="../user/asset.php">
                     <i class="fas fa-plus-circle"></i>
-                    <span>Add Assets</span></a>
+                    <span>Add Asset</span></a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="../user/cancel_asset.php">
                     <i class="fas fa-ban"></i>
-                    <span>Cancel Assets</span></a>
+                    <span>Cancel Asset</span></a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="../user/modify_asset.php">
                 <i class="fa-solid fa-pen-to-square"></i>
-                    <span>Modify Assets</span></a>
+                    <span>Modify Asset</span></a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="../user/transfer_asset.php">
                     <i class="fa-solid fa-right-left"></i>
-                    <span>Transfer Assets</span></a>
+                    <span>Transfer Asset</span></a>
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -230,6 +230,10 @@ session_start();
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    <div class="card-header" style="background-color: #4e73df;">
+                        <h2 class="m-0 font-weight-bold" style="color: white; text-align: center">Add Asset Sub Group</h2>
+                    </div>
+                    <br>
 
                     <!-- Page Heading -->
                     <!-- <h1 class="h3 mb-2 text-gray-800">Sub Asset Group</h1> -->
