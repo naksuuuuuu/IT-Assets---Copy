@@ -355,15 +355,16 @@ $username = $_SESSION['username'];
                                     </thead>
                                     <tbody id="doc_tbody">
                                     <?php
-                                            $query = "SELECT a.DOCUMENT_NO, b.ASSET_ID, b.EMPL_ID, b.sub_ASSET_GROUP, c.MODEL, d.BRAND_NAME, b.PO_item, 
-                                                b.PO_NUMBER, e.ASSET_SUB_GROUP_NAME  
-                                                FROM IT_ASSET_HEADER1 a, IT_ASSET_DETAILS1 b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e
-                                                where a.DOCUMENT_NO	= b.DOCUMENT_NO
-                                                and b.MODEL = c.MODEL_code
-                                                and b.BRAND = d.BRAND_CODE
-                                                and b.CANCEL_ASSET_FLAG is null
-                                                and b.SUB_ASSET_GROUP = e.ASSET_SUB_GROUP_CODE
-                                                order by a.document_no DESC";
+                                            $query = "SELECT f.DOCUMENT_NO, b.ASSET_ID, b.EMPL_ID, b.sub_ASSET_GROUP, c.MODEL, d.BRAND_NAME, b.PO_item, 
+                                            b.PO_NUMBER, e.ASSET_SUB_GROUP_NAME  
+                                            FROM IT_ASSET_HEADER1 a, IT_ASSET_DETAILS1 b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e, IT_ASSET_TRANSFER_TRN_HDR f
+                                            where a.DOCUMENT_NO	= b.DOCUMENT_NO
+                                            and a.DOCUMENT_NO = f.REF_DOC_NO
+                                            and b.MODEL = c.MODEL_code
+                                            and b.BRAND = d.BRAND_CODE
+                                            and b.CANCEL_ASSET_FLAG is null
+                                            and b.SUB_ASSET_GROUP = e.ASSET_SUB_GROUP_CODE
+                                            order by f.document_no DESC";
                                             $stmt = oci_parse(connection(), $query);
                                             oci_execute($stmt);
                                             while ($row = oci_fetch_assoc($stmt)) {
@@ -598,7 +599,7 @@ $username = $_SESSION['username'];
                                         <div class="panel-heading" role="tab" id="heading_Two">
                                             <h3 class="panel-title font-weight-bold" style="color: #000">
                                                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_Two" aria-expanded="false" aria-controls="collapse_Two">
-                                                    Current Asset User
+                                                    Transfer From
                                                 </a>
                                             </h3>
                                         </div>
@@ -654,7 +655,7 @@ $username = $_SESSION['username'];
                                         <div class="panel-heading" role="tab" id="headingThree">
                                             <h3 class="panel-title font-weight-bold" style="color: #000">
                                                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                Transfer Asset To
+                                                    Transfer To
                                                 </a>
                                             </h3>
                                         </div>
@@ -719,10 +720,8 @@ $username = $_SESSION['username'];
                     </div>
                     <br>
                     <div class="col-md-12">
-                        <button id="trans_btn" class="btn btn-success" type="button">
-                            <i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer</button>
-                        <!-- <button class="btn btn-primary" id="print_btn" type="submit">
-                            <i class="fa-solid fa-print"></i> Print</button> -->
+                        <button id="trans_btn" class="btn btn-success" type="submit">
+                            <i class="fa-solid fa-print"></i> Print</button>
                         <button id="close_btn" class="btn btn-warning" type="button">
                             <i class="fa-solid fa-xmark"></i> Close</button>
                     </div>
@@ -856,19 +855,30 @@ $username = $_SESSION['username'];
                 var po_item = $(this).closest('tr').find('.po_item').val()
                 $.ajax({
                     type: "POST",
-                    url: "../../logic/mod_json.php",
+                    url: "../../logic/transfer_print.php",
                     data: {po_number:po_number, po_item:po_item},
                     success: function(res1){
 
                         $('#container1_modal').modal('show');
-                        var selectize = $('#empl_name').selectize()
+                        
+                        var selectize = $('#empl_name2').selectize()
                         var select = selectize[0].selectize
                         select.setValue(res1.EMP_ID, false);
 
-                        $("#dept").val(res1.DEPT)
-                        $("#emp_id").val(res1.EMP_ID)
-                        $("#work_loc").val(res1.WORK_LOC)
-                        $("#bus_email").val(res1.BUS_EMAIL)
+                        var selectize2 = $('#empl_name').selectize()
+                        var select2 = selectize2[0].selectize
+                        select2.setValue(res1.EMP_ID2, false);
+
+                        $("#dept").val(res1.DEPT2)
+                        $("#emp_id").val(res1.EMP_ID2)
+                        $("#work_loc").val(res1.WORK_LOC2)
+                        $("#bus_email").val(res1.BUS_EMAIL2)
+
+                        $("#dept2").val(res1.DEPT)
+                        $("#emp_id2").val(res1.EMP_ID)
+                        $("#work_loc2").val(res1.WORK_LOC)
+                        $("#bus_email2").val(res1.BUS_EMAIL)
+
                         $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
                         $("#brand").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
                         $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
@@ -1081,81 +1091,6 @@ $username = $_SESSION['username'];
                         icon: "error",
                     });
                 }
-            })
-
-            $("#trans_btn").click(function(){
-                var data = 1
-                var po_number = $("#po_number").val()
-                var po_item = $("#po_item").val()
-                var asset_sub_group = $("#asset_sub_group").val()
-                var brand = $("#brand").val()
-                var model = $("#model").val()
-                var ser_no1 = $("#ser_no1").val()
-                var ser_no2 = $("#ser_no2").val()
-                var ser_no3 = $("#ser_no3").val()
-                var ser_no4 = $("#ser_no4").val()
-                var remarks = $("#remarks").val()
-                var ref_doc_no = $("#ref_doc_no").val()
-                var ass_id = $("#ass_id").val()
-                var emp_id = $("#emp_id").val()
-                var emp_id2 = $("#emp_id2").val()
-                var remarks_1 = $("#remarks_1").val()
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'This will be transferred',
-                    icon: 'question',
-                    showCancelButton: true,
-                    reverseButtons: true,
-                    cancelButtonText: 'No',
-                    confirmButtonText: 'Yes',
-                    confirmButtonColor: 'green',
-                    cancelButtonColor: 'red'
-                }).then(confirm =>{
-                    if(confirm.isConfirmed){
-                        $.ajax({
-                            type: 'POST',
-                            url:'../../logic/insert_transfer.php',
-                            data:{data:data, name:name, po_number:po_number, po_item:po_item, asset_sub_group:asset_sub_group, brand:brand,
-                                model:model, ser_no1:ser_no1, ser_no2:ser_no2, ser_no3:ser_no3, ser_no4:ser_no4, remarks:remarks,
-                                ref_doc_no:ref_doc_no, ass_id:ass_id, emp_id:emp_id, emp_id2:emp_id2, remarks_1:remarks_1},
-                            success: function(res){
-                                if(res.success == 1){
-                                    Swal.fire({
-                                        title: 'Are you sure',
-                                        text: 'This item will be print',
-                                        icon: 'question',
-                                        showCancelButton: true,
-                                        reverseButtons: true,
-                                        cancelButtonText: 'No',
-                                        confirmButtonText: 'Yes',
-                                        confirmButtonColor: 'green',
-                                        cancelButtonColor: 'red'
-                                    }).then(confirm => {
-                                        if(confirm.isConfirmed){
-                                            $("#print_form").submit()
-                                            notify(res.icon, res.message)
-                                            window.setInterval(function(){
-                                                location.reload();	
-                                            },2000)
-                                        }
-                                    })
-                                }
-                                else{
-                                    notify(res.icon, res.message)
-                                }        
-                                // console.log(res)
-                            },
-                            failure: function(response){
-                                alert("ERROR");
-                            },
-                            error: function(req, textStatus, errorThrown){
-                                console.log("ERROR ",textStatus);
-                                console.log("ERROR ",errorThrown);
-                                console.log("ERROR", req)
-                            }
-                        })
-                    }
-                })
             })
         })
 

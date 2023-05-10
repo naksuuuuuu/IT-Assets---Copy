@@ -7,7 +7,7 @@ if (isset($_POST['data'])){
     // PO Number
     if(isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) and !isset($_POST['dept']) 
         and !isset($_POST['vendor']) and !isset($_POST['from_date']) and !isset($_POST['to_date']) and !isset($_POST['ser_no1'])
-        and !isset($_POST['rem'])) {
+        and !isset($_POST['rem']) and !isset($_POST['new_item']) and !isset($_POST['modified_item']) and !isset($_POST['cancelled_item'])){
 
             $po_num = $_POST['po_num'];
 
@@ -36,7 +36,7 @@ if (isset($_POST['data'])){
                     $row1 = oci_fetch_assoc($stmt);
             
                 $result.="<tr>
-                            <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                           <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                             <td>".$row["DOCUMENT_NO"]."</td>
                             <td>".$row["PO_ITEM"]."</td>
                             <td>".$row["PO_NUMBER"]."</td>
@@ -45,6 +45,7 @@ if (isset($_POST['data'])){
                             <td>".$row["MTRL_SHORT"]."</td>
                             <td>".$row["VENDOR_NAME"]."</td>
                             <td>".$row1["BUSINESSMAIL"]."</td>
+                            <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                             <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
                         </tr>";
             }
@@ -54,7 +55,7 @@ if (isset($_POST['data'])){
     // employee name
     else if(isset($_POST['emp_name']) and !isset($_POST['po_num']) and !isset($_POST['brand']) and !isset($_POST['dept']) 
         and !isset($_POST['vendor']) and !isset($_POST['from_date']) and !isset($_POST['to_date']) and !isset($_POST['ser_no1'])
-        and !isset($_POST['rem'])) {
+        and !isset($_POST['rem']) and !isset($_POST['new_item']) and !isset($_POST['modified_item']) and !isset($_POST['cancelled_item'])){
 
         $emp_name = $_POST['emp_name'];
 
@@ -83,7 +84,7 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
@@ -92,6 +93,7 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                         <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
                     </tr>";
         }
@@ -101,7 +103,7 @@ if (isset($_POST['data'])){
     // brand
     else if(isset($_POST['brand']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['dept']) 
         and !isset($_POST['vendor']) and !isset($_POST['from_date']) and !isset($_POST['to_date']) and !isset($_POST['ser_no1'])
-        and !isset($_POST['rem'])) {
+        and !isset($_POST['rem']) and !isset($_POST['new_item']) and !isset($_POST['modified_item']) and !isset($_POST['cancelled_item'])){
 
         $brand = $_POST['brand'];
 
@@ -130,7 +132,7 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
@@ -139,6 +141,7 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                         <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
                     </tr>";
         }
@@ -192,7 +195,7 @@ if (isset($_POST['data'])){
     //                     $row2 = oci_fetch_assoc($res);
 
     //                     $result.="<tr>
-    //                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+    //                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
     //                         <td>".$row2["DOCUMENT_NO"]."</td>
     //                         <td>".$row1["PO_NUMBER"]."</td>
     //                         <td>".$row["NAMEENG"]."</td>
@@ -200,6 +203,7 @@ if (isset($_POST['data'])){
     //                         <td>".$row2["MTRL_SHORT"]."</td>
     //                         <td>".$row2["VENDOR_NAME"]."</td>
     //                         <td>".$row["BUSINESSMAIL"]."</td>
+                                // <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
     //                         <td hidden><input class='po_no' value='".$row1["PO_NUMBER"]."' hidden></td>
     //                     </tr>";
     //                 }
@@ -210,7 +214,7 @@ if (isset($_POST['data'])){
 
     else if(isset($_POST['dept']) && !isset($_POST['po_num']) && !isset($_POST['emp_name']) && !isset($_POST['brand']) 
         && !isset($_POST['vendor']) && !isset($_POST['from_date']) && !isset($_POST['to_date']) && !isset($_POST['ser_no1'])
-        && !isset($_POST['rem'])){
+        && !isset($_POST['rem']) and !isset($_POST['new_item']) and !isset($_POST['modified_item']) and !isset($_POST['cancelled_item'])){
 
         $dept = $_POST['dept'];
 
@@ -260,6 +264,7 @@ if (isset($_POST['data'])){
                         <td>".$row2["MTRL_SHORT"]."</td>
                         <td>".$row2["VENDOR_NAME"]."</td>
                         <td>".$row["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                         <td hidden><input class='po_no' value='".$row1["PO_NUMBER"]."' hidden></td>
                     </tr>";
                 }
@@ -271,7 +276,7 @@ if (isset($_POST['data'])){
     // vendor
     else if(isset($_POST['vendor']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) 
         and !isset($_POST['dept']) and !isset($_POST['from_date']) and !isset($_POST['to_date']) and !isset($_POST['ser_no1']) 
-        and !isset($_POST['rem'])){
+        and !isset($_POST['rem']) and !isset($_POST['new_item']) and !isset($_POST['modified_item']) and !isset($_POST['cancelled_item'])){
 
         $vendor = $_POST['vendor'];
 
@@ -300,7 +305,7 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
@@ -309,6 +314,7 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                         <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
                     </tr>";
         }
@@ -317,7 +323,8 @@ if (isset($_POST['data'])){
 
     // po_doc_date
     else if(isset($_POST['from_date']) and isset($_POST['to_date']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) 
-        and !isset($_POST['dept']) and !isset($_POST['vendor']) and !isset($_POST['ser_no1']) and !isset($_POST['rem'])){
+        and !isset($_POST['dept']) and !isset($_POST['vendor']) and !isset($_POST['ser_no1']) and !isset($_POST['rem']) and !isset($_POST['new_item'])
+        and !isset($_POST['modified_item']) and !isset($_POST['cancelled_item'])){
 
         $from_date = date_format(date_create($_POST['from_date']), 'd/m/Y');
         $to_date = date_format(date_create($_POST['to_date']), 'd/m/Y');
@@ -348,7 +355,7 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
@@ -357,6 +364,7 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                         <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
                     </tr>";
         }
@@ -366,7 +374,7 @@ if (isset($_POST['data'])){
     // Ser_no1
     else if(isset($_POST['ser_no1']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) 
         and !isset($_POST['dept']) and !isset($_POST['vendor']) and !isset($_POST['from_date']) and !isset($_POST['to_date'])
-        and !isset($_POST['rem'])){
+        and !isset($_POST['rem']) and !isset($_POST['new_item']) and !isset($_POST['modified_item']) and !isset($_POST['cancelled_item'])){
 
        $ser_no1 = $_POST['ser_no1'];
 
@@ -396,7 +404,7 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
@@ -405,6 +413,7 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                         <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
                     </tr>";
         }
@@ -414,7 +423,7 @@ if (isset($_POST['data'])){
     // rem
     else if(isset($_POST['rem']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) 
         and !isset($_POST['dept']) and !isset($_POST['vendor']) and !isset($_POST['from_date']) and !isset($_POST['to_date'])
-        and !isset($_POST['ser_no1'])){
+        and !isset($_POST['ser_no1']) and !isset($_POST['new_item']) and !isset($_POST['modified_item']) and !isset($_POST['cancelled_item'])){
 
        $rem = $_POST['rem'];
 
@@ -444,7 +453,7 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
                         <td>".$row["DOCUMENT_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["PO_NUMBER"]."</td>
@@ -453,6 +462,156 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                        <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
+                    </tr>";
+        }
+        echo $result;
+    }
+
+    // new_item
+    else if(isset($_POST['new_item']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) 
+        and !isset($_POST['dept']) and !isset($_POST['vendor']) and !isset($_POST['from_date']) and !isset($_POST['to_date'])
+        and !isset($_POST['ser_no1']) and !isset($_POST['rem']) and !isset($_POST['modified_item']) and !isset($_POST['cancelled_item'])){
+
+       $new_item = $_POST['new_item'];
+
+        $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.PO_ITEM, C.VENDOR_NAME, B.EMPL_ID, B.MTRL_SHORT
+            FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
+            WHERE A.PO_NUMBER = B.PO_NUMBER
+            AND A.VENDOR_CODE = C.VENDOR_CODE
+            AND B.CANCEL_ASSET_FLAG is null
+            AND B.LAST_USER_UPDATE is null
+            AND A.PO_NUMBER = :po_num";
+
+            $res = oci_parse(connection(), $sql);
+            oci_bind_by_name($res, ':po_num', $new_item);
+            oci_execute($res);    
+
+            $result = "";
+            while($row = oci_fetch_assoc($res)){
+                $empId = $row["EMPL_ID"];
+            
+                $dept_code = "SELECT A.NAMEENG, A.BUSINESSMAIL, B.DESCR FROM PERSON_TBL A, DEPARTMENT_TBL B, 
+                    JOBCUR_EE C WHERE B.DEPTID = C.DEPTID
+                    AND A.EMPLID = C.EMPLID
+                    AND A.EMPLID = :empl";
+                $stmt = oci_parse(connection1(), $dept_code);
+                oci_bind_by_name($stmt, ':empl', $empId);
+                oci_execute($stmt);
+            
+                $row1 = oci_fetch_assoc($stmt);
+        
+            $result.="<tr>
+                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                        <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
+                        <td>".$row["PO_NUMBER"]."</td>
+                        <td>".$row1["NAMEENG"]."</td>
+                        <td>".$row1["DESCR"]."</td>
+                        <td>".$row["MTRL_SHORT"]."</td>
+                        <td>".$row["VENDOR_NAME"]."</td>
+                        <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                        <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
+                    </tr>";
+        }
+        echo $result;
+    }
+
+    // modified_item
+    else if(isset($_POST['modified_item']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) 
+        and !isset($_POST['dept']) and !isset($_POST['vendor']) and !isset($_POST['from_date']) and !isset($_POST['to_date'])
+        and !isset($_POST['ser_no1']) and !isset($_POST['rem']) and !isset($_POST['new_item']) and !isset($_POST['cancelled_item'])){
+
+       $modified_item = $_POST['modified_item'];
+
+        $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.PO_ITEM, C.VENDOR_NAME, B.EMPL_ID, B.MTRL_SHORT
+            FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
+            WHERE A.PO_NUMBER = B.PO_NUMBER
+            AND A.VENDOR_CODE = C.VENDOR_CODE
+            AND B.CANCEL_ASSET_FLAG is null
+            AND B.LAST_USER_UPDATE is not null
+            AND A.PO_NUMBER = :po_num";
+
+            $res = oci_parse(connection(), $sql);
+            oci_bind_by_name($res, ':po_num', $modified_item);
+            oci_execute($res);    
+
+            $result = "";
+            while($row = oci_fetch_assoc($res)){
+                $empId = $row["EMPL_ID"];
+            
+                $dept_code = "SELECT A.NAMEENG, A.BUSINESSMAIL, B.DESCR FROM PERSON_TBL A, DEPARTMENT_TBL B, 
+                    JOBCUR_EE C WHERE B.DEPTID = C.DEPTID
+                    AND A.EMPLID = C.EMPLID
+                    AND A.EMPLID = :empl";
+                $stmt = oci_parse(connection1(), $dept_code);
+                oci_bind_by_name($stmt, ':empl', $empId);
+                oci_execute($stmt);
+            
+                $row1 = oci_fetch_assoc($stmt);
+        
+            $result.="<tr>
+                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                        <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
+                        <td>".$row["PO_NUMBER"]."</td>
+                        <td>".$row1["NAMEENG"]."</td>
+                        <td>".$row1["DESCR"]."</td>
+                        <td>".$row["MTRL_SHORT"]."</td>
+                        <td>".$row["VENDOR_NAME"]."</td>
+                        <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                        <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
+                    </tr>";
+        }
+        echo $result;
+    }
+
+    // modified_item
+    else if(isset($_POST['cancelled_item']) and !isset($_POST['po_num']) and !isset($_POST['emp_name']) and !isset($_POST['brand']) 
+        and !isset($_POST['dept']) and !isset($_POST['vendor']) and !isset($_POST['from_date']) and !isset($_POST['to_date'])
+        and !isset($_POST['ser_no1']) and !isset($_POST['rem']) and !isset($_POST['new_item']) and !isset($_POST['modified_item'])){
+
+       $cancelled_item = $_POST['cancelled_item'];
+
+        $sql = "SELECT A.DOCUMENT_NO, A.PO_NUMBER, B.PO_ITEM, C.VENDOR_NAME, B.EMPL_ID, B.MTRL_SHORT
+            FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
+            WHERE A.PO_NUMBER = B.PO_NUMBER
+            AND A.VENDOR_CODE = C.VENDOR_CODE
+            AND B.CANCEL_ASSET_FLAG is not null
+            AND A.PO_NUMBER = :po_num";
+
+            $res = oci_parse(connection(), $sql);
+            oci_bind_by_name($res, ':po_num', $cancelled_item);
+            oci_execute($res);    
+
+            $result = "";
+            while($row = oci_fetch_assoc($res)){
+                $empId = $row["EMPL_ID"];
+            
+                $dept_code = "SELECT A.NAMEENG, A.BUSINESSMAIL, B.DESCR FROM PERSON_TBL A, DEPARTMENT_TBL B, 
+                    JOBCUR_EE C WHERE B.DEPTID = C.DEPTID
+                    AND A.EMPLID = C.EMPLID
+                    AND A.EMPLID = :empl";
+                $stmt = oci_parse(connection1(), $dept_code);
+                oci_bind_by_name($stmt, ':empl', $empId);
+                oci_execute($stmt);
+            
+                $row1 = oci_fetch_assoc($stmt);
+        
+            $result.="<tr>
+                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                        <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
+                        <td>".$row["PO_NUMBER"]."</td>
+                        <td>".$row1["NAMEENG"]."</td>
+                        <td>".$row1["DESCR"]."</td>
+                        <td>".$row["MTRL_SHORT"]."</td>
+                        <td>".$row["VENDOR_NAME"]."</td>
+                        <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
                         <td hidden><input class='po_no' value='".$row["PO_NUMBER"]."' hidden></td>
                     </tr>";
         }

@@ -125,10 +125,18 @@ session_start();
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="../user/history.php">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="true" aria-controls="collapseThree">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span>History</span>
                 </a>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">History:</h6>
+                        <a class="collapse-item" href="../user/history.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/transferred_asset.php">Transferred Asset</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Nav Item - Charts -->

@@ -131,13 +131,28 @@ session_start();
                 Reports
             </div>
 
-            <!-- Nav Item - Tables -->
             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="true" aria-controls="collapseThree">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
+                </a>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">History:</h6>
+                        <a class="collapse-item" href="../user/history.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/transferred_asset.php">Transferred Asset</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="../user/history.php">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span>History</span>
                 </a>
-            </li>
+            </li> -->
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
@@ -493,6 +508,62 @@ session_start();
                                                     ?>
                                                 </select> 
                                             </div>
+
+                                            <div class="col-md-3">
+                                                <div class="label" style="color: #000000">New Item</div>
+                                                <select type="text" name="new_item" id='new_item' class='form-select' required style="margin-bottom: 8px;"> 
+                                                <option value=""></option>
+                                                <?php  
+                                                    $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
+                                                        WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                        AND B.CANCEL_ASSET_FLAG is null
+                                                        AND B.LAST_USER_UPDATE is null";
+                                                    $res = oci_parse(connection(), $sql);
+                                                    oci_execute($res);
+
+                                                    while($row = oci_fetch_row($res)){
+                                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                    }
+                                                ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="label" style="color: #000000">Modified Item</div>
+                                                <select type="text" name="modified_item" id='modified_item' class='form-select' required style="margin-bottom: 8px;"> 
+                                                <option value=""></option>
+                                                <?php  
+                                                    $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
+                                                        WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                        AND B.CANCEL_ASSET_FLAG is null
+                                                        AND B.LAST_USER_UPDATE is not null";
+                                                    $res = oci_parse(connection(), $sql);
+                                                    oci_execute($res);
+
+                                                    while($row = oci_fetch_row($res)){
+                                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                    }
+                                                ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="label" style="color: #000000">Cancelled Item</div>
+                                                <select type="text" name="cancelled_item" id='cancelled_item' class='form-select' required style="margin-bottom: 8px;"> 
+                                                <option value=""></option>
+                                                <?php  
+                                                    $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
+                                                        WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                        AND B.CANCEL_ASSET_FLAG is not null";
+                                                    $res = oci_parse(connection(), $sql);
+                                                    oci_execute($res);
+
+                                                    while($row = oci_fetch_row($res)){
+                                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                    }
+                                                ?>
+                                                </select>
+                                            </div>
                                         </div>
                                 
                                         <div class="row g-2">
@@ -607,7 +678,7 @@ session_start();
                                                             $row1 = oci_fetch_assoc($stmt);
                                                         
                                                             echo"<tr>
-                                                                <td><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></td>
+                                                                    <td><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></td>
                                                                     <td>".$row["DOCUMENT_NO"]."</td>
                                                                     <td>".$row["PO_ITEM"]."</td>
                                                                     <td>".$row["PO_NUMBER"]."</td>
@@ -1254,6 +1325,9 @@ session_start();
     $("#brand").selectize({})
     $("#ser_no1").selectize({})
     $("#rem").selectize({})
+    $("#new_item").selectize({})
+    $("#modified_item").selectize({})
+    $("#cancelled_item").selectize({})
 
     $("#dataTable1").on("click", '.view_dtl', function(){
         var po_number = $(this).closest('tr').find('.po_no').val()
@@ -1268,8 +1342,12 @@ session_start();
                     backdrop: 'static',
                     keyboard: false
                 });
-                $("#empl_name").val(res1.EMP_ID)
-                $("#department").val(res1.DEPT)
+                // $("#empl_name").val(res1.EMP_ID)
+                var selectize = $('#empl_name').selectize()
+                var select = selectize[0].selectize
+                select.setValue(res1.EMP_ID, false);
+
+                $("#dept").val(res1.DEPT)
                 $("#emp_id").val(res1.EMP_ID)
                 $("#emp_add").val(res1.EMP_ADD)
                 $("#work_loc").val(res1.WORK_LOC)
@@ -1278,7 +1356,7 @@ session_start();
                 $("#hired_date").val(res1.HIRED_DATE)
                 $("#per_email").val(res1.PER_EMAIL)
                 $("#bus_email").val(res1.BUS_EMAIL)
-                $("#ref_person").val(res1.REF_PERSON)
+                // $("#ref_person").val(res1.REF_PERSON)
                 $("#supplier").val(res1.SUPPLIER)
                 $("#req_grp").append("<option value="+ res1.REQ_GRP +">"+ res1.REQ_GRP_NAME +"</option>")
                 $("#type").append("<option value="+ res1.REQ_TYPE +">"+ res1.REQ_TYPE_NAME +"</option>")
@@ -1288,7 +1366,7 @@ session_start();
                 $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
                 $("#series").val(res1.SERIES)
                 $("#price").val(res1.PRICE)
-                $("#ser_no11").val(res1.SER_NO1)
+                $("#ser_no1").val(res1.SER_NO1)
                 $("#ser_no2").val(res1.SER_NO2)
                 $("#ser_no3").val(res1.SER_NO3)
                 $("#ser_no4").val(res1.SER_NO4)
@@ -1296,6 +1374,9 @@ session_start();
                 $("#del_note").val(res1.DEL_NOTE)
                 $("#del_date").val(res1.DEL_DATE)
                 $("#malt_shrt").val(res1.MTRL_SHORT)
+                $("#license_start").val(res1.LICENSE_START)
+                $("#license_month").val(res1.LICENSE_MONTH)
+                $("#license_exp").val(res1.LICENSE_EXP)
                 $("#war_start").val(res1.WAR_START)
                 $("#war_month").val(res1.WAR_MONTH)
                 $("#war_exp").val(res1.WAR_EXP)
@@ -1303,24 +1384,6 @@ session_start();
                 $("#po_number").val(res1.PO_NUMBER)
                 $("#po_item").val(res1.PO_ITEM)
                 // $("#attch").val(res1.ATTCH)
-            }
-        })
-    })
-
-    $("#close_btn1").click(function(){
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This will be closed',
-            icon: 'question',
-            showCancelButton: true,
-            reverseButtons: true,
-            cancelButtonText: 'No',
-            confirmButtonText: 'Yes',
-            confirmButtonColor: 'green',
-            cancelButtonColor: 'red'
-        }).then(confirm => {
-            if(confirm.isConfirmed){
-                $("#po_dtls").modal('hide')
             }
         })
     })
@@ -1336,10 +1399,13 @@ session_start();
         var to_date = $("#to_date").val()
         var ser_no1 = $("#ser_no1").find(':selected').val()
         var rem = $("#rem").find(':selected').val()
+        var new_item = $("#new_item").find(':selected').val()
+        var modified_item = $("#modified_item").find(':selected').val()
+        var cancelled_item = $("#cancelled_item").find(':selected').val()
 
         // po num
         if (po_num != "" && emp_name == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == "" 
-            && ser_no1 == "" && rem == "") {
+            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == "") {
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1380,7 +1446,7 @@ session_start();
 
         // emp name
         else if (emp_name != "" && po_num == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == "" 
-            && ser_no1 == "" && rem == ""){
+            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1421,7 +1487,7 @@ session_start();
 
         // brand
         else if (brand != "" && po_num == "" && emp_name == "" && dept == "" && vendor == "" && from_date == "" && to_date == ""
-            && ser_no1 == "" && rem == ""){
+            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1462,7 +1528,7 @@ session_start();
 
         // dept
         else if (dept != "" && po_num == "" && emp_name == "" && brand == "" && vendor == "" && from_date == "" && to_date == "" 
-            && ser_no1 == "" && rem == ""){
+            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1503,7 +1569,7 @@ session_start();
 
         // vendor
         else if (vendor != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && from_date == "" && to_date == ""
-            && ser_no1 == "" && rem == ""){
+            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1544,7 +1610,7 @@ session_start();
 
         // po_doc_date
         else if (from_date && to_date != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
-            && ser_no1 == "" && rem == ""){
+            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1585,7 +1651,7 @@ session_start();
 
         // ser_no1
         else if (ser_no1 != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
-            && from_date == "" && to_date == "" && rem == ""){
+            && from_date == "" && to_date == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1626,7 +1692,7 @@ session_start();
 
         // remarks
         else if (rem != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
-            && from_date == "" && to_date == "" && ser_no1 == ""){
+            && from_date == "" && to_date == "" && ser_no1 == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1640,6 +1706,129 @@ session_start();
                 type: "POST",
                 url: "../../logic/reports.php",
                 data: {data:data, rem:rem},
+                success: function(res){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Data loaded successfully!',
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
+                    })
+                    $('#doc_tbody').html(res)
+                },
+                error: function(){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while loading data',
+                        icon: 'error'
+                    })
+                }
+            })
+        }
+
+        // new_item
+        else if (new_item != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
+            && from_date == "" && to_date == "" && ser_no1 == "" && rem == "" && modified_item == "" && cancelled_item == ""){
+            Swal.fire({
+                title: 'Loading',
+                text: 'Please wait while the data is being loaded...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+            $.ajax({
+                type: "POST",
+                url: "../../logic/reports.php",
+                data: {data:data, new_item:new_item},
+                success: function(res){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Data loaded successfully!',
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
+                    })
+                    $('#doc_tbody').html(res)
+                },
+                error: function(){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while loading data',
+                        icon: 'error'
+                    })
+                }
+            })
+        }
+
+        // nmodified_item
+        else if (modified_item != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
+            && from_date == "" && to_date == "" && ser_no1 == "" && rem == "" && new_item == ""){
+            Swal.fire({
+                title: 'Loading',
+                text: 'Please wait while the data is being loaded...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+            $.ajax({
+                type: "POST",
+                url: "../../logic/reports.php",
+                data: {data:data, modified_item:modified_item},
+                success: function(res){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Data loaded successfully!',
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
+                    })
+                    $('#doc_tbody').html(res)
+                },
+                error: function(){
+                    Swal.hideLoading()
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while loading data',
+                        icon: 'error'
+                    })
+                }
+            })
+        }
+
+        // cancelled_item
+        else if (cancelled_item != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
+            && from_date == "" && to_date == "" && ser_no1 == "" && rem == "" && new_item == "" && modified_item == ""){
+            Swal.fire({
+                title: 'Loading',
+                text: 'Please wait while the data is being loaded...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+            $.ajax({
+                type: "POST",
+                url: "../../logic/reports.php",
+                data: {data:data, cancelled_item:cancelled_item},
                 success: function(res){
                     Swal.hideLoading()
                     Swal.fire({
@@ -1679,28 +1868,24 @@ session_start();
         location.reload()
     })
 
-    // $("#print_btn").click(function(){
-    //     var po_no =  $("#po_number").val()
-    //     var po_item = $("#po_item").val()
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "../../printouts/index.php",
-    //         data: {po_no:po_no, po_item:po_item},
-    //         success: function(res){
-    //             window.open(res);
-    //         },
-    //         failure: function(response){
-    //             alert("ERROR");
-    //         },
-    //         error: function(req, textStatus, errorThrown){
-    //             console.log("ERROR ",textStatus);
-    //             console.log("ERROR ",errorThrown);
-    //             console.log("ERROR", req)
-    //         }
-    //     })
-    // })
-
     
+    $("#close_btn1").click(function(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will be closed',
+            icon: 'question',
+            showCancelButton: true,
+            reverseButtons: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            confirmButtonColor: 'green',
+            cancelButtonColor: 'red'
+        }).then(confirm => {
+            if(confirm.isConfirmed){
+                $("#po_dtls").modal('hide')
+            }
+        })
+    })
 
     // chart start
     window.onload = function () {
