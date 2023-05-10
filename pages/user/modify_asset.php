@@ -140,6 +140,8 @@ session_start();
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">History:</h6>
                         <a class="collapse-item" href="../user/history.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/cancelled_asset.php">Cancelled Asset</a>
+                        <a class="collapse-item" href="../user/modified_asset.php">Modified Asset</a>
                         <a class="collapse-item" href="../user/transferred_asset.php">Transferred Asset</a>
                     </div>
                 </div>
@@ -823,6 +825,13 @@ session_start();
                                                         <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control war_exp" required placeholder=" " style="background-color: #e6e6e6;">
                                                     </div>
 
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Asset Flag *</label>
+                                                        <select id="ass_flag" name='ass_flag[]' type="text" autocomplete="off" class="form-control war_exp" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+
+                                                        </select>
+                                                    </div>
+
                                                     <div class="col-md-12">
                                                         <label class="form-label">Remarks *</label>
                                                         <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " 
@@ -1071,6 +1080,7 @@ $(document).ready(function(){
                 $("#war_start").val(res1.WAR_START)
                 $("#war_month").val(res1.WAR_MONTH)
                 $("#war_exp").val(res1.WAR_EXP)
+                $("#ass_flag").append("<option>"+ res1.ASS_FLAG +"</option>")
                 $("#remarks").val(res1.REMARKS)
                 $("#po_number").val(res1.PO_NUMBER)
                 $("#po_item").val(res1.PO_ITEM)

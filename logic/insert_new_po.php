@@ -47,6 +47,7 @@
             $war_start = date_format(date_create($_POST['war_start'][$key]), 'd/m/Y');
             $war_month = $_POST['war_month'][$key];
             $war_exp = date_format(date_create($_POST['war_exp'][$key]), 'd/m/Y');
+            $ass_flagT = $_POST['ass_flagT'][$key];
             $rem = $_POST['rem'][$key];
             // $attch = $_POST[''];
             $po_doc_date = date_format(date_create($_POST['po_doc_date1'][$key]), 'd/m/Y');
@@ -87,13 +88,13 @@
                     SUB_ASSET_GROUP, BRAND, MODEL, SERIAL_NO1, SERIAL_NO2, SERIAL_NO3, SERIAL_NO4, ASS_CODE, UNIT,
                     QTY, PO_ITEM, UNIT_PRICE, LICENSE_START_DATE, LICENSE_MONTH, LICENSE_EXPIRE_DATE, 
                     WARRANTY_START_DATE, WARRANTY_MONTH, WARRANTY_EXPIRE_DATE, DEL_NOTE, MTRL_SHORT, REMARKS,
-                    REF_PERSON, EMPL_ID, USER_CREATE, USER_CREATED_DATE, ASSET_ID, SERIES)
+                    REF_PERSON, EMPL_ID, USER_CREATE, USER_CREATED_DATE, ASSET_ID, SERIES, ASSET_FLAG)
                     VALUES 
                     (:doc_num, to_date(:doc_date, 'DD/MM/YY'), :po_no, to_date(:del_date, 'DD/MM/YY'), :req_grp1, :req_type1, :ass_grp1, 
                     :ass_sub_grp1, :brand1, :model1, :serial_no1, :serial_no2, :serial_no3, :serial_no4, :ass_code, :unit, 
                     :qty, :po_item, :unit_price, to_date(:lic_start, 'DD/MM/YY'), :lic_month, to_date(:lic_exp, 'DD/MM/YY'), 
                     to_date(:war_start, 'DD/MM/YY'), :war_month, to_date(:war_exp, 'DD/MM/YY'), :del_note, :mtrl_short, :rem,
-                    :ref_person, :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :ass_id, :series)";
+                    :ref_person, :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :ass_id, :series, :ass_flag)";
 
                     $result= oci_parse(connection(), $det_sql);
 
@@ -125,6 +126,7 @@
                     oci_bind_by_name($result, ':war_exp', $war_exp);
                     oci_bind_by_name($result, ':del_note', $del_note);
                     oci_bind_by_name($result, ':mtrl_short', $mtrl_short);
+                    oci_bind_by_name($result, ':ass_flag', $ass_flagT);
                     oci_bind_by_name($result, ':rem', $rem);
                     // oci_bind_by_name($result, ':attch', $file_name);
                     oci_bind_by_name($result, ':ref_person', $ref_per);
@@ -228,13 +230,13 @@
                     SUB_ASSET_GROUP, BRAND, MODEL, SERIAL_NO1, SERIAL_NO2, SERIAL_NO3, SERIAL_NO4, ASS_CODE, UNIT,
                     QTY, PO_ITEM, UNIT_PRICE, LICENSE_START_DATE, LICENSE_MONTH, LICENSE_EXPIRE_DATE, 
                     WARRANTY_START_DATE, WARRANTY_MONTH, WARRANTY_EXPIRE_DATE, DEL_NOTE, MTRL_SHORT, REMARKS,
-                    REF_PERSON, EMPL_ID, USER_CREATE, USER_CREATED_DATE, ASSET_ID, SERIES)
+                    REF_PERSON, EMPL_ID, USER_CREATE, USER_CREATED_DATE, ASSET_ID, SERIES, ASSET_FLAG)
                     VALUES 
                     (:doc_num, to_date(:doc_date, 'DD/MM/YY'), :po_no, to_date(:del_date, 'DD/MM/YY'), :req_grp1, :req_type1, :ass_grp1, 
                     :ass_sub_grp1, :brand1, :model1, :serial_no1, :serial_no2, :serial_no3, :serial_no4, :ass_code, :unit, 
                     :qty, :po_item, :unit_price, to_date(:lic_start, 'DD/MM/YY'), :lic_month, to_date(:lic_exp, 'DD/MM/YY'), 
                     to_date(:war_start, 'DD/MM/YY'), :war_month, to_date(:war_exp, 'DD/MM/YY'), :del_note, :mtrl_short, :rem,
-                    :ref_person,  :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :ass_id, :series)";
+                    :ref_person,  :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :ass_id, :series, :ass_flag)";
 
                     $result= oci_parse(connection(), $det_sql);
 
@@ -266,6 +268,7 @@
                     oci_bind_by_name($result, ':war_exp', $war_exp);
                     oci_bind_by_name($result, ':del_note', $del_note);
                     oci_bind_by_name($result, ':mtrl_short', $mtrl_short);
+                    oci_bind_by_name($result, ':ass_flag', $ass_flagT);
                     oci_bind_by_name($result, ':rem', $rem);
                     // oci_bind_by_name($result, ':attch', $file_name);
                     oci_bind_by_name($result, ':ref_person', $ref_per);

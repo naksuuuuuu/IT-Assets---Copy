@@ -133,7 +133,9 @@ session_start();
                 <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">History:</h6>
-                        <a class="collapse-item" href="../user/history.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/added_asset.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/cancelled_asset.php">Cancelled Asset</a>
+                        <a class="collapse-item" href="../user/modified_asset.php">Modified Asset</a>
                         <a class="collapse-item" href="../user/transferred_asset.php">Transferred Asset</a>
                     </div>
                 </div>

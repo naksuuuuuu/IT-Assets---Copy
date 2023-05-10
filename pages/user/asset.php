@@ -140,7 +140,9 @@ $username = $_SESSION['username'];
                 <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">History:</h6>
-                        <a class="collapse-item" href="../user/history.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/added_asset.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/cancelled_asset.php">Cancelled Asset</a>
+                        <a class="collapse-item" href="../user/modified_asset.php">Modified Asset</a>
                         <a class="collapse-item" href="../user/transferred_asset.php">Transferred Asset</a>
                     </div>
                 </div>
@@ -421,6 +423,7 @@ $username = $_SESSION['username'];
                                                                     <th style="width: 200px;">Warranty Month Start</th>
                                                                     <th style="width: 200px;">Warranty Month</th>
                                                                     <th style="width: 200px;">Warranty Expiry Date</th>
+                                                                    <th style="width: 200px;">Asset Flag</th>
                                                                     <th style="width: 200px;">Remarks</th>
                                                                     <th style="width: 200px;">PO Doc Date</th>
                                                                     <th style="width: 200px;">Plant</th>
@@ -889,12 +892,12 @@ $username = $_SESSION['username'];
                                         <div class="panel panel-default">
                                             <div class="panel-heading" role="tab" id="headingThree">
                                                 <h3 class="panel-title font-weight-bold" style="color: #000">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_Three" aria-expanded="false" aria-controls="collapse_Three">
                                                         Attachment
                                                     </a>
                                                 </h3>
                                             </div>
-                                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                            <div id="collapse_Three" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                                 <div class="panel-body">   
                                                     <div class="container">
                                                         <div class="row">
@@ -1405,14 +1408,14 @@ $username = $_SESSION['username'];
                                                                             <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="background-color: #e6e6e6;">
                                                                         </div>
 
-                                                                        <!-- <div class="col-md-4">
-                                                                            <label class="form-label">Asset Flag</label>
-                                                                            <select id="ass_flag" name='ass_flag' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                                                <option selected=" ">Select Asset Sub Group...</option>
+                                                                        <div class="col-md-4">
+                                                                            <label class="form-label">Asset Flag *</label>
+                                                                            <select id="ass_flagR" name='ass_flagR' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                                                <option selected=" ">Select Asset Flag...</option>
                                                                                 <option value="asset">Asset</option>
                                                                                 <option value="expense">Expense</option>
                                                                             </select>
-                                                                        </div> -->
+                                                                        </div>
 
                                                                         <div class="col-md-12">
                                                                             <label class="form-label">Remarks *</label>
@@ -2277,6 +2280,15 @@ $username = $_SESSION['username'];
                                                                             <input id="war_exp1" name='war_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="background-color: #e6e6e6;">
                                                                         </div>
 
+                                                                        <div class="col-md-4">
+                                                                            <label class="form-label">Asset Flag *</label>
+                                                                            <select id="ass_flagE" name='ass_flagE' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                                                <option selected=" ">Select Asset Flag...</option>
+                                                                                <option value="asset">Asset</option>
+                                                                                <option value="expense">Expense</option>
+                                                                            </select>
+                                                                        </div>
+
                                                                         <div class="col-md-12">
                                                                             <label class="form-label">Remarks *</label>
                                                                             <textarea id="remarks1" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
@@ -2981,21 +2993,22 @@ $username = $_SESSION['username'];
                $(row).find('td:nth-child(34)').attr('class', 'war_start')
                $(row).find('td:nth-child(35)').attr('class', 'war_month')
                $(row).find('td:nth-child(36)').attr('class', 'war_exp')
-               $(row).find('td:nth-child(37)').attr('class', 'rem')
+               $(row).find('td:nth-child(37)').attr('Class', 'ass_flagT')
+               $(row).find('td:nth-child(38)').attr('class', 'rem')
             //    $(row).find('td:nth-child(38)').attr('class', 'attch')
-               $(row).find('td:nth-child(38)').attr('class', 'po_doc_date1')
-               $(row).find('td:nth-child(39)').attr('class', 'plant1')
-               $(row).find('td:nth-child(40)').attr('class', 'status')
-               $(row).find('td:nth-child(41)').attr('class', 'qty')
-               $(row).find('td:nth-child(42)').attr('class', 'unit')
-               $(row).find('td:nth-child(43)').attr('class', 'po_item1')
-               $(row).find('td:nth-child(44)').addClass('supp1').attr('hidden', true);
-               $(row).find('td:nth-child(45)').addClass('req_grp1').attr('hidden', true);
-               $(row).find('td:nth-child(46)').addClass('req_type1').attr('hidden', true);
-               $(row).find('td:nth-child(47)').addClass('ass_grp1').attr('hidden', true);
-               $(row).find('td:nth-child(48)').addClass('ass_sub_grp1').attr('hidden', true);
-               $(row).find('td:nth-child(49)').addClass('brand1').attr('hidden', true);
-               $(row).find('td:nth-child(50)').addClass('model1').attr('hidden', true);
+               $(row).find('td:nth-child(39)').attr('class', 'po_doc_date1')
+               $(row).find('td:nth-child(40)').attr('class', 'plant1')
+               $(row).find('td:nth-child(41)').attr('class', 'status')
+               $(row).find('td:nth-child(42)').attr('class', 'qty')
+               $(row).find('td:nth-child(43)').attr('class', 'unit')
+               $(row).find('td:nth-child(44)').attr('class', 'po_item1')
+               $(row).find('td:nth-child(45)').addClass('supp1').attr('hidden', true);
+               $(row).find('td:nth-child(46)').addClass('req_grp1').attr('hidden', true);
+               $(row).find('td:nth-child(47)').addClass('req_type1').attr('hidden', true);
+               $(row).find('td:nth-child(48)').addClass('ass_grp1').attr('hidden', true);
+               $(row).find('td:nth-child(49)').addClass('ass_sub_grp1').attr('hidden', true);
+               $(row).find('td:nth-child(50)').addClass('brand1').attr('hidden', true);
+               $(row).find('td:nth-child(51)').addClass('model1').attr('hidden', true);
 
             //    $(row).find('td:nth-child(50)').attr('class', 'model1' hidden)
             }
@@ -3489,6 +3502,7 @@ $username = $_SESSION['username'];
             var war_start = $("#war_start").val()
             var war_month = $("#war_month").val()
             var war_exp = $("#war_exp").val()
+            var ass_flagR = $("#ass_flagR").val()
             var remarks = $("#remarks").val()
             var qty = $("#qty").val()
             var unit = $("#unit").val()
@@ -3505,7 +3519,7 @@ $username = $_SESSION['username'];
            var rowdata = [count_item, empl_name, dept, emp_id, emp_add, work_loc, off_phone, mob_phone, hired_date,
            per_email, bus_email, ref_person, po_no, supplier, req_grp, type, asset_group, asset_sub_group, brand, model, series,
            price, ser_no, ser_no2, ser_no3, ser_no4, ass_code, del_note, del_date, malt_shrt, license_start, license_month,
-           license_exp, war_start, war_month, war_exp, remarks, po_doc_date, plant, status, qty, unit, item,
+           license_exp, war_start, war_month, war_exp, ass_flagR, remarks, po_doc_date, plant, status, qty, unit, item,
            supp1, req_grp1, type1, asset_group1, asset_sub_group1, brand1, model1]
 
         //    uploadedFilename[0],
@@ -3559,15 +3573,16 @@ $username = $_SESSION['username'];
                 var war_start = $(tr_parent).find("td").eq(33).text()
                 var war_month = $(tr_parent).find("td").eq(34).text()
                 var war_exp = $(tr_parent).find("td").eq(35).text()
-                var rem = $(tr_parent).find("td").eq(36).text()
+                var ass_flagR = $(tr_parent).find("td").eq(36).text()
+                var rem = $(tr_parent).find("td").eq(37).text()
                 // var attch = $(tr_parent).find('td:eq(36) input[type=file]').prop('files')[0];
                 // var attch = $(tr_parent).find('td:eq(37) img').attr('src');
-                var po_doc_date = $(tr_parent).find("td").eq(37).text()
-                var plant = $(tr_parent).find("td").eq(38).text()
-                var status = $(tr_parent).find("td").eq(39).text()
-                var quantity = $(tr_parent).find("td").eq(40).text()
-                var unit = $(tr_parent).find("td").eq(41).text()
-                var po_item = $(tr_parent).find("td").eq(42).text()
+                var po_doc_date = $(tr_parent).find("td").eq(38).text()
+                var plant = $(tr_parent).find("td").eq(39).text()
+                var status = $(tr_parent).find("td").eq(40).text()
+                var quantity = $(tr_parent).find("td").eq(41).text()
+                var unit = $(tr_parent).find("td").eq(42).text()
+                var po_item = $(tr_parent).find("td").eq(43).text()
 
                 // $("#empl_name1").val(emp_id);
                 var selectize = $('#empl_name1').selectize()
@@ -3607,6 +3622,7 @@ $username = $_SESSION['username'];
                 $("#war_start1").val(war_start);
                 $("#war_month1").val(war_month);
                 $("#war_exp1").val(war_exp);
+                $("#ass_flagE").val(ass_flagR);
                 $("#remarks1").val(rem);
                 // $("#attch1").val(attch);
                 $("#po_doc_date1").val(po_doc_date);
@@ -3680,6 +3696,7 @@ $username = $_SESSION['username'];
             var war_start = $("#war_start1").val()
             var war_month = $("#war_month1").val()
             var war_exp = $("#war_exp1").val()
+            var ass_flagE = $("#ass_flagE").val()
             var remarks = $("#remarks1").val()
             // var attch = $("#attch1").prop('files')[0];
             var po_doc_date = $("#po_doc_date1").val()
@@ -3725,15 +3742,16 @@ $username = $_SESSION['username'];
             tr_parent.find("td").eq(33).text(war_start)
             tr_parent.find("td").eq(34).text(war_month)
             tr_parent.find("td").eq(35).text(war_exp)
-            tr_parent.find("td").eq(36).text(remarks)
+            tr_parent.find("td").eq(36).text(ass_flagE)
+            tr_parent.find("td").eq(37).text(remarks)
             // attchtr_parent).find('td:eq(36) input[type=file]').prop('files')[0];
             // attchtr_parent).find('td:eq(36) img').attr('src');
-            tr_parent.find("td").eq(37).text(po_doc_date)
-            tr_parent.find("td").eq(38).text(plant)
-            tr_parent.find("td").eq(39).text(status)
-            tr_parent.find("td").eq(40).text(qty)
-            tr_parent.find("td").eq(41).text(unit)
-            tr_parent.find("td").eq(42).text(item)
+            tr_parent.find("td").eq(38).text(po_doc_date)
+            tr_parent.find("td").eq(39).text(plant)
+            tr_parent.find("td").eq(40).text(status)
+            tr_parent.find("td").eq(41).text(qty)
+            tr_parent.find("td").eq(42).text(unit)
+            tr_parent.find("td").eq(43).text(item)
 
             // if (attch) {
             //     var reader = new FileReader();
@@ -3827,6 +3845,7 @@ $username = $_SESSION['username'];
                     var war_start = []
                     var war_month = []
                     var war_exp = []
+                    var ass_flagT = []
                     var rem = []
                     var attch = []
                     var po_doc_date1 = []
@@ -3982,6 +4001,10 @@ $username = $_SESSION['username'];
                                 })
                                 // ajaxData.append("war_exp", war_exp)
 
+                                $(".ass_flagT").each(function(){
+                                    ass_flagT.push(this.innerText)
+                                })
+
                                 $(".rem").each(function(){
                                     rem.push(this.innerText)
                                 })
@@ -4032,8 +4055,8 @@ $username = $_SESSION['username'];
                                         req_type1:req_type1, ass_grp1:ass_grp1, ass_sub_grp1:ass_sub_grp1, brand1:brand1, model1:model1, series:series, 
                                         unit_price:unit_price, ser_no1:ser_no1, ser_no2:ser_no2, ser_no3:ser_no3, ser_no4:ser_no4, ass_code:ass_code, 
                                         del_note:del_note, del_date:del_date, mtrl_short:mtrl_short, lic_start:lic_start, lic_month:lic_month, lic_exp:lic_exp, 
-                                        war_start:war_start, war_month:war_month, war_exp, rem:rem, po_doc_date1:po_doc_date1, plant1:plant1, status:status, 
-                                        qty:qty, unit:unit, po_item1:po_item1, },
+                                        war_start:war_start, war_month:war_month, war_exp, ass_flagT:ass_flagT, rem:rem, po_doc_date1:po_doc_date1, plant1:plant1, status:status, 
+                                        qty:qty, unit:unit, po_item1:po_item1},
                                     success: function(res){
                                         // console.log(res)
                                         if(res.success == 1){

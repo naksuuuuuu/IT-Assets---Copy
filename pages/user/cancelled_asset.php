@@ -140,7 +140,9 @@ session_start();
                 <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">History:</h6>
-                        <a class="collapse-item" href="../user/history.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/added_asset.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/cancelled_asset.php">Cancelled Asset</a>
+                        <a class="collapse-item" href="../user/modified_asset.php">Modified Asset</a>
                         <a class="collapse-item" href="../user/transferred_asset.php">Transferred Asset</a>
                     </div>
                 </div>
@@ -332,7 +334,7 @@ session_start();
                     <div class="container-fluid">
 
                     <div class="card-header" style="background-color: #4e73df;">
-                        <h2 class="m-0 font-weight-bold" style="color: white; text-align: center">List of Added Asset</h2>
+                        <h2 class="m-0 font-weight-bold" style="color: white; text-align: center">List of Cancelled Asset</h2>
                     </div>
                     <br>
 
@@ -362,7 +364,7 @@ session_start();
                                                 <?php  
                                                     $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
                                                         WHERE A.PO_NUMBER = B.PO_NUMBER
-                                                        AND B.CANCEL_ASSET_FLAG is null";
+                                                        AND B.CANCEL_ASSET_FLAG is not null";
                                                     $res = oci_parse(connection(), $sql);
                                                     oci_execute($res);
 
@@ -389,7 +391,7 @@ session_start();
                                                     <?php
                                                         $sql = "SELECT DISTINCT A.DOCUMENT_NO, B.EMPL_ID FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B
                                                                 WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
-                                                                AND A.CANCEL_ASSET_FLAG is null";
+                                                                AND B.CANCEL_ASSET_FLAG is not null";
 
                                                         $result = oci_parse(connection(), $sql);
                                                         oci_execute($result);                                                    
@@ -416,7 +418,7 @@ session_start();
                                                 <select class="form-select" name="ser_no1" id="ser_no1" style="margin-bottom: 8px;">
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS1 WHERE CANCEL_ASSET_FLAG is null";
+                                                        $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS1 WHERE CANCEL_ASSET_FLAG is not null";
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
 
@@ -432,7 +434,7 @@ session_start();
                                                 <select class="form-select" name="rem" id="rem" style="margin-bottom: 8px;">
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT DISTINCT REMARKS FROM IT_ASSET_DETAILS1 WHERE CANCEL_ASSET_FLAG is null";
+                                                        $sql = "SELECT DISTINCT REMARKS FROM IT_ASSET_DETAILS1 WHERE CANCEL_ASSET_FLAG is not null";
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
 
@@ -448,9 +450,10 @@ session_start();
                                                 <select type="text" name="vendor" id='vendor' class='form-select' required style="margin-bottom: 8px;"> 
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER1 A, IT_ASSET_VENDORS B
-                                                                WHERE A.VENDOR_CODE = B.VENDOR_CODE
-                                                                AND A.CANCEL_ASSET_FLAG is null";
+                                                        $sql = "SELECT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER1 A, IT_ASSET_VENDORS B, IT_ASSET_DETAILS1 C
+                                                            WHERE A.VENDOR_CODE = B.VENDOR_CODE
+                                                            AND C.DOCUMENT_NO = A.DOCUMENT_NO
+                                                            AND C.CANCEL_ASSET_FLAG is not null";
 
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
@@ -468,7 +471,7 @@ session_start();
                                                     <?php
                                                         $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_HEADER1 B
                                                         WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
-                                                        AND A.CANCEL_ASSET_FLAG is null";
+                                                        AND A.CANCEL_ASSET_FLAG is not null";
 
                                                         $result = oci_parse(connection(), $sql);
                                                         oci_execute($result);                                                    
@@ -498,7 +501,8 @@ session_start();
                                                     <option value=""></option>
                                                     <?php 
                                                         $sql = "SELECT A.BRAND, B.BRAND_NAME FROM IT_ASSET_DETAILS1 A, IT_ASSET_BRAND B
-                                                                WHERE A.BRAND = B.BRAND_CODE";
+                                                            WHERE A.BRAND = B.BRAND_CODE
+                                                            AND B.CANCEL_ASSET_FLAG is not null";
                                                         
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
@@ -510,21 +514,21 @@ session_start();
                                                 </select> 
                                             </div>
 
-                                            <div class="col-md-3">
+                                            <!-- <div class="col-md-3">
                                                 <div class="label" style="color: #000000">New Item</div>
                                                 <select type="text" name="new_item" id='new_item' class='form-select' required style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                 <?php  
-                                                    $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
-                                                        WHERE A.PO_NUMBER = B.PO_NUMBER
-                                                        AND B.CANCEL_ASSET_FLAG is null
-                                                        AND B.LAST_USER_UPDATE is null";
-                                                    $res = oci_parse(connection(), $sql);
-                                                    oci_execute($res);
+                                                    // $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
+                                                    //     WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                    //     AND B.CANCEL_ASSET_FLAG is null
+                                                    //     AND B.LAST_USER_UPDATE is null";
+                                                    // $res = oci_parse(connection(), $sql);
+                                                    // oci_execute($res);
 
-                                                    while($row = oci_fetch_row($res)){
-                                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
-                                                    }
+                                                    // while($row = oci_fetch_row($res)){
+                                                    //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                    // }
                                                 ?>
                                                 </select>
                                             </div>
@@ -534,16 +538,16 @@ session_start();
                                                 <select type="text" name="modified_item" id='modified_item' class='form-select' required style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                 <?php  
-                                                    $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
-                                                        WHERE A.PO_NUMBER = B.PO_NUMBER
-                                                        AND B.CANCEL_ASSET_FLAG is null
-                                                        AND B.LAST_USER_UPDATE is not null";
-                                                    $res = oci_parse(connection(), $sql);
-                                                    oci_execute($res);
+                                                    // $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
+                                                    //     WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                    //     AND B.CANCEL_ASSET_FLAG is null
+                                                    //     AND B.LAST_USER_UPDATE is not null";
+                                                    // $res = oci_parse(connection(), $sql);
+                                                    // oci_execute($res);
 
-                                                    while($row = oci_fetch_row($res)){
-                                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
-                                                    }
+                                                    // while($row = oci_fetch_row($res)){
+                                                    //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                    // }
                                                 ?>
                                                 </select>
                                             </div>
@@ -553,18 +557,18 @@ session_start();
                                                 <select type="text" name="cancelled_item" id='cancelled_item' class='form-select' required style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                 <?php  
-                                                    $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
-                                                        WHERE A.PO_NUMBER = B.PO_NUMBER
-                                                        AND B.CANCEL_ASSET_FLAG is not null";
-                                                    $res = oci_parse(connection(), $sql);
-                                                    oci_execute($res);
+                                                    // $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
+                                                    //     WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                    //     AND B.CANCEL_ASSET_FLAG is not null";
+                                                    // $res = oci_parse(connection(), $sql);
+                                                    // oci_execute($res);
 
-                                                    while($row = oci_fetch_row($res)){
-                                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
-                                                    }
+                                                    // while($row = oci_fetch_row($res)){
+                                                    //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                    // }
                                                 ?>
                                                 </select>
-                                            </div>
+                                            </div> -->
                                         </div>
                                 
                                         <div class="row g-2">
@@ -656,11 +660,12 @@ session_start();
                                                 <tbody id="doc_tbody">
                                                     <?php
                                                         $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, C.VENDOR_NAME, 
-                                                        B.EMPL_ID, B.MTRL_SHORT, B.PO_ITEM
-                                                        FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
-                                                        WHERE A.PO_NUMBER = B.PO_NUMBER
-                                                        AND A.VENDOR_CODE = C.VENDOR_CODE
-                                                        ORDER BY A.DOCUMENT_NO DESC";
+                                                            B.EMPL_ID, B.MTRL_SHORT, B.PO_ITEM
+                                                            FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
+                                                            WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                            AND A.VENDOR_CODE = C.VENDOR_CODE
+                                                            AND B.CANCEL_ASSET_FLAG is not null
+                                                            ORDER BY A.DOCUMENT_NO DESC";
                                                 
                                                         $result = oci_parse(connection(), $sql);
                                                         oci_execute($result);                                                    
@@ -1326,9 +1331,9 @@ session_start();
     $("#brand").selectize({})
     $("#ser_no1").selectize({})
     $("#rem").selectize({})
-    $("#new_item").selectize({})
-    $("#modified_item").selectize({})
-    $("#cancelled_item").selectize({})
+    // $("#new_item").selectize({})
+    // $("#modified_item").selectize({})
+    // $("#cancelled_item").selectize({})
 
     $("#dataTable1").on("click", '.view_dtl', function(){
         var po_number = $(this).closest('tr').find('.po_no').val()
@@ -1400,13 +1405,13 @@ session_start();
         var to_date = $("#to_date").val()
         var ser_no1 = $("#ser_no1").find(':selected').val()
         var rem = $("#rem").find(':selected').val()
-        var new_item = $("#new_item").find(':selected').val()
-        var modified_item = $("#modified_item").find(':selected').val()
-        var cancelled_item = $("#cancelled_item").find(':selected').val()
+        // var new_item = $("#new_item").find(':selected').val()
+        // var modified_item = $("#modified_item").find(':selected').val()
+        // var cancelled_item = $("#cancelled_item").find(':selected').val()
 
         // po num
         if (po_num != "" && emp_name == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == "" 
-            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == "") {
+            && ser_no1 == "" && rem == "") {
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1447,7 +1452,7 @@ session_start();
 
         // emp name
         else if (emp_name != "" && po_num == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == "" 
-            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1488,7 +1493,7 @@ session_start();
 
         // brand
         else if (brand != "" && po_num == "" && emp_name == "" && dept == "" && vendor == "" && from_date == "" && to_date == ""
-            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1529,7 +1534,7 @@ session_start();
 
         // dept
         else if (dept != "" && po_num == "" && emp_name == "" && brand == "" && vendor == "" && from_date == "" && to_date == "" 
-            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1570,7 +1575,7 @@ session_start();
 
         // vendor
         else if (vendor != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && from_date == "" && to_date == ""
-            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1611,7 +1616,7 @@ session_start();
 
         // po_doc_date
         else if (from_date && to_date != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
-            && ser_no1 == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
+            && ser_no1 == "" && rem == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1652,7 +1657,7 @@ session_start();
 
         // ser_no1
         else if (ser_no1 != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
-            && from_date == "" && to_date == "" && rem == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
+            && from_date == "" && to_date == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1693,7 +1698,7 @@ session_start();
 
         // remarks
         else if (rem != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
-            && from_date == "" && to_date == "" && ser_no1 == "" && new_item == "" && modified_item == "" && cancelled_item == ""){
+            && from_date == "" && to_date == "" && ser_no1 == ""){
             Swal.fire({
                 title: 'Loading',
                 text: 'Please wait while the data is being loaded...',
@@ -1707,129 +1712,6 @@ session_start();
                 type: "POST",
                 url: "../../logic/reports.php",
                 data: {data:data, rem:rem},
-                success: function(res){
-                    Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
-                    $('#doc_tbody').html(res)
-                },
-                error: function(){
-                    Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
-                }
-            })
-        }
-
-        // new_item
-        else if (new_item != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
-            && from_date == "" && to_date == "" && ser_no1 == "" && rem == "" && modified_item == "" && cancelled_item == ""){
-            Swal.fire({
-                title: 'Loading',
-                text: 'Please wait while the data is being loaded...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading()
-                }
-            })
-            $.ajax({
-                type: "POST",
-                url: "../../logic/reports.php",
-                data: {data:data, new_item:new_item},
-                success: function(res){
-                    Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
-                    $('#doc_tbody').html(res)
-                },
-                error: function(){
-                    Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
-                }
-            })
-        }
-
-        // nmodified_item
-        else if (modified_item != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
-            && from_date == "" && to_date == "" && ser_no1 == "" && rem == "" && new_item == ""){
-            Swal.fire({
-                title: 'Loading',
-                text: 'Please wait while the data is being loaded...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading()
-                }
-            })
-            $.ajax({
-                type: "POST",
-                url: "../../logic/reports.php",
-                data: {data:data, modified_item:modified_item},
-                success: function(res){
-                    Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
-                    $('#doc_tbody').html(res)
-                },
-                error: function(){
-                    Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
-                }
-            })
-        }
-
-        // cancelled_item
-        else if (cancelled_item != "" && po_num == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
-            && from_date == "" && to_date == "" && ser_no1 == "" && rem == "" && new_item == "" && modified_item == ""){
-            Swal.fire({
-                title: 'Loading',
-                text: 'Please wait while the data is being loaded...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading()
-                }
-            })
-            $.ajax({
-                type: "POST",
-                url: "../../logic/reports.php",
-                data: {data:data, cancelled_item:cancelled_item},
                 success: function(res){
                     Swal.hideLoading()
                     Swal.fire({
