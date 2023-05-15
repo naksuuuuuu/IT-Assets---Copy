@@ -334,7 +334,7 @@ session_start();
                     <div class="container-fluid">
 
                     <div class="card-header" style="background-color: #4e73df;">
-                        <h2 class="m-0 font-weight-bold" style="color: white; text-align: center">List of Cancelled Asset</h2>
+                        <h2 class="m-0 font-weight-bold" style="color: white; text-align: center">Cancelled Asset</h2>
                     </div>
                     <br>
 

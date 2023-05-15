@@ -4,9 +4,9 @@ header("Content-Type:application/json");
 
 require "../config/connection.php";
 
-if(isset($_POST['po_number'])){
-    $po_number = $_POST['po_number'];
-    $po_item = $_POST['po_item'];
+if(isset($_POST['doc_no1'])){
+    $doc_no1 = $_POST['doc_no1'];
+    // $po_item = $_POST['po_item'];
   
     $sql = "SELECT A.VENDOR_CODE, B.DOCUMENT_NO, to_char(B.DOCUMENT_DATE, 'YYYY-MM-DD') as DOCUMENT_DATE, B.PO_NUMBER, 
     to_char(B.DEL_DATE, 'YYYY-MM-DD') as DEL_DATE, B.REQ_GRP, B.REQ_TYPE, B.ASSET_GROUP, B.SUB_ASSET_GROUP, B.BRAND, B.MODEL as model_code, B.SERIAL_NO1, 
@@ -16,7 +16,7 @@ if(isset($_POST['po_number'])){
     to_char(B.WARRANTY_START_DATE, 'YYYY-MM-DD') as WARRANTY_START_DATE, 
     B.WARRANTY_MONTH, to_char(B.WARRANTY_EXPIRE_DATE, 'YYYY-MM-DD') as WARRANTY_EXPIRE_DATE, B.DEL_NOTE, B.MTRL_SHORT, B.REMARKS,
     B.EMPL_ID, C.REQ_GROUP_NAME, D.REQ_TYPE_NAME, E.ASSET_GROUP_NAME, F.ASSET_SUB_GROUP_NAME, G.BRAND_NAME, H.MODEL, SERIES,
-    B.DOCUMENT_NO, B.ASSET_ID, J.TRANSFER_FROM
+    B.ASSET_ID, J.TRANSFER_FROM
     FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_REQ_GROUP C, IT_ASSET_REQ_TYPE D, IT_ASSET_GROUP E,
     IT_ASSET_SUB_GROUP F, IT_ASSET_BRAND G, IT_ASSET_MODEL H, IT_ASSET_VENDORS I, IT_ASSET_TRANSFER_TRN_HDR J
     WHERE A.PO_NUMBER = B.PO_NUMBER
@@ -28,11 +28,10 @@ if(isset($_POST['po_number'])){
     AND B.BRAND = G.BRAND_CODE
     AND B.MODEL = H.MODEL_CODE
     AND B.DOCUMENT_NO = J.REF_DOC_NO
-    AND B.PO_NUMBER = :po_number
-    AND B.PO_ITEM = :po_item";
+    AND J.DOCUMENT_NO = :doc_no1";
     $res = oci_parse(connection(), $sql);
-    oci_bind_by_name($res, ':po_number', $po_number);
-    oci_bind_by_name($res, ':po_item', $po_item);
+    oci_bind_by_name($res, ':doc_no1', $doc_no1);
+    // oci_bind_by_name($res, ':po_item', $po_item);
     oci_execute($res);
   
     $result = "";

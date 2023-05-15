@@ -827,8 +827,8 @@ session_start();
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Asset Flag *</label>
-                                                        <select id="ass_flag" name='ass_flag[]' type="text" autocomplete="off" class="form-control war_exp" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-
+                                                        <select id="ass_flag" name='ass_flag[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                                <!-- <option selected=" ">Select ass_flag...</option> -->
                                                         </select>
                                                     </div>
 
@@ -858,36 +858,36 @@ session_start();
                                     </div>
                                 </div>
                                 <br>
-                                    <div class="card" style="border: 2px solid #e6e6e6">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="headingThree">
-                                                <h3 class="panel-title font-weight-bold" style="color: #000">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                        Attachment
-                                                    </a>
-                                                </h3>
-                                            </div>
-                                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                                <div class="panel-body">   
-                                                    <div class="container">
-                                                        <div class="row">
-                                                            <div class="col-lg-8 col-sm-12 col-11 main-section">
-                                                                <form enctype="multipart/form-data">
-                                                                    <div class="form-group">
-                                                                        <div class="file-loading">
-                                                                            <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
-                                                                        </div>
+                                <!-- <div class="card" style="border: 2px solid #e6e6e6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingThree">
+                                            <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    Attachment
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                            <div class="panel-body">   
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-8 col-sm-12 col-11 main-section">
+                                                            <form enctype="multipart/form-data">
+                                                                <div class="form-group">
+                                                                    <div class="file-loading">
+                                                                        <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
                                                                     </div>
-                                                                </form>            
-                                                            </div>
+                                                                </div>
+                                                            </form>            
                                                         </div>
                                                     </div>
-                                                    <br>
                                                 </div>
+                                                <br>
                                             </div>
                                         </div>
                                     </div>
-                                    <br>
+                                </div>
+                                <br> -->
                                     <div class="col-md-12">
                                         <button id="save_btn1" class="btn btn-success" type="button">
                                         <i class="fa-solid fa-floppy-disk"></i> Save</button>

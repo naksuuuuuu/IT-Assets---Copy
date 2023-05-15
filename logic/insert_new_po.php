@@ -214,11 +214,13 @@
                         if ($ass_row[0] == '') {
                             $ass_id = "0001";
                         }
-                        else{
-                            $ass_id = $ass_row[0];
-                            $ass_id++;
+                        else {
+                            $lastfourdigits = substr($ass_row[0], -4);
+                            $increment = intval($lastfourdigits) + 1;
+                            $padded = str_pad($increment, 4, '0', STR_PAD_LEFT);
+                            $ass_id = substr($ass_row[0], 0, -4) .$padded;
                         }
-
+                        
                     $doc_num = "SELECT DOCUMENT_NO, DOCUMENT_DATE FROM IT_ASSET_HEADER1 WHERE PO_NUMBER = :po_no";
                     $res_doc_num = oci_parse(connection(), $doc_num); 
                     oci_bind_by_name($res_doc_num, ':po_no', $po_no);
@@ -294,7 +296,7 @@
             }
         }
         if ($count != 0){
-            echo json_encode(array('success' => 1, 'message' => "SAVED", 'icon' => "success"));
+            echo json_encode(array('success' => 1, 'message' => "SUCCESS", 'icon' => "success"));
         }
         else{
             echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));

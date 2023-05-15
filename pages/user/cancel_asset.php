@@ -855,7 +855,7 @@ session_start();
                                     </div>
                                 </div>
                                 <br>
-                                <div class="card" style="border: 2px solid #e6e6e6">
+                                <!-- <div class="card" style="border: 2px solid #e6e6e6">
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="headingThree">
                                             <h3 class="panel-title font-weight-bold" style="color: #000">
@@ -884,7 +884,7 @@ session_start();
                                         </div>
                                     </div>
                                 </div>
-                                <br>
+                                <br> -->
                                 <div class="col-md-12">
                                     <button id="cancel_btn" class="btn btn-danger" type="button">
                                         <i class="fa-solid fa-ban"></i> Cancel</button>
@@ -1036,7 +1036,7 @@ $(document).ready(function(){
                 $("#war_start").val(res1.WAR_START)
                 $("#war_month").val(res1.WAR_MONTH)
                 $("#war_exp").val(res1.WAR_EXP)
-                $("#ass_flag").append("<option value="+ res1.ASS_FLAG +">"+ res1.ASS_FLAG +"</option>")
+                $("#ass_flag").append("<option>"+ res1.ASS_FLAG +"</option>")
                 $("#remarks").val(res1.REMARKS)
                 $("#po_number").val(res1.PO_NUMBER)
                 $("#po_item").val(res1.PO_ITEM)

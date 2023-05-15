@@ -255,23 +255,24 @@ $username = $_SESSION['username'];
                         <div class="card-header py-3" style="background: #87CEFA">
                             <div class="row g-2">
                                 <div class="col-md-3">
-                                    <div class="label" style="color: #000">PO Number</div>
-                                    <select class="form-select" name="po_no" id="po_no" style="margin-bottom: 8px;">
-                                        <option value=""></option>
-                                        <?php 
-                                            $sql = "SELECT PO_NUMBER FROM IT_ASSET_HEADER1 WHERE CANCEL_ASSET_FLAG is null";
-                                            $res = oci_parse(connection(), $sql);
-                                            oci_execute($res);
+                                    <div class="label" style="color: #000000">PO Number:</div>
+                                    <select type="text" name="po_num1" id='po_num1' class='form-select' required style="margin-bottom: 8px;"> 
+                                    <option value=""></option>
+                                    <?php  
+                                        $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
+                                            WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
+                                        $res = oci_parse(connection(), $sql);
+                                        oci_execute($res);
 
-                                            while($row = oci_fetch_row($res)){
-                                                echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
-                                            }
-                                        ?>
+                                        while($row = oci_fetch_row($res)){
+                                            echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                        }
+                                    ?>
                                     </select>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="label" style="color: #000">PO Document Date:</div>
+                                    <div class="label" style="color: #000000">PO Document Date:</div>
                                         <div class="input-group">
                                             <input type="date" class="form-control" id="from_date" placeholder="From">
                                             <span class="input-group-text">-</span>
@@ -284,9 +285,8 @@ $username = $_SESSION['username'];
                                     <select type="text" name="emp_name" id='emp_name' class='form-select' required style="margin-bottom: 8px;"> 
                                     <option value=""></option>
                                         <?php
-                                            $sql = "SELECT DISTINCT A.DOCUMENT_NO, B.EMPL_ID FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B
-                                                    WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
-                                                    AND A.CANCEL_ASSET_FLAG is null";
+                                            $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
+                                            WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
 
                                             $result = oci_parse(connection(), $sql);
                                             oci_execute($result);                                                    
@@ -310,10 +310,11 @@ $username = $_SESSION['username'];
 
                                 <div class="col-md-3">
                                     <div class="label" style="color: #000">Serial Number</div>
-                                    <select class="form-select" name="ser_no" id="ser_no" style="margin-bottom: 8px;">
+                                    <select class="form-select" name="ser_no1" id="ser_no1" style="margin-bottom: 8px;">
                                         <option value=""></option>
                                         <?php 
-                                            $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS1 WHERE CANCEL_ASSET_FLAG is null";
+                                            $sql = "SELECT DISTINCT A.SERIAL_NO1 FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
+                                                WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
                                             $res = oci_parse(connection(), $sql);
                                             oci_execute($res);
 
@@ -322,6 +323,90 @@ $username = $_SESSION['username'];
                                             }
                                         ?>
                                     </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="label" style="color: #000">Remarks</div>
+                                    <select class="form-select" name="rem" id="rem" style="margin-bottom: 8px;">
+                                        <option value=""></option>
+                                        <?php 
+                                            $sql = "SELECT DISTINCT A.REMARKS FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
+                                            WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
+                                            $res = oci_parse(connection(), $sql);
+                                            oci_execute($res);
+
+                                            while($row = oci_fetch_row($res)){
+                                                echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="label" style="color: #000000">Vendor:</div>
+                                    <select type="text" name="vendor" id='vendor' class='form-select' required style="margin-bottom: 8px;"> 
+                                        <option value=""></option>
+                                        <?php 
+                                            $sql = "SELECT DISTINCT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER1 A, IT_ASSET_VENDORS B, IT_ASSET_DETAILS1 C, IT_ASSET_TRANSFER_TRN_HDR D
+                                            WHERE A.VENDOR_CODE = B.VENDOR_CODE
+                                            AND A.DOCUMENT_NO = C.DOCUMENT_NO
+                                            AND C.DOCUMENT_NO = D.REF_DOC_NO";
+
+                                            $res = oci_parse(connection(), $sql);
+                                            oci_execute($res);
+                                            while($row = oci_fetch_row($res)){
+                                                echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
+                                            }
+                                        ?>
+                                    </select> 
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="label" style="color: #000000">Department:</div>
+                                    <select type="text" name="dept" id='dept' class='form-select' required style="margin-bottom: 8px;"> 
+                                        <option value=""></option>
+                                        <?php
+                                            $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
+                                            WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
+                                            $result = oci_parse(connection(), $sql);
+                                            oci_execute($result);                                                    
+
+                                            while($row = oci_fetch_assoc($result)){
+                                                $empId = $row["EMPL_ID"];
+
+                                                $dept_code = "SELECT DISTINCT B.DEPTID, B.DESCR FROM PERSON_TBL A, DEPARTMENT_TBL B, 
+                                                    JOBCUR_EE C WHERE B.DEPTID = C.DEPTID
+                                                    AND A.EMPLID = C.EMPLID
+                                                    AND A.EMPLID = :empl";
+                                                $stmt = oci_parse(connection1(), $dept_code);
+                                                oci_bind_by_name($stmt, ':empl', $empId);
+                                                oci_execute($stmt);
+
+                                                $row1 = oci_fetch_row($stmt);
+
+                                                echo "<option value='".htmlspecialchars($row1[0], ENT_QUOTES)."'>".htmlspecialchars($row1[1], ENT_QUOTES)."</option>";
+                                            }
+                                        ?>
+                                    </select> 
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="label" style="color: #000000">BRAND:</div>
+                                    <select type="text" name="brand" id='brand' class='form-select' required style="margin-bottom: 8px;"> 
+                                        <option value=""></option>
+                                        <?php 
+                                            $sql = "SELECT A.BRAND, B.BRAND_NAME FROM IT_ASSET_DETAILS1 A, IT_ASSET_BRAND B, IT_ASSET_TRANSFER_TRN_HDR C
+                                                WHERE A.BRAND = B.BRAND_CODE
+                                                AND C.REF_DOC_NO = A.DOCUMENT_NO";
+                                            
+                                            $res = oci_parse(connection(), $sql);
+                                            oci_execute($res);
+
+                                            while($row = oci_fetch_row($res)){
+                                                echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1], ENT_IGNORE)."</option>";
+                                            }
+                                        ?>
+                                    </select> 
                                 </div>
                             </div>
                                 <div class="col-md-12">
@@ -351,13 +436,14 @@ $username = $_SESSION['username'];
                                             <th>Model</th>
                                             <th hidden>Sub Asset Group Code</th>
                                             <th hidden>Employee Id</th>
-                                            <th hidden>PO Item</th>
-                                            <th hidden>po number</th>
+                                            <!-- <th hidden>PO Item</th> -->
+                                            <!-- <th hidden>po number</th> -->
+                                            <th hidden>Doc No1</th>
                                         </tr>
                                     </thead>
                                     <tbody id="doc_tbody">
                                     <?php
-                                            $query = "SELECT f.DOCUMENT_NO, b.ASSET_ID, b.EMPL_ID, b.sub_ASSET_GROUP, c.MODEL, d.BRAND_NAME, b.PO_item, 
+                                            $query = "SELECT DISTINCT f.DOCUMENT_NO, b.ASSET_ID, b.EMPL_ID, b.sub_ASSET_GROUP, c.MODEL, d.BRAND_NAME, b.PO_item, 
                                             b.PO_NUMBER, e.ASSET_SUB_GROUP_NAME  
                                             FROM IT_ASSET_HEADER1 a, IT_ASSET_DETAILS1 b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e, IT_ASSET_TRANSFER_TRN_HDR f
                                             where a.DOCUMENT_NO	= b.DOCUMENT_NO
@@ -389,8 +475,7 @@ $username = $_SESSION['username'];
                                                         <td>" . $row['MODEL'] . "</td>
                                                         <td hidden>" . $row['SUB_ASSET_GROUP'] . "</td>
                                                         <td hidden>" . $row['EMPL_ID'] . "</td>
-                                                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                                                        <td hidden><input class='po_no' value=".$row["PO_NUMBER"]." hidden></td>
+                                                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                                                     </tr>";
                                             }
                                         ?>
@@ -853,12 +938,13 @@ $username = $_SESSION['username'];
                 })
             })
             $("#myTable").on("click", ".view_dtl", function(){
-                var po_number = $(this).closest('tr').find('.po_no').val()
-                var po_item = $(this).closest('tr').find('.po_item').val()
+                // var po_number = $(this).closest('tr').find('.po_no').val()
+                // var po_item = $(this).closest('tr').find('.po_item').val()
+                var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
                 $.ajax({
                     type: "POST",
                     url: "../../logic/transfer_print.php",
-                    data: {po_number:po_number, po_item:po_item},
+                    data: {doc_no1:doc_no1},
                     success: function(res1){
 
                         $('#container1_modal').modal('show');
@@ -911,19 +997,30 @@ $username = $_SESSION['username'];
             })
 
             // selectize
-            $("#po_no").selectize({})
+            $("#po_num1").selectize({})
             $("#ser_no").selectize({})
             $("#emp_name").selectize({})
+            $("#brand").selectize({})
+            $("#dept").selectize({})
+            $("#vendor").selectize({})
+            $("#ser_no1").selectize({})
+            $("#rem").selectize({})
 
             $("#srch").click(function(){
                 var data = 1
-                var po_no = $("#po_no").find(':selected').val()
-                var ser_no = $("#ser_no").find(':selected').val()
+                var po_num1 = $("#po_num1").find(':selected').val()
+                var emp_name = $("#emp_name").find(':selected').val()
+                var brand = $("#brand").find(':selected').val()
+                var dept = $("#dept").find(':selected').val()
+                var vendor = $("#vendor").find(':selected').val()
                 var from_date = $("#from_date").val()
                 var to_date = $("#to_date").val()
-                var emp_name = $("#emp_name").find(':selected').val()
+                var ser_no1 = $("#ser_no1").find(':selected').val()
+                var rem = $("#rem").find(':selected').val()
 
-                if(po_no !== "" && ser_no == "" && from_date == "" && to_date == "" && emp_name == ""){
+                // po num
+                if (po_num1 != "" && emp_name == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == "" 
+                    && ser_no1 == "" && rem == "") {
                     Swal.fire({
                         title: 'Loading',
                         text: 'Please wait while the data is being loaded...',
@@ -934,26 +1031,25 @@ $username = $_SESSION['username'];
                         }
                     })
                     $.ajax({
-                        type:"POST",
-                        url: "../../logic/transfer_search.php",
-                        data:{data:data, po_no:po_no, },
-                        success: function(res){   
+                        type: "POST",
+                        url: "../../logic/transferred_search.php",
+                        data: {data:data, po_num1:po_num1},
+                        success: function(res){
                             Swal.hideLoading()
                             Swal.fire({
+                                icon: 'success',
                                 title: 'Success',
                                 text: 'Data loaded successfully!',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
                                 showConfirmButton: false,
-                                showCancelButton: false
-                            })            
-                            $('#doc_tbody').html(res) 
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
+                            })
+                            $('#doc_tbody').html(res)
                         },
                         error: function(){
-                            // Hide the loading spinner
                             Swal.hideLoading()
-                            // Show an error message
                             Swal.fire({
                                 title: 'Error',
                                 text: 'An error occurred while loading data',
@@ -963,8 +1059,9 @@ $username = $_SESSION['username'];
                     })
                 }
 
-                // ser_no1
-                else if(ser_no !== "" && po_no == "" && from_date == "" && to_date == "" && emp_name == ""){
+                // emp name
+                else if (emp_name != "" && po_num1 == "" && brand == "" && dept == "" && vendor == "" && from_date == "" && to_date == "" 
+                    && ser_no1 == "" && rem == ""){
                     Swal.fire({
                         title: 'Loading',
                         text: 'Please wait while the data is being loaded...',
@@ -975,26 +1072,148 @@ $username = $_SESSION['username'];
                         }
                     })
                     $.ajax({
-                        type:"POST",
-                        url: "../../logic/transfer_search.php",
-                        data:{data:data, ser_no:ser_no},
-                        success: function(res){   
+                        type: "POST",
+                        url: "../../logic/transferred_search.php",
+                        data: {data:data, emp_name:emp_name},
+                        success: function(res){
                             Swal.hideLoading()
                             Swal.fire({
+                                icon: 'success',
                                 title: 'Success',
                                 text: 'Data loaded successfully!',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
                                 showConfirmButton: false,
-                                showCancelButton: false
-                            })            
-                            $('#doc_tbody').html(res) 
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
+                            })
+                            $('#doc_tbody').html(res)
                         },
                         error: function(){
-                            // Hide the loading spinner
                             Swal.hideLoading()
-                            // Show an error message
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An error occurred while loading data',
+                                icon: 'error'
+                            })
+                        }
+                    })
+                }
+
+                // brand
+                else if (brand != "" && po_num1 == "" && emp_name == "" && dept == "" && vendor == "" && from_date == "" && to_date == ""
+                    && ser_no1 == "" && rem == ""){
+                    Swal.fire({
+                        title: 'Loading',
+                        text: 'Please wait while the data is being loaded...',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    })
+                    $.ajax({
+                        type: "POST",
+                        url: "../../logic/transferred_search.php",
+                        data: {data:data, brand:brand},
+                        success: function(res){
+                            Swal.hideLoading()
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Data loaded successfully!',
+                                showConfirmButton: false,
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
+                            })
+                            $('#doc_tbody').html(res)
+                        },
+                        error: function(){
+                            Swal.hideLoading()
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An error occurred while loading data',
+                                icon: 'error'
+                            })
+                        }
+                    })
+                }
+
+                // dept
+                else if (dept != "" && po_num1 == "" && emp_name == "" && brand == "" && vendor == "" && from_date == "" && to_date == "" 
+                    && ser_no1 == "" && rem == ""){
+                    Swal.fire({
+                        title: 'Loading',
+                        text: 'Please wait while the data is being loaded...',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    })
+                    $.ajax({
+                        type: "POST",
+                        url: "../../logic/transferred_search.php",
+                        data: {data:data, dept:dept},
+                        success: function(res){
+                            Swal.hideLoading()
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Data loaded successfully!',
+                                showConfirmButton: false,
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
+                            })
+                            $('#doc_tbody').html(res)
+                        },
+                        error: function(){
+                            Swal.hideLoading()
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An error occurred while loading data',
+                                icon: 'error'
+                            })
+                        },
+                    })
+                }
+
+                // vendor
+                else if (vendor != "" && po_num1 == "" && emp_name == "" && brand == "" && dept == "" && from_date == "" && to_date == ""
+                    && ser_no1 == "" && rem == ""){
+                    Swal.fire({
+                        title: 'Loading',
+                        text: 'Please wait while the data is being loaded...',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    })
+                    $.ajax({
+                        type: "POST",
+                        url: "../../logic/transferred_search.php",
+                        data: {data:data, vendor:vendor},
+                        success: function(res){
+                            Swal.hideLoading()
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Data loaded successfully!',
+                                showConfirmButton: false,
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
+                            })
+                            $('#doc_tbody').html(res)
+                        },
+                        error: function(){
+                            Swal.hideLoading()
                             Swal.fire({
                                 title: 'Error',
                                 text: 'An error occurred while loading data',
@@ -1005,7 +1224,8 @@ $username = $_SESSION['username'];
                 }
 
                 // po_doc_date
-                else if(from_date && to_date !== "" && po_no == "" && ser_no == "" && emp_name == ""){
+                else if (from_date && to_date != "" && po_num1 == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
+                    && ser_no1 == "" && rem == ""){
                     Swal.fire({
                         title: 'Loading',
                         text: 'Please wait while the data is being loaded...',
@@ -1016,26 +1236,25 @@ $username = $_SESSION['username'];
                         }
                     })
                     $.ajax({
-                        type:"POST",
-                        url: "../../logic/transfer_search.php",
-                        data:{data:data, from_date:from_date, to_date:to_date},
-                        success: function(res){   
+                        type: "POST",
+                        url: "../../logic/transferred_search.php",
+                        data: {data:data, from_date:from_date, to_date:to_date},
+                        success: function(res){
                             Swal.hideLoading()
                             Swal.fire({
+                                icon: 'success',
                                 title: 'Success',
                                 text: 'Data loaded successfully!',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
                                 showConfirmButton: false,
-                                showCancelButton: false
-                            })            
-                            $('#doc_tbody').html(res) 
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
+                            })
+                            $('#doc_tbody').html(res)
                         },
                         error: function(){
-                            // Hide the loading spinner
                             Swal.hideLoading()
-                            // Show an error message
                             Swal.fire({
                                 title: 'Error',
                                 text: 'An error occurred while loading data',
@@ -1045,8 +1264,9 @@ $username = $_SESSION['username'];
                     })
                 }
 
-                // emp_name
-                else if(emp_name !== "" && po_no == "" && ser_no == "" && from_date == "" && to_date == ""){
+                // ser_no1
+                else if (ser_no1 != "" && po_num1 == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
+                    && from_date == "" && to_date == "" && rem == ""){
                     Swal.fire({
                         title: 'Loading',
                         text: 'Please wait while the data is being loaded...',
@@ -1057,26 +1277,66 @@ $username = $_SESSION['username'];
                         }
                     })
                     $.ajax({
-                        type:"POST",
-                        url: "../../logic/transfer_search.php",
-                        data:{data:data, emp_name:emp_name},
-                        success: function(res){   
+                        type: "POST",
+                        url: "../../logic/transferred_search.php",
+                        data: {data:data, ser_no1:ser_no1},
+                        success: function(res){
                             Swal.hideLoading()
                             Swal.fire({
+                                icon: 'success',
                                 title: 'Success',
                                 text: 'Data loaded successfully!',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
                                 showConfirmButton: false,
-                                showCancelButton: false
-                            })            
-                            $('#doc_tbody').html(res) 
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
+                            })
+                            $('#doc_tbody').html(res)
                         },
                         error: function(){
-                            // Hide the loading spinner
                             Swal.hideLoading()
-                            // Show an error message
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An error occurred while loading data',
+                                icon: 'error'
+                            })
+                        }
+                    })
+                }
+
+                // remarks
+                else if (rem != "" && po_num1 == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
+                    && from_date == "" && to_date == "" && ser_no1 == ""){
+                    Swal.fire({
+                        title: 'Loading',
+                        text: 'Please wait while the data is being loaded...',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    })
+                    $.ajax({
+                        type: "POST",
+                        url: "../../logic/transferred_search.php",
+                        data: {data:data, rem:rem},
+                        success: function(res){
+                            Swal.hideLoading()
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Data loaded successfully!',
+                                showConfirmButton: false,
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
+                            })
+                            $('#doc_tbody').html(res)
+                        },
+                        error: function(){
+                            Swal.hideLoading()
                             Swal.fire({
                                 title: 'Error',
                                 text: 'An error occurred while loading data',

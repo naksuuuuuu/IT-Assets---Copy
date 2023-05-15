@@ -406,7 +406,7 @@ session_start();
                         <!-- <div class="row g-3"> -->
                             <!-- Area Chart -->
                         <div class="container-fluid">
-                            <div class="card" style="border: 1px solid red">
+                            <!-- <div class="card" style="border: 1px solid red"> -->
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div id="chartContainer" style="height: 400px;"></div>
@@ -472,7 +472,7 @@ session_start();
                                         ?>
                                     </div>
                                 </div>
-                            </div>
+                            <!-- </div> -->
                             <br>
                         </div>
                         <br>
