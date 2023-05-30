@@ -270,7 +270,7 @@ $username = $_SESSION['username'];
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="label" style="color: #000">PO Document Date:</div>
+                                    <div class="label" style="color: #000">Document Date:</div>
                                         <div class="input-group">
                                             <input type="date" class="form-control" id="from_date" placeholder="From">
                                             <span class="input-group-text">-</span>
@@ -359,7 +359,9 @@ $username = $_SESSION['username'];
                                             $query = "SELECT a.DOCUMENT_NO, b.ASSET_ID, b.EMPL_ID, b.sub_ASSET_GROUP, c.MODEL, d.BRAND_NAME, b.PO_item, 
                                                 b.PO_NUMBER, e.ASSET_SUB_GROUP_NAME  
                                                 FROM IT_ASSET_HEADER1 a, IT_ASSET_DETAILS1 b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e
-                                                where a.DOCUMENT_NO	= b.DOCUMENT_NO
+                                                where  a.DOCUMENT_DATE >= TRUNC(SYSDATE, 'MM')
+                                                and a.DOCUMENT_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                                and a.DOCUMENT_NO	= b.DOCUMENT_NO
                                                 and b.MODEL = c.MODEL_code
                                                 and b.BRAND = d.BRAND_CODE
                                                 and b.CANCEL_ASSET_FLAG is null
@@ -388,7 +390,7 @@ $username = $_SESSION['username'];
                                                         <td hidden>" . $row['SUB_ASSET_GROUP'] . "</td>
                                                         <td hidden>" . $row['EMPL_ID'] . "</td>
                                                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                                                        <td hidden><input class='po_no' value=".$row["PO_NUMBER"]." hidden></td>
+                                                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                                                     </tr>";
                                             }
                                         ?>
@@ -529,8 +531,8 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Series *</label>
-                                                        <input id="series" name='series' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">Series</label>
+                                                        <input id="series" name='series' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -853,12 +855,12 @@ $username = $_SESSION['username'];
                 })
             })
             $("#myTable").on("click", ".view_dtl", function(){
-                var po_number = $(this).closest('tr').find('.po_no').val()
+                var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
                 var po_item = $(this).closest('tr').find('.po_item').val()
                 $.ajax({
                     type: "POST",
                     url: "../../logic/mod_json.php",
-                    data: {po_number:po_number, po_item:po_item},
+                    data: {doc_no1:doc_no1, po_item:po_item},
                     success: function(res1){
 
                         $('#container1_modal').modal('show');
@@ -904,6 +906,16 @@ $username = $_SESSION['username'];
             $("#ser_no").selectize({})
             $("#emp_name").selectize({})
 
+            $("#clr").click(function(){
+                location.reload()
+                // var po_no = $('#po_no')[0].selectize;
+                // var emp_name = $('#emp_name')[0].selectize;
+                // var ser_no = $('#ser_no')[0].selectize;
+                // po_no.clear();
+                // emp_name.clear();
+                // ser_no.clear();
+            })
+
             $("#srch").click(function(){
                 var data = 1
                 var po_no = $("#po_no").find(':selected').val()
@@ -929,13 +941,14 @@ $username = $_SESSION['username'];
                         success: function(res){   
                             Swal.hideLoading()
                             Swal.fire({
+                                icon: 'success',
                                 title: 'Success',
                                 text: 'Data loaded successfully!',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
                                 showConfirmButton: false,
-                                showCancelButton: false
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
                             })            
                             $('#doc_tbody').html(res) 
                         },
@@ -970,13 +983,14 @@ $username = $_SESSION['username'];
                         success: function(res){   
                             Swal.hideLoading()
                             Swal.fire({
+                                icon: 'success',
                                 title: 'Success',
                                 text: 'Data loaded successfully!',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
                                 showConfirmButton: false,
-                                showCancelButton: false
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
                             })            
                             $('#doc_tbody').html(res) 
                         },
@@ -1011,13 +1025,14 @@ $username = $_SESSION['username'];
                         success: function(res){   
                             Swal.hideLoading()
                             Swal.fire({
+                                icon: 'success',
                                 title: 'Success',
                                 text: 'Data loaded successfully!',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
                                 showConfirmButton: false,
-                                showCancelButton: false
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
                             })            
                             $('#doc_tbody').html(res) 
                         },
@@ -1052,14 +1067,15 @@ $username = $_SESSION['username'];
                         success: function(res){   
                             Swal.hideLoading()
                             Swal.fire({
+                                icon: 'success',
                                 title: 'Success',
                                 text: 'Data loaded successfully!',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
                                 showConfirmButton: false,
-                                showCancelButton: false
-                            })            
+                                toast: true,
+                                position: 'top-right',
+                                timer: 2000,
+                                timerProgressBar: true
+                            })           
                             $('#doc_tbody').html(res) 
                         },
                         error: function(){

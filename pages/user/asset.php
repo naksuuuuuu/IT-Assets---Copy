@@ -425,6 +425,7 @@ $username = $_SESSION['username'];
                                                                     <th style="width: 200px;">Warranty Expiry Date</th>
                                                                     <th style="width: 200px;">Asset Flag</th>
                                                                     <th style="width: 200px;">Remarks</th>
+                                                                    <th style="width: 200px;">Attachment</th>
                                                                     <th style="width: 200px;">PO Doc Date</th>
                                                                     <th style="width: 200px;">Plant</th>
                                                                     <th style="width: 200px;">Status</th>
@@ -888,36 +889,6 @@ $username = $_SESSION['username'];
                                         </div>                              
                                     </div>
                                     <br>
-                                    <div class="card" style="border: 2px solid #e6e6e6">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="headingThree">
-                                                <h3 class="panel-title font-weight-bold" style="color: #000">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_Three" aria-expanded="false" aria-controls="collapse_Three">
-                                                        Attachment
-                                                    </a>
-                                                </h3>
-                                            </div>
-                                            <div id="collapse_Three" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                                <div class="panel-body">   
-                                                    <div class="container">
-                                                        <div class="row">
-                                                            <div class="col-lg-8 col-sm-12 col-11 main-section">
-                                                                <form enctype="multipart/form-data">
-                                                                    <div class="form-group">
-                                                                        <div class="file-loading">
-                                                                            <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
-                                                                        </div>
-                                                                    </div>
-                                                                </form>            
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
                                     <div class="col-md-12">
                                         <button id="save_btn1" class="btn btn-success" type="button">
                                             <i class="fa-solid fa-floppy-disk"></i> Save</button>
@@ -1329,8 +1300,8 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Series *</label>
-                                                                            <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                                            <label class="form-label">Series</label>
+                                                                            <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                                         </div>
 
                                                                         <div class="col-md-4">
@@ -1428,402 +1399,39 @@ $username = $_SESSION['username'];
                                                                             <input id="attch" name='attch[]' type="file" type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div> -->
                                                                     </div>
-
-                                                                    <!--  <div>
-                                                                        <input type="date" id="po_date" class="form-control" style="width: 200px; margin-top: 20px; margin-left: 10px">
-                                                                        <input type="text" id="plant" class="form-control" style="width: 200px; margin-top: 20px; margin-left: 10px">
-                                                                                <input type="text" id="amt">
-                                                                        <input type="text" id="po_stat" class="form-control" style="width: 200px; margin-top: 20px; margin-left: 10px">
-                                                                        <input type="text" id="po_num" hidden>
-                                                                        <input type="text" id="supp_hide" hidden>
-                                                                    </div> -->
-
-                                                                    <!-- <div class="row mb-3" style="margin-left: 40px;">
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">PO Number:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <select type="text" class="form-control" id="po_no" name="po_no[]" style="border: none; border-bottom: 1px solid blue; border-radius:0px;">
-                                                                            <option value=""></option>
-                                                                                <?php 
-                                                                                    // $sql = "SELECT DISTINCT PO_NO FROM IT_ASSET_PO";
-                                                                                    // $res = oci_parse(connection(), $sql);
-                                                                                    // oci_execute($res);
-
-                                                                                    // while($row = oci_fetch_row($res)){
-                                                                                    //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
-                                                                                    // }
-                                                                                ?>
-                                                                            </select>
-                                                                        </div>
-                                                                        
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Supplier:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" autocomplete="off" 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">                                           
-                                                                                        
-                                                                                <option value=""></option>
-                                                                                    <?php 
-                                                                                        // $sql = "SELECT DISTINCT VENDOR_CODE, VENDOR_NAME FROM IT_ASSET_VENDORS";
-                                                                                        // $res = oci_parse(connection(), $sql);
-                                                                                        // oci_execute($res);
-
-                                                                                        // while($row = oci_fetch_row($res)){
-                                                                                        //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                                                                        // }
-                                                                                    ?>
-                                                                            </select>
-                                                                        </div>
-
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Request Group:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <select id="req_grp" name='req_grp[]' type="text" autocomplete="off" class="form-select" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">  
-                                                                                    
-                                                                            <option value=" "></option>
-                                                                            <?php 
-                                                                                // $sql = "SELECT REQ_GROUP_ID, REQ_GROUP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GROUP_ID";
-                                                                                // $res = oci_parse(connection(), $sql);
-                                                                                // oci_execute($res);
-
-                                                                                // while($row = oci_fetch_row($res)){
-                                                                                //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                                                                // }
-                                                                            ?>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div> -->
-
-                                                                    <!-- <div class="row mb-3" style="margin-left:40px;">
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Request Type:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <select id="type" name='type[]' type="text" autocomplete="off" class="form-select" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">  
-                                                                                    
-                                                                            <option value=" "></option>
-                                                                            </select>
-                                                                        </div> 
-                                                                        
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Asset Group:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <select id="asset_group" name='asset_group' type="text" autocomplete="off" class="form-select" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">  
-                                                                                    
-                                                                            <option value=" "></option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div> -->
-
-                                                                    <!-- <div class="row mb-3" style="margin-left:40px; ">
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Asset Sub Group:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <select id="asset_sub_group" name='asset_sub_group' type="text" autocomplete="off" class="form-select" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">  
-                                                                                    
-                                                                            <option value=" "></option>
-                                                                            </select>
-                                                                        </div>
-
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Brand:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <select id="brand" name='brand[]' type="text" autocomplete="off" class="form-select" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">
-
-                                                                            <option value=""></option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div> -->
-
-                                                                    <!-- <div class="row mb-3" style="margin-left:40px;">
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Model:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <select id="model" name='model[]' type="text" autocomplete="off" class="form-select" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">
-
-                                                                            <option value=""></option>
-                                                                            </select>
-                                                                        </div>
-
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Price:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input id="price" name='price[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">
-                                                                        </div>
-                                                                    </div> -->
-
-                                                                    <!-- <div class="row mb-3" style="margin-left:40px;">
-                                                                        <label class="col-sm-2" style=" margin-right: -20px; color: black">Serial Number:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input id="ser_no" name='ser_no[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">
-                                                                        </div>
-
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Asset Code:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input id="ass_code" name='ass_code[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="row mb-3" style="margin-left:40px;">
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Delivery Note:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input id="del_note" name='del_note[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">
-                                                                        </div>
-
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Delivery Date:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input id="del_date" name='del_date[]' type="date" autocomplete="off" class="form-control" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;;">
-                                                                        </div>
-                                                                    </div> -->
-
-                                                                    <!-- <div class="row mb-3" style="margin-left:40px;">
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Material Short</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input id="malt_shrt" name='malt_shrt[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;;">
-                                                                        </div>
-
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Remarks:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="row mb-3" style="margin-left:40px;">
-                                                                        <label class="col-sm-2" style="margin-right: -20px; color: black">Attachment:</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input id="attch" name='attch[]' type="file" autocomplete="off" class="form-control" required 
-                                                                                style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;;">
-                                                                        </div>
-
-                                                                        <button id="upload" name="upload">Upload File</button> 
-                                                                    </div> -->
-
-                                                                    <!-- <div class="table-responsive">
-                                                                        <table class="display nowrap" id="dataTable" width="100%">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th style='text-align: start; width: 35px;'></th>
-                                                                                    <th hidden style="width: 200px; background-color: transparent"> PO Number</th>
-                                                                                    <th hidden>PO DATE</th> 
-                                                                                    <th hidden>Supplier Code</th>
-                                                                                    <th style="width: 200px">Supplier</th>
-                                                                                    <th hidden style="width: 200px"> Type Code </th>
-                                                                                    <th style="width: 200px">Type</th>
-                                                                                    <th hidden style="width: 200px">Brand Code</th>
-                                                                                    <th style="width: 200px">Brand</th>
-                                                                                    <th style="width: 200px">Price</th>
-                                                                                    <th style="width: 200px">Serial No.</th>
-                                                                                    <th style="width: 200px">Asset Code</th>
-                                                                                    <th style="width: 200px">Delivery Note</th>
-                                                                                    <th style="width: 200px">Delivery Date</th>
-                                                                                    <th style="width: 200px">Material Short</th>
-                                                                                    <th style="width: 200px">Remarks</th>
-                                                                                    <th style="width: 200px">Attachment</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tfoot>
-                                                                                <tr>
-                                                                                    <th>Request Group Name</th>
-                                                                                    <th>User Created</th>
-                                                                                    <th>User Created Date</th>
-                                                                                    <th>Last User Update</th>
-                                                                                    <th>Last User Update Date</th>
-                                                                                </tr>
-                                                                            </tfoot>
-                                                                            <tbody id="td_body">
-                                                                                <tr style="background-color: white;">
-                                                                                    <td style='text-align: center'><img id='plusImg' src='../../assets/add-free-icon-font.png'></td>  
-                                                                                    <td hidden style='text-align: start; background-color: #FFFFFF	'>
-                                                                                        <input id="po_no" name='po_no[]' type="text" autocomplete="off" 
-                                                                                        style=" background-color: transparent">                                           
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('po_no').value = "<?php echo ($_POST['po_no']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td hidden style='text-align: start; background-color: #FFFFFF	'>
-                                                                                        <input id="po_date" name='po_date[]' type="text" autocomplete="off" 
-                                                                                        style=" background-color: transparent">                                           
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('po_date').value = "<?php echo ($_POST['po_date']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td hidden>
-                                                                                        <input hidden id="supp_code" name='supp_code[]' type="text" autocomplete="off" 
-                                                                                        style="background-color: transparent">                                           
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('supp_code').value = "<?php echo ($_POST['supp_code']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" autocomplete="off" 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px">                                           
-                                                                                        
-                                                                                        <option value=""></option>
-                                                                                        <?php 
-                                                                                            // $sql = "SELECT DISTINCT VENDOR_CODE, VENDOR_NAME FROM IT_ASSET_VENDORS";
-                                                                                            // $res = oci_parse(connection(), $sql);
-                                                                                            // oci_execute($res);
-
-                                                                                            // while($row = oci_fetch_row($res)){
-                                                                                            //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                                                                            // }
-                                                                                        ?>
-                                                                                        </select>
-                                                                                        <script>
-                                                                                            document.getElementById('supplier').value = "<?php echo ($_POST['supplier']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td hidden>
-                                                                                        <input id="type_code" name='type_code[]' type="text" autocomplete="off" 
-                                                                                        style="background-color: transparent">                                           
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('type_code').value = "<?php echo ($_POST['type_code']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <select id="type" name='type[]' type="text" autocomplete="off" class="form-select" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px">  
-                                                                                    
-                                                                                        <option value=" "></option>
-                                                                                        <?php 
-                                                                                            // $sql = "SELECT REQ_TYPE_ID, REQ_TYPE_NAME FROM IT_ASSET_REQ_TYPE ORDER BY REQ_TYPE_ID";
-                                                                                            // $res = oci_parse(connection(), $sql);
-                                                                                            // oci_execute($res);
-
-                                                                                            // while($row = oci_fetch_row($res)){
-                                                                                            //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                                                                            // }
-                                                                                        ?>
-                                                                                        </select>
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('type').value = "<?php echo ($_POST['type']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td hidden>
-                                                                                        <input id="brand_code" name='brand_code[]' type="text" autocomplete="off" hiddens
-                                                                                        style="background-color: transparent">                                           
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('brand_code').value = "<?php echo ($_POST['brand_code']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <select id="brand" name='brand[]' type="text" autocomplete="off" class="form-select" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px">
-
-                                                                                        <option value=""></option>
-                                                                                        <?php 
-                                                                                            // $sql = "SELECT BRAND_CODE, BRAND_NAME FROM IT_ASSET_BRAND ORDER BY BRAND_CODE";
-                                                                                            // $res = oci_parse(connection(), $sql);
-                                                                                            // oci_execute($res);
-
-                                                                                            // while($row = oci_fetch_row($res)){
-                                                                                            //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                                                                            // }
-                                                                                        ?>
-                                                                                        </select>
-                                                                                        <script>
-                                                                                            document.getElementById('brand').value = "<?php echo ($_POST['brand']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <input id="price" name='price[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px">
-
-                                                                                        <script>
-                                                                                            document.getElementById('price').value = "<?php echo ($_POST['price']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <input id="ser_no" name='ser_no[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px">
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('ser_no').value = "<?php echo ($_POST['ser_no']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <input id="ass_code" name='ass_code[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px">
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('ass_code').value = "<?php echo ($_POST['ass_code']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <input id="del_note" name='del_note[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px">
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('del_note').value = "<?php echo ($_POST['del_note']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <input id="del_date" name='del_date[]' type="date" autocomplete="off" class="form-control" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;">
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('del_date').value = "<?php echo ($_POST['del_date']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <input id="malt_shrt" name='malt_shrt[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;">
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('malt_shrt').value = "<?php echo ($_POST['malt_shrt']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px">
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('remarks').value = "<?php echo ($_POST['remarks']);?>";
-                                                                                        </script>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        <input id="attch" name='attch[]' type="file" autocomplete="off" class="form-control" required 
-                                                                                        style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;">
-                                                                                        
-                                                                                        <script>
-                                                                                            document.getElementById('attch').value = "<?php echo ($_POST['attch']);?>";
-                                                                                        </script>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                        <div class="col-md-12" style='justify-content: end; display: flex; height:35px; margin-top: 20px'>
-                                                                            <button class="btn btn-success" type="button" id="save_btn"><i class="fa fa-plus-circle"></i> Save</button>
-                                                                        </div> -->
-                                                                <!-- </div> -->
+                                                                    <br>
                                                                 </div>
                                                                 <br>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="card" style="border: 2px solid #e6e6e6">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading" role="tab" id="headingThree">
+                                                                <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_Three" aria-expanded="false" aria-controls="collapse_Three">
+                                                                        Attachment
+                                                                    </a>
+                                                                </h3>
+                                                            </div>
+                                                            <div id="collapse_Three" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                                                <div class="panel-body">   
+                                                                    <div class="container">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-8 col-sm-12 col-11 main-section">
+                                                                                <form enctype="multipart/form-data">
+                                                                                    <div class="form-group">
+                                                                                        <div class="file-loading">
+                                                                                            <input id="attch" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>                       
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -2202,7 +1810,7 @@ $username = $_SESSION['username'];
 
                                                                         <div class="col-md-4">
                                                                             <label class="form-label">Series *</label>
-                                                                            <input id="series1" name='series1[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                                            <input id="series1" name='series1[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                                         </div>
 
                                                                         <div class="col-md-4">
@@ -2699,6 +2307,35 @@ $username = $_SESSION['username'];
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="card" style="border: 2px solid #e6e6e6">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading" role="tab" id="headingThree">
+                                                                <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_Three" aria-expanded="false" aria-controls="collapse_Three">
+                                                                        Attachment
+                                                                    </a>
+                                                                </h3>
+                                                            </div>
+                                                            <div id="collapse_Three" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                                                <div class="panel-body">   
+                                                                    <div class="container">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-8 col-sm-12 col-11 main-section">
+                                                                                <form enctype="multipart/form-data">
+                                                                                    <div class="form-group">
+                                                                                        <div class="file-loading">
+                                                                                            <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>            
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <br>
                                                     <div class="col-md-12">
                                                         <button id="update_btn" class="btn btn-primary" type="button">
@@ -2946,7 +2583,6 @@ $username = $_SESSION['username'];
         const myModalEl = document.getElementById("srch_po")
         myModalEl.addEventListener('shown.bs.modal', function(){
             table.columns.adjust().draw()
-
         })
 
         var dtl_table = $("#dtl_dataTable").DataTable({
@@ -2995,20 +2631,20 @@ $username = $_SESSION['username'];
                $(row).find('td:nth-child(36)').attr('class', 'war_exp')
                $(row).find('td:nth-child(37)').attr('Class', 'ass_flagT')
                $(row).find('td:nth-child(38)').attr('class', 'rem')
-            //    $(row).find('td:nth-child(38)').attr('class', 'attch')
-               $(row).find('td:nth-child(39)').attr('class', 'po_doc_date1')
-               $(row).find('td:nth-child(40)').attr('class', 'plant1')
-               $(row).find('td:nth-child(41)').attr('class', 'status')
-               $(row).find('td:nth-child(42)').attr('class', 'qty')
-               $(row).find('td:nth-child(43)').attr('class', 'unit')
-               $(row).find('td:nth-child(44)').attr('class', 'po_item1')
-               $(row).find('td:nth-child(45)').addClass('supp1').attr('hidden', true);
-               $(row).find('td:nth-child(46)').addClass('req_grp1').attr('hidden', true);
-               $(row).find('td:nth-child(47)').addClass('req_type1').attr('hidden', true);
-               $(row).find('td:nth-child(48)').addClass('ass_grp1').attr('hidden', true);
-               $(row).find('td:nth-child(49)').addClass('ass_sub_grp1').attr('hidden', true);
-               $(row).find('td:nth-child(50)').addClass('brand1').attr('hidden', true);
-               $(row).find('td:nth-child(51)').addClass('model1').attr('hidden', true);
+               $(row).find('td:nth-child(39)').attr('class', 'attch1')
+               $(row).find('td:nth-child(40)').attr('class', 'po_doc_date1')
+               $(row).find('td:nth-child(41)').attr('class', 'plant1')
+               $(row).find('td:nth-child(42)').attr('class', 'status')
+               $(row).find('td:nth-child(43)').attr('class', 'qty')
+               $(row).find('td:nth-child(44)').attr('class', 'unit')
+               $(row).find('td:nth-child(45)').attr('class', 'po_item1')
+               $(row).find('td:nth-child(46)').addClass('supp1').attr('hidden', true);
+               $(row).find('td:nth-child(47)').addClass('req_grp1').attr('hidden', true);
+               $(row).find('td:nth-child(48)').addClass('req_type1').attr('hidden', true);
+               $(row).find('td:nth-child(49)').addClass('ass_grp1').attr('hidden', true);
+               $(row).find('td:nth-child(50)').addClass('ass_sub_grp1').attr('hidden', true);
+               $(row).find('td:nth-child(51)').addClass('brand1').attr('hidden', true);
+               $(row).find('td:nth-child(52)').addClass('model1').attr('hidden', true);
 
             //    $(row).find('td:nth-child(50)').attr('class', 'model1' hidden)
             }
@@ -3445,22 +3081,22 @@ $username = $_SESSION['username'];
 
         // add button in modal receiver and information
         var count_item = 0
-        // var imagebase64 = []
-        // var uploadedFilename = [];
+        var imagebase64 = []
+        var uploadedFilename = [];
         $("#add_btn1").click(function(){
-            // imagebase64.length = 0
-            // uploadedFilename.length = 0
-            // var filesname= $('#attch').prop('files');
-            // var file = $('#attch').prop('files')[0];
-            // var reader = new FileReader();
-            // reader.onload = function(event) {
-            //     var base64String = event.target.result.split(',')[1];
-            //     imagebase64.push('data:image/jpeg;base64,' + base64String);
-            // };
-            // $.each(filesname, function(index, file) {
-            //     uploadedFilename.push(file.name);
-            // });
-            // reader.readAsDataURL(file);
+            imagebase64.length = 0
+            uploadedFilename.length = 0
+            var filesname= $('#attch').prop('files');
+            var file = $('#attch').prop('files')[0];
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var base64String = event.target.result.split(',')[1];
+                imagebase64.push('data:image/jpeg;base64,' + base64String);
+            };
+            $.each(filesname, function(index, file) {
+                uploadedFilename.push(file.name);
+            });
+            reader.readAsDataURL(file);
 
             var table = $("#dtl_dataTable").DataTable();
             count_item ++
@@ -3519,10 +3155,8 @@ $username = $_SESSION['username'];
            var rowdata = [count_item, empl_name, dept, emp_id, emp_add, work_loc, off_phone, mob_phone, hired_date,
            per_email, bus_email, ref_person, po_no, supplier, req_grp, type, asset_group, asset_sub_group, brand, model, series,
            price, ser_no, ser_no2, ser_no3, ser_no4, ass_code, del_note, del_date, malt_shrt, license_start, license_month,
-           license_exp, war_start, war_month, war_exp, ass_flagR, remarks, po_doc_date, plant, status, qty, unit, item,
+           license_exp, war_start, war_month, war_exp, ass_flagR, remarks, uploadedFilename[0], po_doc_date, plant, status, qty, unit, item,
            supp1, req_grp1, type1, asset_group1, asset_sub_group1, brand1, model1]
-
-        //    uploadedFilename[0],
 
            table.row.add(rowdata).draw();
            $("#info").modal("hide")
@@ -3633,14 +3267,14 @@ $username = $_SESSION['username'];
                 $("#unit1").val(unit);
                 $("#item1").val(po_item);
 
-                // var attch_input = $("#attch1");
-                // attch_input.val(null); 
-                // if (attch) {
-                //     var blob = dataURItoBlob(attch);
-                //     var jpegFile = new File([blob], 'image.jpg', { type: 'image/jpeg' });
-                //     var pngFile = new File([blob], 'image.png', { type: 'image/png' });
-                //     attch_input[0].files[0] = jpegFile; // or pngFile, depending on the file type
-                // }
+                var attch_input = $("#attch1");
+                attch_input.val(null); 
+                if (attch) {
+                    var blob = dataURItoBlob(attch);
+                    var jpegFile = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+                    var pngFile = new File([blob], 'image.png', { type: 'image/png' });
+                    attch_input[0].files[0] = jpegFile; // or pngFile, depending on the file type
+                }
                 
                 $("#edit_info").modal("show");  
             }

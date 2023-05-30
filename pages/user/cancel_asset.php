@@ -331,7 +331,7 @@ session_start();
                                 <div class="row g-2">
                                     <div class="col-md-3">
                                         <div class="label" style="color: #000">PO Number</div>
-                                        <select class="form-select" name="po_no" id="po_no" style="margin-bottom: 8px;">
+                                        <select class="form-select po_no" name="po_no" id="po_no" style="margin-bottom: 8px;">
                                             <option value=""></option>
                                             <?php 
                                                 $sql = "SELECT PO_NUMBER FROM IT_ASSET_HEADER1 WHERE CANCEL_ASSET_FLAG is null";
@@ -346,7 +346,7 @@ session_start();
                                     </div>
 
                                     <div class="col-md-6">
-                                        <div class="label" style="color: #000">PO Document Date:</div>
+                                        <div class="label" style="color: #000">Document Date:</div>
                                             <div class="input-group">
                                                 <input type="date" class="form-control" id="from_date" placeholder="From">
                                                 <span class="input-group-text">-</span>
@@ -401,7 +401,7 @@ session_start();
                                 </div>
                                     <div class="col-md-12">
                                         <div class="" style='justify-content: end; display: flex; height:40px; margin-top: 10px'>
-                                            <button class="btn btn-warning" id="clr" type="button" style="margin-right: 10px;"><i class="fa-solid fa-trash-can"></i> Reset</button>
+                                            <button class="btn btn-warning" id="clr" type="button" style="margin-right: 10px;"><i class="fa-solid fa-arrows-rotate"></i> Reset</button>
                                             <button class="btn btn-success" id="srch" type="button"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
                                         </div>
                                     </div>                                
@@ -447,12 +447,14 @@ session_start();
                                         <tbody id="doc_tbody">
                                         <?php
                                                 $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, B.MTRL_SHORT, 
-                                                        C.VENDOR_NAME, A.PO_NUMBER, B.PO_ITEM
-                                                        FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
-                                                        WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
-                                                        AND A.VENDOR_CODE = C.VENDOR_CODE
-                                                        AND B.CANCEL_ASSET_FLAG is null
-                                                        ORDER BY A.DOCUMENT_NO DESC";
+                                                    C.VENDOR_NAME, A.PO_NUMBER, B.PO_ITEM
+                                                    FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
+                                                    WHERE A.DOCUMENT_DATE >= TRUNC(SYSDATE, 'MM')
+                                                    AND A.DOCUMENT_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                                    AND A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                    AND A.VENDOR_CODE = C.VENDOR_CODE
+                                                    AND B.CANCEL_ASSET_FLAG is null
+                                                    ORDER BY A.DOCUMENT_NO DESC";
                                         
                                                 $result = oci_parse(connection(), $sql);
                                                 oci_execute($result);                                                    
@@ -480,7 +482,7 @@ session_start();
                                                             <td>".$row1["DESCR"]."</td>
                                                             <td>".$row["VENDOR_NAME"]."</td>
                                                             <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                                                            <td hidden><input class='po_no' value=".$row["PO_NUMBER"]." hidden></td>
+                                                            <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                                                         </tr>";
                                                 }
                                             ?>
@@ -744,8 +746,8 @@ session_start();
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Series *</label>
-                                                        <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">Series</label>
+                                                        <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -855,16 +857,16 @@ session_start();
                                     </div>
                                 </div>
                                 <br>
-                                <!-- <div class="card" style="border: 2px solid #e6e6e6">
+                                <div class="card" style="border: 2px solid #e6e6e6">
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="headingThree">
                                             <h3 class="panel-title font-weight-bold" style="color: #000">
-                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                                     Attachment
                                                 </a>
                                             </h3>
                                         </div>
-                                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">   
                                                 <div class="container">
                                                     <div class="row">
@@ -884,7 +886,7 @@ session_start();
                                         </div>
                                     </div>
                                 </div>
-                                <br> -->
+                                <br>
                                 <div class="col-md-12">
                                     <button id="cancel_btn" class="btn btn-danger" type="button">
                                         <i class="fa-solid fa-ban"></i> Cancel</button>
@@ -969,33 +971,33 @@ $(document).ready(function(){
     $("#po_no").selectize({})
     $("#ser_no").selectize({})
     $("#emp_name").selectize({})
-    $("#empl_name").change(function(){
-        var empl_name1 = $(this).val()
-        $.ajax({
-            url:"../../logic/empl_details.php",
-            method:"POST",
-            data:{empl_name1: empl_name1},
-            success:function(res){
-                $("#dept").val(res.DEPT)
-                $("#emp_id").val(res.EMPLID)
-                $("#emp_add").val(res.ADDRESS)
-                $("#work_loc").val(res.LOCATION)
-                $("#off_phone").val(res.OFFICEPHONE)
-                $("#mob_phone").val(res.MOBILEPHONE)
-                $("#hired_date").val(res.HIREDDATE)
-                $("#per_email").val(res.PERSONAL_EMAIL)
-                $("#bus_email").val(res.BUSINESS_EMAIL)
-            }
-        })
-    })
+    // $("#empl_name").change(function(){
+    //     var empl_name1 = $(this).val()
+    //     $.ajax({
+    //         url:"../../logic/empl_details.php",
+    //         method:"POST",
+    //         data:{empl_name1: empl_name1},
+    //         success:function(res){
+    //             $("#dept").val(res.DEPT)
+    //             $("#emp_id").val(res.EMPLID)
+    //             $("#emp_add").val(res.ADDRESS)
+    //             $("#work_loc").val(res.LOCATION)
+    //             $("#off_phone").val(res.OFFICEPHONE)
+    //             $("#mob_phone").val(res.MOBILEPHONE)
+    //             $("#hired_date").val(res.HIREDDATE)
+    //             $("#per_email").val(res.PERSONAL_EMAIL)
+    //             $("#bus_email").val(res.BUSINESS_EMAIL)
+    //         }
+    //     })
+    // })
 
     $("#dataTable1").on("click", '.view_dtl', function(){
-        var po_number = $(this).closest('tr').find('.po_no').val()
+        var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
         var po_item = $(this).closest('tr').find('.po_item').val()
         $.ajax({
             type: "POST",
             url: "../../logic/mod_json.php",
-            data: {po_number: po_number, po_item:po_item},
+            data: {doc_no1: doc_no1, po_item:po_item},
             success: function(res1){
                 $('#po_dtls').modal('show');
                 $('#po_dtls').modal({
@@ -1045,6 +1047,16 @@ $(document).ready(function(){
         })
     })
 
+    $("#clr").click(function(){
+        location.reload()
+        // var po_no = $('#po_no')[0].selectize;
+        // var emp_name = $('#emp_name')[0].selectize;
+        // var ser_no = $('#ser_no')[0].selectize;
+        // po_no.clear();
+        // emp_name.clear();
+        // ser_no.clear();
+    })
+
     $("#srch").click(function(){
         var data = 1
         var po_no = $("#po_no").find(':selected').val()
@@ -1070,14 +1082,15 @@ $(document).ready(function(){
                 success: function(res){   
                     Swal.hideLoading()
                     Swal.fire({
+                        icon: 'success',
                         title: 'Success',
                         text: 'Data loaded successfully!',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
                         showConfirmButton: false,
-                        showCancelButton: false
-                    })            
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
+                    })           
                     $('#doc_tbody').html(res) 
                 },
                 error: function(){
@@ -1110,13 +1123,14 @@ $(document).ready(function(){
                 success: function(res){   
                     Swal.hideLoading()
                     Swal.fire({
+                        icon: 'success',
                         title: 'Success',
                         text: 'Data loaded successfully!',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
                         showConfirmButton: false,
-                        showCancelButton: false
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
                     })            
                     $('#doc_tbody').html(res) 
                 },
@@ -1151,14 +1165,15 @@ $(document).ready(function(){
                 success: function(res){   
                     Swal.hideLoading()
                     Swal.fire({
+                        icon: 'success',
                         title: 'Success',
                         text: 'Data loaded successfully!',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
                         showConfirmButton: false,
-                        showCancelButton: false
-                    })            
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
+                    })             
                     $('#doc_tbody').html(res) 
                 },
                 error: function(){
@@ -1192,13 +1207,14 @@ $(document).ready(function(){
                 success: function(res){   
                     Swal.hideLoading()
                     Swal.fire({
+                        icon: 'success',
                         title: 'Success',
                         text: 'Data loaded successfully!',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
                         showConfirmButton: false,
-                        showCancelButton: false
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
                     })            
                     $('#doc_tbody').html(res) 
                 },

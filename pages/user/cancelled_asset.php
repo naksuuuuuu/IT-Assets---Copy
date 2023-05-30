@@ -376,7 +376,7 @@ session_start();
                                             </div>
 
                                             <div class="col-md-6">
-                                                <div class="label" style="color: #000000">PO Document Date:</div>
+                                                <div class="label" style="color: #000000">Document Date:</div>
                                                     <div class="input-group">
                                                         <input type="date" class="form-control" id="from_date" placeholder="From">
                                                         <span class="input-group-text">-</span>
@@ -502,7 +502,7 @@ session_start();
                                                     <?php 
                                                         $sql = "SELECT A.BRAND, B.BRAND_NAME FROM IT_ASSET_DETAILS1 A, IT_ASSET_BRAND B
                                                             WHERE A.BRAND = B.BRAND_CODE
-                                                            AND B.CANCEL_ASSET_FLAG is not null";
+                                                            AND A.CANCEL_ASSET_FLAG is not null";
                                                         
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
@@ -571,8 +571,9 @@ session_start();
                                             </div> -->
                                         </div>
                                 
-                                        <div class="row g-2">
-                                            <div class="col-md-3" style='justify-content: start; display: flex; margin-top: 35px'>
+                                        <div class="col-md-12">
+                                            <div class="" style='justify-content: end; display: flex; height:40px; margin-top: 10px'>
+                                                <button class="btn btn-warning" id="clr" type="button" style="margin-right: 10px;"><i class="fa-solid fa-arrows-rotate"></i> Reset</button>
                                                 <button class="btn btn-success" id="srch" type="button"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
                                             </div>
                                         </div>
@@ -662,7 +663,9 @@ session_start();
                                                         $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, C.VENDOR_NAME, 
                                                             B.EMPL_ID, B.MTRL_SHORT, B.PO_ITEM
                                                             FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
-                                                            WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                            WHERE A.DOCUMENT_DATE >= TRUNC(SYSDATE, 'MM')
+                                                            AND A.DOCUMENT_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                                            AND A.DOCUMENT_NO = B.DOCUMENT_NO
                                                             AND A.VENDOR_CODE = C.VENDOR_CODE
                                                             AND B.CANCEL_ASSET_FLAG is not null
                                                             ORDER BY A.DOCUMENT_NO DESC";
@@ -694,7 +697,7 @@ session_start();
                                                                     <td>".$row["VENDOR_NAME"]."</td>
                                                                     <td>".$row1["BUSINESSMAIL"]."</td>
                                                                     <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                                                                    <td hidden><input class='po_no' value=".$row["PO_NUMBER"]." hidden></td>
+                                                                    <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                                                                 </tr>";
                                                         }
                                                     ?>
@@ -1142,7 +1145,7 @@ session_start();
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Brand *</label>
-                                                        <select id="brand" name='brand[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <select id="brand1" name='brand[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                 <!-- <option selected=" ">Select Brand...</option> -->
                                                         </select>
                                                     </div>
@@ -1155,8 +1158,8 @@ session_start();
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Series *</label>
-                                                        <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">Series</label>
+                                                        <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -1221,7 +1224,8 @@ session_start();
 
                                                     <div class="col-md-12">
                                                         <label class="form-label">Remarks *</label>
-                                                        <input id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        </textarea>
                                                     </div>
 
                                                     <!-- <div class="col-md-4">
@@ -1336,12 +1340,12 @@ session_start();
     // $("#cancelled_item").selectize({})
 
     $("#dataTable1").on("click", '.view_dtl', function(){
-        var po_number = $(this).closest('tr').find('.po_no').val()
+        var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
         var po_item = $(this).closest('tr').find('.po_item').val()
         $.ajax({
             type: "POST",
             url: "../../logic/mod_json.php",
-            data: {po_number: po_number, po_item:po_item},
+            data: {doc_no1: doc_no1, po_item:po_item},
             success: function(res1){
                 $('#po_dtls').modal('show');
                 $('#po_dtls').modal({
@@ -1353,7 +1357,7 @@ session_start();
                 var select = selectize[0].selectize
                 select.setValue(res1.EMP_ID, false);
 
-                $("#dept").val(res1.DEPT)
+                $("#department").val(res1.DEPT)
                 $("#emp_id").val(res1.EMP_ID)
                 $("#emp_add").val(res1.EMP_ADD)
                 $("#work_loc").val(res1.WORK_LOC)
@@ -1368,11 +1372,11 @@ session_start();
                 $("#type").append("<option value="+ res1.REQ_TYPE +">"+ res1.REQ_TYPE_NAME +"</option>")
                 $("#asset_group").append("<option value="+ res1.ASS_GRP +">"+ res1.ASS_GRP_NAME +"</option>")
                 $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
-                $("#brand").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
+                $("#brand1").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
                 $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
                 $("#series").val(res1.SERIES)
                 $("#price").val(res1.PRICE)
-                $("#ser_no1").val(res1.SER_NO1)
+                $("#ser_no11").val(res1.SER_NO1)
                 $("#ser_no2").val(res1.SER_NO2)
                 $("#ser_no3").val(res1.SER_NO3)
                 $("#ser_no4").val(res1.SER_NO4)
@@ -1423,7 +1427,7 @@ session_start();
             })
             $.ajax({
                 type: "POST",
-                url: "../../logic/reports.php",
+                url: "../../logic/history/cancelled_asset.php",
                 data: {data:data, po_num:po_num},
                 success: function(res){
                     Swal.hideLoading()
@@ -1464,7 +1468,7 @@ session_start();
             })
             $.ajax({
                 type: "POST",
-                url: "../../logic/reports.php",
+                url: "../../logic/history/cancelled_asset.php",
                 data: {data:data, emp_name:emp_name},
                 success: function(res){
                     Swal.hideLoading()
@@ -1505,7 +1509,7 @@ session_start();
             })
             $.ajax({
                 type: "POST",
-                url: "../../logic/reports.php",
+                url: "../../logic/history/cancelled_asset.php",
                 data: {data:data, brand:brand},
                 success: function(res){
                     Swal.hideLoading()
@@ -1546,7 +1550,7 @@ session_start();
             })
             $.ajax({
                 type: "POST",
-                url: "../../logic/reports.php",
+                url: "../../logic/history/cancelled_asset.php",
                 data: {data:data, dept:dept},
                 success: function(res){
                     Swal.hideLoading()
@@ -1587,7 +1591,7 @@ session_start();
             })
             $.ajax({
                 type: "POST",
-                url: "../../logic/reports.php",
+                url: "../../logic/history/cancelled_asset.php",
                 data: {data:data, vendor:vendor},
                 success: function(res){
                     Swal.hideLoading()
@@ -1628,7 +1632,7 @@ session_start();
             })
             $.ajax({
                 type: "POST",
-                url: "../../logic/reports.php",
+                url: "../../logic/history/cancelled_asset.php",
                 data: {data:data, from_date:from_date, to_date:to_date},
                 success: function(res){
                     Swal.hideLoading()
@@ -1669,7 +1673,7 @@ session_start();
             })
             $.ajax({
                 type: "POST",
-                url: "../../logic/reports.php",
+                url: "../../logic/history/cancelled_asset.php",
                 data: {data:data, ser_no1:ser_no1},
                 success: function(res){
                     Swal.hideLoading()
@@ -1710,7 +1714,7 @@ session_start();
             })
             $.ajax({
                 type: "POST",
-                url: "../../logic/reports.php",
+                url: "../../logic/history/cancelled_asset.php",
                 data: {data:data, rem:rem},
                 success: function(res){
                     Swal.hideLoading()

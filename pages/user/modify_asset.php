@@ -139,7 +139,7 @@ session_start();
                 <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">History:</h6>
-                        <a class="collapse-item" href="../user/history.php">Added Asset</a>
+                        <a class="collapse-item" href="../user/added_asset.php">Added Asset</a>
                         <a class="collapse-item" href="../user/cancelled_asset.php">Cancelled Asset</a>
                         <a class="collapse-item" href="../user/modified_asset.php">Modified Asset</a>
                         <a class="collapse-item" href="../user/transferred_asset.php">Transferred Asset</a>
@@ -349,7 +349,7 @@ session_start();
                                     </div>
 
                                     <div class="col-md-6">
-                                        <div class="label" style="color: #000">PO Document Date:</div>
+                                        <div class="label" style="color: #000">Document Date:</div>
                                             <div class="input-group">
                                                 <input type="date" class="form-control" id="from_date" placeholder="From">
                                                 <span class="input-group-text">-</span>
@@ -432,6 +432,12 @@ session_start();
                                                 <th style="width: 200px">PO Doc Date</th>
                                                 <th style="width: 200px">Department</th>
                                                 <th style='width: 200px'>Supplier</th>
+                                                <th style='width: 200px'>Req Group</th>
+                                                <th style='width: 200px'>Req Type</th>
+                                                <th style='width: 200px'>Asset Group</th>
+                                                <th style='width: 200px'>Asset Sub Group</th>
+                                                <th style='width: 200px'>Brand</th>
+                                                <th style='width: 200px'>Model</th>
                                                 <th hidden>PO Item</th>
                                                 <th hidden>po number</th>
                                                 <!-- <th>Status</th> -->
@@ -450,12 +456,14 @@ session_start();
                                         <tbody id="doc_tbody">
                                             <?php
                                                 $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, B.MTRL_SHORT, 
-                                                        C.VENDOR_NAME, A.PO_NUMBER, B.PO_ITEM
-                                                        FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
-                                                        WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
-                                                        AND A.VENDOR_CODE = C.VENDOR_CODE
-                                                        AND B.CANCEL_ASSET_FLAG is null
-                                                        ORDER BY A.DOCUMENT_NO DESC";
+                                                    C.VENDOR_NAME, B.REQ_GRP, B.REQ_TYPE, B.ASSET_GROUP, B.SUB_ASSET_GROUP, B.BRAND, B.MODEL, A.PO_NUMBER, B.PO_ITEM
+                                                    FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
+                                                    WHERE A.DOCUMENT_DATE >= TRUNC(SYSDATE, 'MM')
+                                                    AND A.DOCUMENT_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                                    AND A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                    AND A.VENDOR_CODE = C.VENDOR_CODE
+                                                    AND B.CANCEL_ASSET_FLAG is null
+                                                    ORDER BY A.DOCUMENT_NO DESC";
                                         
                                                 $result = oci_parse(connection(), $sql);
                                                 oci_execute($result);                                                    
@@ -482,8 +490,14 @@ session_start();
                                                             <td>".$row["PO_DOCUMENT_DATE"]."</td>
                                                             <td>".$row1["DESCR"]."</td>
                                                             <td>".$row["VENDOR_NAME"]."</td>
-                                                            <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                                                            <td hidden><input class='po_no' value=".$row["PO_NUMBER"]." hidden></td>
+                                                            <td><input class='req_grp1' value='".$row["REQ_GRP"]."'></td>
+                                                            <td><input class='req_type1' value='".$row["REQ_TYPE"]."'></td>
+                                                            <td><input class='ass_grp1' value='".$row["ASSET_GROUP"]."'></td>
+                                                            <td><input class='ass_sub_grp1' value='".$row["SUB_ASSET_GROUP"]."'></td>
+                                                            <td><input class='brand1' value='".$row["BRAND"]."'></td>
+                                                            <td><input class='model1' value='".$row["MODEL"]."'></td>
+                                                            <td hidden><input class='po_item' value='".$row["PO_ITEM"]."' hidden></td>
+                                                            <td hidden><input class='doc_no1' value='".$row["DOCUMENT_NO"]."' hidden></td>
                                                         </tr>";
                                                 }
                                             ?>
@@ -698,15 +712,6 @@ session_start();
                                                         <label class="form-label">Request Group *</label>
                                                         <select class="form-select" id="req_grp" name='req_grp[]' type="text" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                             <!-- <option selected=" ">Select Request Group...</option> -->
-                                                            <?php 
-                                                                $sql = "SELECT REQ_GROUP_ID, REQ_GROUP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GROUP_ID";
-                                                                $res = oci_parse(connection(), $sql);
-                                                                oci_execute($res);
-
-                                                                while($row = oci_fetch_row($res)){
-                                                                    echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                                                }
-                                                            ?>
                                                         </select>
                                                     </div>
 
@@ -746,8 +751,8 @@ session_start();
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Series *</label>
-                                                        <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">Series</label>
+                                                        <input id="series" name='series[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -858,16 +863,16 @@ session_start();
                                     </div>
                                 </div>
                                 <br>
-                                <!-- <div class="card" style="border: 2px solid #e6e6e6">
+                                <div class="card" style="border: 2px solid #e6e6e6">
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="headingThree">
                                             <h3 class="panel-title font-weight-bold" style="color: #000">
-                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                                     Attachment
                                                 </a>
                                             </h3>
                                         </div>
-                                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">   
                                                 <div class="container">
                                                     <div class="row">
@@ -887,7 +892,7 @@ session_start();
                                         </div>
                                     </div>
                                 </div>
-                                <br> -->
+                                <br>
                                     <div class="col-md-12">
                                         <button id="save_btn1" class="btn btn-success" type="button">
                                         <i class="fa-solid fa-floppy-disk"></i> Save</button>
@@ -982,6 +987,78 @@ $(document).ready(function(){
             }
         })
     })
+
+    $("#req_grp").change(function(){
+        var req_grp = $(this).val()
+        $.ajax({
+        url:"../../logic/type.php",
+        method:"POST",
+        data:{req_grp:req_grp},
+        success:function(req_grp){
+            $("#type").empty()
+            $("#asset_group").empty()
+            $("#asset_sub_group").empty()
+            $("#brand").empty()
+            $("#model").empty()
+            $("#type").append(req_grp)
+        }
+        })
+    })
+    $("#type").change(function(){
+        var type = $(this).val()
+        $.ajax({
+        url:"../../logic/type.php",
+        method:"POST",
+        data:{type:type},
+        success:function(type){
+            $("#asset_group").empty()
+            $("#asset_sub_group").empty()
+            $("#brand").empty()
+            $("#model").empty()
+            $("#asset_group").append(type)
+        }
+        })
+    })
+    $("#asset_group").change(function(){
+        var asset_group = $(this).val()
+        $.ajax({
+        url:"../../logic/type.php",
+        method:"POST",
+        data:{asset_group:asset_group},
+        success:function(asset_group){
+            $("#asset_sub_group").empty()
+            $("#brand").empty()
+            $("#model").empty()
+            $("#asset_sub_group").append(asset_group)
+        }
+        })
+    })
+    $("#asset_sub_group").change(function(){
+        var asset_sub_group = $(this).val()
+        $.ajax({
+        url:"../../logic/type.php",
+        method:"POST",
+        data:{asset_sub_group:asset_sub_group},
+        success:function(asset_sub_group){
+            $("#brand").empty()
+            $("#model").empty()
+            $("#brand").append(asset_sub_group)
+        }
+        })
+    })
+    $("#brand").change(function(){
+        var brand = $(this).val()
+        $.ajax({
+        url:"../../logic/type.php",
+        method:"POST",
+        data:{brand:brand},
+        success:function(brand){
+            $("#model").empty()
+            $("#model").append(brand)
+        }
+        })
+    })
+
     // datatable1 = $('#dataTable1').DataTable({
     // searching: false, 
     // paging: true,
@@ -1030,12 +1107,19 @@ $(document).ready(function(){
     })
 
     $("#dataTable1").on("click", '.view_dtl', function(){
-        var po_number = $(this).closest('tr').find('.po_no').val()
+        var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
         var po_item = $(this).closest('tr').find('.po_item').val()
+        var req_grp1 = $(this).closest('tr').find('.req_grp1').val()
+        var req_type1 = $(this).closest('tr').find('.req_type1').val()
+        var ass_grp1 = $(this).closest('tr').find('.ass_grp1').val()
+        var ass_sub_grp1 = $(this).closest('tr').find('.ass_sub_grp1').val()
+        var brand1 = $(this).closest('tr').find('.brand1').val()
+        var model1 = $(this).closest('tr').find('.model1').val()
         $.ajax({
             type: "POST",
             url: "../../logic/mod_json.php",
-            data: {po_number: po_number, po_item:po_item},
+            data: {doc_no1: doc_no1, po_item:po_item, req_grp1:req_grp1, req_type1:req_type1, ass_grp1:ass_grp1, 
+                ass_sub_grp1:ass_sub_grp1, brand1:brand1, model1:model1},
             success: function(res1){
                 $('#po_dtls').modal('show');
                 $('#po_dtls').modal({
@@ -1046,6 +1130,8 @@ $(document).ready(function(){
                 var selectize = $('#empl_name').selectize()
                 var select = selectize[0].selectize
                 select.setValue(res1.EMP_ID, false);
+
+                $("#req_grp").empty()
 
                 $("#dept").val(res1.DEPT)
                 $("#emp_id").val(res1.EMP_ID)
@@ -1058,7 +1144,7 @@ $(document).ready(function(){
                 $("#bus_email").val(res1.BUS_EMAIL)
                 // $("#ref_person").val(res1.REF_PERSON)
                 $("#supplier").val(res1.SUPPLIER)
-                $("#req_grp").append("<option value="+ res1.REQ_GRP +">"+ res1.REQ_GRP_NAME +"</option>")
+                $("#req_grp").append(res1.REQ_GRP)
                 $("#type").append("<option value="+ res1.REQ_TYPE +">"+ res1.REQ_TYPE_NAME +"</option>")
                 $("#asset_group").append("<option value="+ res1.ASS_GRP +">"+ res1.ASS_GRP_NAME +"</option>")
                 $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
@@ -1089,6 +1175,16 @@ $(document).ready(function(){
         })
     })
 
+    $("#clr").click(function(){
+        location.reload()
+        // var po_no = $('#po_no')[0].selectize;
+        // var emp_name = $('#emp_name')[0].selectize;
+        // var ser_no = $('#ser_no')[0].selectize;
+        // po_no.clear();
+        // emp_name.clear();
+        // ser_no.clear();
+    })
+
     $("#srch").click(function(){
         // var doc_no = $("#doc_no").find(":selected").val()
         var data = 1
@@ -1115,13 +1211,14 @@ $(document).ready(function(){
                 success: function(res){   
                     Swal.hideLoading()
                     Swal.fire({
+                        icon: 'success',
                         title: 'Success',
                         text: 'Data loaded successfully!',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
                         showConfirmButton: false,
-                        showCancelButton: false
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
                     })            
                     $('#doc_tbody').html(res) 
                 },
@@ -1156,14 +1253,15 @@ $(document).ready(function(){
                 success: function(res){   
                     Swal.hideLoading()
                     Swal.fire({
+                        icon: 'success',
                         title: 'Success',
                         text: 'Data loaded successfully!',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
                         showConfirmButton: false,
-                        showCancelButton: false
-                    })            
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
+                    })           
                     $('#doc_tbody').html(res) 
                 },
                 error: function(){
@@ -1197,13 +1295,14 @@ $(document).ready(function(){
                 success: function(res){   
                     Swal.hideLoading()
                     Swal.fire({
+                        icon: 'success',
                         title: 'Success',
                         text: 'Data loaded successfully!',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
                         showConfirmButton: false,
-                        showCancelButton: false
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
                     })            
                     $('#doc_tbody').html(res) 
                 },
@@ -1238,13 +1337,14 @@ $(document).ready(function(){
                 success: function(res){   
                     Swal.hideLoading()
                     Swal.fire({
+                        icon: 'success',
                         title: 'Success',
                         text: 'Data loaded successfully!',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
                         showConfirmButton: false,
-                        showCancelButton: false
+                        toast: true,
+                        position: 'top-right',
+                        timer: 2000,
+                        timerProgressBar: true
                     })            
                     $('#doc_tbody').html(res) 
                 },
@@ -1291,6 +1391,12 @@ $(document).ready(function(){
     $("#save_btn1").click(function(){
         var po_no =  $("#po_number").val()
         var po_item = $("#po_item").val()
+        var req_grp = $("#req_grp").val()
+        var type = $("#type").val()
+        var asset_group = $("#asset_group").val()
+        var asset_sub_group = $("#asset_sub_group").val()
+        var brand =$("#brand").val()
+        var model = $("#model").val()
         var series = $("#series").val()
         var ser_no1 = $(".ser_no1").val()
         var ass_code = $(".ass_code").val()
@@ -1318,9 +1424,10 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "../../logic/modified_po.php",
-                    data:{po_no:po_no, po_item:po_item, series:series, name:name, ser_no1:ser_no1, ass_code:ass_code, del_note:del_note,
-                        license_start:license_start, license_month:license_month, license_exp:license_exp, war_start:war_start,
-                        war_month:war_month, war_exp:war_exp, remarks:remarks},
+                    data:{po_no:po_no, po_item:po_item, req_grp:req_grp, type:type, asset_group:asset_group, 
+                        asset_sub_group:asset_sub_group, brand:brand, model:model,series:series, name:name, ser_no1:ser_no1, 
+                        ass_code:ass_code, del_note:del_note, license_start:license_start, license_month:license_month, 
+                        license_exp:license_exp, war_start:war_start, war_month:war_month, war_exp:war_exp, remarks:remarks},
                     success: function(res){
                         if(res.success == 1){
                             notify(res.icon, res.message)

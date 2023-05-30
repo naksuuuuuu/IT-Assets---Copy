@@ -10,9 +10,10 @@ if (isset($_POST['data'])){
 
         $sql1 = "SELECT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, C.VENDOR_NAME, B.PO_ITEM
                 FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
-                WHERE A.PO_NUMBER = B.PO_NUMBER
+                WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
                 AND A.VENDOR_CODE = C.VENDOR_CODE
-                AND B.PO_NUMBER = :po_no";
+                AND B.PO_NUMBER = :po_no 
+                ORDER BY A.DOCUMENT_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':po_no', $po_no);
@@ -42,7 +43,7 @@ if (isset($_POST['data'])){
                         <td>".$row1["DESCR"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -56,9 +57,10 @@ if (isset($_POST['data'])){
 
         $sql1 = "SELECT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, C.VENDOR_NAME, B.PO_ITEM
                 FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
-                WHERE A.PO_NUMBER = B.PO_NUMBER
+                WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
                 AND A.VENDOR_CODE = C.VENDOR_CODE
-                AND B.SERIAL_NO1 = :ser_no";
+                AND B.SERIAL_NO1 = :ser_no
+                ORDER BY A.DOCUMENT_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':ser_no', $ser_no);
@@ -88,7 +90,7 @@ if (isset($_POST['data'])){
                         <td>".$row1["DESCR"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -102,11 +104,12 @@ if (isset($_POST['data'])){
         $to_date = date_format(date_create($_POST['to_date']), 'd/m/Y');
 
         $sql1 = "SELECT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, C.VENDOR_NAME, B.PO_ITEM
-                FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
-                WHERE A.PO_NUMBER = B.PO_NUMBER
-                AND A.VENDOR_CODE = C.VENDOR_CODE
-                AND A.PO_DOCUMENT_DATE
-                BETWEEN to_date(:from_date, 'DD/MM/YY') AND to_date(:to_date, 'DD/MM/YY')";
+            FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
+            WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
+            AND A.VENDOR_CODE = C.VENDOR_CODE
+            AND A.DOCUMENT_DATE
+            BETWEEN to_date(:from_date, 'DD/MM/YY') AND to_date(:to_date, 'DD/MM/YY')
+            ORDER BY A.DOCUMENT_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':from_date', $from_date);
@@ -137,7 +140,7 @@ if (isset($_POST['data'])){
                         <td>".$row1["DESCR"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -151,9 +154,10 @@ if (isset($_POST['data'])){
 
         $sql1 = "SELECT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, C.VENDOR_NAME, B.PO_ITEM
                 FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C 
-                WHERE A.PO_NUMBER = B.PO_NUMBER
+                WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
                 AND A.VENDOR_CODE = C.VENDOR_CODE
-                AND B.EMPL_ID = :emp_name";
+                AND B.EMPL_ID = :emp_name
+                ORDER BY A.DOCUMENT_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':emp_name', $emp_name);
@@ -183,7 +187,7 @@ if (isset($_POST['data'])){
                         <td>".$row1["DESCR"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;

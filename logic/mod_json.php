@@ -4,9 +4,15 @@ header("Content-Type:application/json");
 
 require "../config/connection.php";
 
-if(isset($_POST['po_number'])){
-    $po_number = $_POST['po_number'];
+if(isset($_POST['doc_no1'])){
+    $doc_no1 = $_POST['doc_no1'];
     $po_item = $_POST['po_item'];
+    $req_grp1 = $_POST['req_grp1'];
+    $req_type1 = $_POST['req_type1'];
+    $ass_grp1 = $_POST['ass_grp1'];
+    $ass_sub_grp1 = $_POST['ass_sub_grp1'];
+    $brand1 = $_POST['brand1'];
+    $model1 = $_POST['model1'];
   
     $sql = "SELECT A.VENDOR_CODE, B.DOCUMENT_NO, to_char(B.DOCUMENT_DATE, 'YYYY-MM-DD') as DOCUMENT_DATE, B.PO_NUMBER, 
     to_char(B.DEL_DATE, 'YYYY-MM-DD') as DEL_DATE, B.REQ_GRP, B.REQ_TYPE, B.ASSET_GROUP, B.SUB_ASSET_GROUP, B.BRAND, B.MODEL as model_code, B.SERIAL_NO1, 
@@ -19,7 +25,7 @@ if(isset($_POST['po_number'])){
     B.DOCUMENT_NO, B.ASSET_ID, B.ASSET_FLAG
     FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_REQ_GROUP C, IT_ASSET_REQ_TYPE D, IT_ASSET_GROUP E,
     IT_ASSET_SUB_GROUP F, IT_ASSET_BRAND G, IT_ASSET_MODEL H, IT_ASSET_VENDORS I
-    WHERE A.PO_NUMBER = B.PO_NUMBER
+    WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
     AND A.VENDOR_CODE = I.VENDOR_CODE
     AND B.REQ_GRP = C.REQ_GROUP_ID
     AND B.REQ_TYPE = D.REQ_TYPE_ID
@@ -27,15 +33,32 @@ if(isset($_POST['po_number'])){
     AND B.SUB_ASSET_GROUP = F.ASSET_SUB_GROUP_CODE
     AND B.BRAND = G.BRAND_CODE
     AND B.MODEL = H.MODEL_CODE
-    AND B.PO_NUMBER = :po_number
+    AND A.DOCUMENT_NO = :doc_no1
     AND B.PO_ITEM = :po_item";
     $res = oci_parse(connection(), $sql);
-    oci_bind_by_name($res, ':po_number', $po_number);
+    oci_bind_by_name($res, ':doc_no1', $doc_no1);
     oci_bind_by_name($res, ':po_item', $po_item);
     oci_execute($res);
   
     $result = "";
     while($row = oci_fetch_assoc($res)){
+
+      if ($row["REQ_GRP"] == "REQGR01"){
+        $req = "<option value='".$row["REQ_GRP"]."'>".$row["REQ_GROUP_NAME"]."</option>
+                <option value='REQGR02'>Installation</option>
+                <option value='REQGR03'>Repair</option>";  
+      }
+      else if($row["REQ_GRP"] == "REQGR02") {
+        $req = "<option value='".$row["REQ_GRP"]."'>".$row["REQ_GROUP_NAME"]."</option>
+                <option value='REQGR01'>Purchase</option>
+                <option value='REQGR03'>Repair</option>";  
+      }
+      else if($row["REQ_GRP"] == "REQGR03") {
+        $req = "<option value='".$row["REQ_GRP"]."'>".$row["REQ_GROUP_NAME"]."</option>
+                <option value='REQGR01'>Purchase</option>
+                <option value='REQGR02'>Installation</option>";
+      }
+
       $empId = $row["EMPL_ID"];
   
       $dept_code = "SELECT a.*, d.DESCR as dept, b.LOCATION, b.EMPL_STATUS, c.DESCR from PERSON_TBL a, JobCur_ee b , 
@@ -50,12 +73,12 @@ if(isset($_POST['po_number'])){
             oci_execute($stmt);
         
             $row1 = oci_fetch_assoc($stmt);
-        
+      
             echo json_encode( array('DEPT' => $row1['DEPT'], 'EMP_ID'=> $row1['EMPLID'], 
             'EMP_ADD' => $row1['SOI'].$row1['TAMBOL'].$row1['AMPHUR'], 'WORK_LOC' => $row1['DESCR'], 
             'OFF_PHONE' =>$row1['OFFICEPHONE'], 'MOB_PHONE' => $row1['MOBILEPHONE'], 'HIRED_DATE' => $row1['HIRE_DATE'], 
             'PER_EMAIL' => $row1['PERSONELMAIL'], 'BUS_EMAIL' => $row1['BUSINESSMAIL'], 
-            'SUPPLIER' => $row['VENDOR_CODE'], 'REQ_GRP' => $row['REQ_GRP'], 'REQ_TYPE' => $row['REQ_TYPE'], 
+            'SUPPLIER' => $row['VENDOR_CODE'], 'REQ_GRP' => $req, 'REQ_TYPE' => $row['REQ_TYPE'], 
             'ASS_GRP' => $row['ASSET_GROUP'], 'ASS_SUB_GRP' => $row['SUB_ASSET_GROUP'], 
             'BRAND' => $row['BRAND'], 'MODEL_CODE' => $row['MODEL_CODE'], 'SERIES' => $row['SERIES'],
             'PRICE' => $row['UNIT_PRICE'], 'SER_NO1' => $row['SERIAL_NO1'], 

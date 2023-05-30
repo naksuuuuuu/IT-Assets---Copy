@@ -60,12 +60,12 @@
             
             // details
             if(oci_execute($res, OCI_NO_AUTO_COMMIT)){
-                $doc_num = "SELECT DOCUMENT_NO FROM IT_ASSET_TRANSFER_TRN_HDR WHERE PO_NUMBER = :po_no AND PO_ITEM = :po_item";
-                $res_doc_num = oci_parse(connection(), $doc_num); 
-                oci_bind_by_name($res_doc_num, ':po_no', $po_number);
-                oci_bind_by_name($res_doc_num, ':po_item', $po_item);
-                oci_execute($res_doc_num);
-                $row1 = oci_fetch_row($res_doc_num);
+                // $doc_num = "SELECT DOCUMENT_NO FROM IT_ASSET_TRANSFER_TRN_HDR WHERE PO_NUMBER = :po_no AND PO_ITEM = :po_item";
+                // $res_doc_num = oci_parse(connection(), $doc_num); 
+                // oci_bind_by_name($res_doc_num, ':po_no', $po_number);
+                // oci_bind_by_name($res_doc_num, ':po_item', $po_item);
+                // oci_execute($res_doc_num);
+                // $row1 = oci_fetch_row($res_doc_num);
 
                 $dtl_sql = "INSERT INTO IT_ASSET_TRANSFER_TRN_DTL 
                     (DOCUMENT_NO, ASSET_ID, ASSET_SUB_GROUP, BRAND_CODE, MODEL_CODE, SERIAL_1, SERIAL_2, SERIAL_3, SERIAL_4,
@@ -74,7 +74,7 @@
                     (:doc_no, :ass_id, :ass_sub_grp, :brand, :model, :ser_no1, :ser_no2, :ser_no3, :ser_no4,
                     :remarks, :user_name, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :transfer_remarks)";
                 $res_dtl = oci_parse(connection(), $dtl_sql);
-                oci_bind_by_name($res_dtl, ':doc_no', $row1[0]);
+                oci_bind_by_name($res_dtl, ':doc_no', $doc_no);
                 oci_bind_by_name($res_dtl, ':ass_id', $ass_id);
                 oci_bind_by_name($res_dtl, ':ass_sub_grp', $asset_sub_group);
                 oci_bind_by_name($res_dtl, ':brand', $brand);

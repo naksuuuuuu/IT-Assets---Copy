@@ -9,6 +9,12 @@
     if(isset($_POST['po_no'])){
         $po_no = $_POST['po_no'];
         $po_item = $_POST['po_item'];
+        $req_grp = $_POST['req_grp'];
+        $type = $_POST['type'];
+        $asset_group = $_POST['asset_group'];
+        $asset_sub_group = $_POST['asset_sub_group'];
+        $brand = $_POST['brand'];
+        $model = $_POST['model'];
         $series = $_POST['series'];
         $name = $_POST['name'];
         $ser_no1  = $_POST['ser_no1'];
@@ -22,7 +28,9 @@
         $war_exp = date_format(date_create($_POST['war_exp']), 'd/m/Y');
         $remarks = $_POST['remarks'];
         
-            $sql = "UPDATE IT_ASSET_DETAILS1 SET SERIAL_NO1 = :ser_no1, ASS_CODE = :ass_code, DEL_NOTE = :del_note,
+            $sql = "UPDATE IT_ASSET_DETAILS1 SET REQ_GRP = :req_grp, REQ_TYPE = :type, ASSET_GROUP = :asset_group, 
+            SUB_ASSET_GROUP = :asset_sub_group, BRAND = :brand, MODEL = :model,
+            SERIAL_NO1 = :ser_no1, ASS_CODE = :ass_code, DEL_NOTE = :del_note,
             LICENSE_START_DATE = to_date(:license_start, 'DD/MM/YY'), LICENSE_MONTH = :license_month, 
             LICENSE_EXPIRE_DATE = to_date(:license_exp, 'DD/MM/YY'),
             WARRANTY_START_DATE = to_date(:war_start, 'DD/MM/YY'), WARRANTY_MONTH = :war_month, 
@@ -34,6 +42,12 @@
             oci_bind_by_name($res, ':update_date', $date);
             oci_bind_by_name($res, ':po_no', $po_no);
             oci_bind_by_name($res, ':po_item', $po_item);
+            oci_bind_by_name($res, ':req_grp', $req_grp);
+            oci_bind_by_name($res, ':type', $type);
+            oci_bind_by_name($res, ':asset_group', $asset_group);
+            oci_bind_by_name($res, ':asset_sub_group', $asset_sub_group);
+            oci_bind_by_name($res, ':brand', $brand);
+            oci_bind_by_name($res, ':model', $model);
             oci_bind_by_name($res, ':series', $series);
             oci_bind_by_name($res, ':ser_no1', $ser_no1);
             oci_bind_by_name($res, ':ass_code', $ass_code);

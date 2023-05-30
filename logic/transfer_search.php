@@ -8,13 +8,14 @@ if (isset($_POST['data'])){
     and !isset($_POST['emp_name'])){
         $po_no = $_POST['po_no'];
 
-        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, A.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
-        FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_TRANSFER_TRN_HDR E
+        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, E.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
+        FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_HEADER1 E
         WHERE A.SUB_ASSET_GROUP = B.ASSET_SUB_GROUP_CODE
         AND A.BRAND = C.BRAND_CODE
         AND A.MODEL = D.MODEL_CODE
-        AND A.DOCUMENT_NO = E.REF_DOC_NO
-        AND E.PO_NUMBER = :po_no";
+        AND A.DOCUMENT_NO = E.DOCUMENT_NO
+        AND A.PO_NUMBER = :po_no
+        ORDER BY E.DOCUMENT_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':po_no', $po_no);
@@ -42,7 +43,7 @@ if (isset($_POST['data'])){
                         <td>".$row["BRAND_NAME"]."</td>
                         <td>".$row["MODEL"]."</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -54,13 +55,14 @@ if (isset($_POST['data'])){
         and !isset($_POST['emp_name'])){
         $ser_no = $_POST['ser_no'];
 
-        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, A.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
-                FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_TRANSFER_TRN_HDR E
-                WHERE A.SUB_ASSET_GROUP = B.ASSET_SUB_GROUP_CODE
-                AND A.BRAND = C.BRAND_CODE
-                AND A.MODEL = D.MODEL_CODE
-                AND A.DOCUMENT_NO = E.REF_DOC_NO
-                AND A.SERIAL_NO1 = :ser_no";
+        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, E.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
+            FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_HEADER1 E
+            WHERE A.SUB_ASSET_GROUP = B.ASSET_SUB_GROUP_CODE
+            AND A.BRAND = C.BRAND_CODE
+            AND A.MODEL = D.MODEL_CODE
+            AND A.DOCUMENT_NO = E.DOCUMENT_NO
+            AND A.SERIAL_NO1 = :ser_no
+            ORDER BY E.DOCUMENT_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':ser_no', $ser_no);
@@ -88,7 +90,7 @@ if (isset($_POST['data'])){
                         <td>".$row["BRAND_NAME"]."</td>
                         <td>".$row["MODEL"]."</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -101,15 +103,15 @@ if (isset($_POST['data'])){
         $from_date = date_format(date_create($_POST['from_date']), 'd/m/Y');
         $to_date = date_format(date_create($_POST['to_date']), 'd/m/Y');
 
-        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, A.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
-            FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_TRANSFER_TRN_HDR E, IT_ASSET_HEADER1 F
+        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, E.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
+            FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_HEADER1 E
             WHERE A.SUB_ASSET_GROUP = B.ASSET_SUB_GROUP_CODE
             AND A.BRAND = C.BRAND_CODE
             AND A.MODEL = D.MODEL_CODE
-            AND A.DOCUMENT_NO = E.REF_DOC_NO
-            AND A.PO_NUMBER = F.PO_NUMBER
-            AND F.PO_DOCUMENT_DATE
-            BETWEEN to_date(:from_date, 'DD/MM/YY') AND to_date(:to_date, 'DD/MM/YY')";
+            AND A.DOCUMENT_NO = E.DOCUMENT_NO
+            AND E.DOCUMENT_DATE
+            BETWEEN to_date(:from_date, 'DD/MM/YY') AND to_date(:to_date, 'DD/MM/YY')
+            ORDER BY E.DOCUMENT_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':from_date', $from_date);
@@ -138,7 +140,7 @@ if (isset($_POST['data'])){
                         <td>".$row["BRAND_NAME"]."</td>
                         <td>".$row["MODEL"]."</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -150,13 +152,14 @@ if (isset($_POST['data'])){
         
         $emp_name = $_POST['emp_name'];
 
-        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, A.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
-                FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_TRANSFER_TRN_HDR E
+        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, E.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
+                FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_HEADER1 E
                 WHERE A.SUB_ASSET_GROUP = B.ASSET_SUB_GROUP_CODE
                 AND A.BRAND = C.BRAND_CODE
                 AND A.MODEL = D.MODEL_CODE
-                AND A.DOCUMENT_NO = E.REF_DOC_NO
-                AND A.EMPL_ID = :emp_name";
+                AND A.DOCUMENT_NO = E.DOCUMENT_NO
+                AND A.EMPL_ID = :emp_name
+                ORDER BY E.DOCUMENT_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':emp_name', $emp_name);
@@ -184,7 +187,7 @@ if (isset($_POST['data'])){
                         <td>".$row["BRAND_NAME"]."</td>
                         <td>".$row["MODEL"]."</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input hidden class='po_no' value='".$row["PO_NUMBER"]."'></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;

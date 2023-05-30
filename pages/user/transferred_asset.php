@@ -272,7 +272,7 @@ $username = $_SESSION['username'];
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="label" style="color: #000000">PO Document Date:</div>
+                                    <div class="label" style="color: #000000">Transfer Date:</div>
                                         <div class="input-group">
                                             <input type="date" class="form-control" id="from_date" placeholder="From">
                                             <span class="input-group-text">-</span>
@@ -419,8 +419,8 @@ $username = $_SESSION['username'];
                     </div>
                     <div class="card shadow mb-4 cardToggle">
                         <div class="card-header py-3">
-                                <h2 class="m-0 font-weight-bold text-primary">Asset Information</h2>
-                            </div>
+                            <h2 class="m-0 font-weight-bold text-primary">Asset Information</h2>
+                        </div>
                         <div class="card-body">
                             <div class="table-responsive" style="background-color: white">
                                 <table id='myTable' class='display nowrap' width='100%' cellspacing="0">
@@ -444,15 +444,17 @@ $username = $_SESSION['username'];
                                     <tbody id="doc_tbody">
                                     <?php
                                             $query = "SELECT DISTINCT f.DOCUMENT_NO, b.ASSET_ID, b.EMPL_ID, b.sub_ASSET_GROUP, c.MODEL, d.BRAND_NAME, b.PO_item, 
-                                            b.PO_NUMBER, e.ASSET_SUB_GROUP_NAME  
-                                            FROM IT_ASSET_HEADER1 a, IT_ASSET_DETAILS1 b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e, IT_ASSET_TRANSFER_TRN_HDR f
-                                            where a.DOCUMENT_NO	= b.DOCUMENT_NO
-                                            and a.DOCUMENT_NO = f.REF_DOC_NO
-                                            and b.MODEL = c.MODEL_code
-                                            and b.BRAND = d.BRAND_CODE
-                                            and b.CANCEL_ASSET_FLAG is null
-                                            and b.SUB_ASSET_GROUP = e.ASSET_SUB_GROUP_CODE
-                                            order by f.document_no DESC";
+                                                b.PO_NUMBER, e.ASSET_SUB_GROUP_NAME  
+                                                FROM IT_ASSET_HEADER1 a, IT_ASSET_DETAILS1 b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e, IT_ASSET_TRANSFER_TRN_HDR f
+                                                where f.TRANSFER_DATE >= TRUNC(SYSDATE, 'MM')
+                                                AND f.TRANSFER_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                                AND a.DOCUMENT_NO	= b.DOCUMENT_NO
+                                                and a.DOCUMENT_NO = f.REF_DOC_NO
+                                                and b.MODEL = c.MODEL_code
+                                                and b.BRAND = d.BRAND_CODE
+                                                and b.CANCEL_ASSET_FLAG is null
+                                                and b.SUB_ASSET_GROUP = e.ASSET_SUB_GROUP_CODE
+                                                order by f.document_no DESC";
                                             $stmt = oci_parse(connection(), $query);
                                             oci_execute($stmt);
                                             while ($row = oci_fetch_assoc($stmt)) {
@@ -473,8 +475,8 @@ $username = $_SESSION['username'];
                                                         <td>" . $row['ASSET_SUB_GROUP_NAME'] . "</td>
                                                         <td>" . $row['BRAND_NAME'] . "</td>
                                                         <td>" . $row['MODEL'] . "</td>
-                                                        <td hidden>" . $row['SUB_ASSET_GROUP'] . "</td>
-                                                        <td hidden>" . $row['EMPL_ID'] . "</td>
+                                                        <td hidden>" . $row['SUB_ASSET_GROUP'] . " hidden</td>
+                                                        <td hidden>" . $row['EMPL_ID'] . " hidden</td>
                                                         <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
                                                     </tr>";
                                             }
@@ -603,7 +605,7 @@ $username = $_SESSION['username'];
 
                                                     <div class="col-md-4">
                                                         <label class="form-label">Brand *</label>
-                                                        <select id="brand" name='brand' type="text" autocomplete="off" readonly class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <select id="brand1" name='brand' type="text" autocomplete="off" readonly class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                 <!-- <option selected=" ">Select Brand...</option> -->
                                                         </select>
                                                     </div>
@@ -616,8 +618,8 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Series *</label>
-                                                        <input id="series" name='series' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                        <label class="form-label">Series</label>
+                                                        <input id="series" name='series' type="text" autocomplete="off" readonly class="form-control" required placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -938,8 +940,6 @@ $username = $_SESSION['username'];
                 })
             })
             $("#myTable").on("click", ".view_dtl", function(){
-                // var po_number = $(this).closest('tr').find('.po_no').val()
-                // var po_item = $(this).closest('tr').find('.po_item').val()
                 var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
                 $.ajax({
                     type: "POST",
@@ -968,7 +968,7 @@ $username = $_SESSION['username'];
                         $("#bus_email2").val(res1.BUS_EMAIL)
 
                         $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
-                        $("#brand").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
+                        $("#brand1").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
                         $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
                         // $("#asset_sub_group").val(res1.ASS_SUB_GRP_NAME)
                         // $("#brand").val(res1.BRAND_NAME)
@@ -1005,6 +1005,16 @@ $username = $_SESSION['username'];
             $("#vendor").selectize({})
             $("#ser_no1").selectize({})
             $("#rem").selectize({})
+
+            $("#clr").click(function(){
+                location.reload()
+                // var po_no = $('#po_no')[0].selectize;
+                // var emp_name = $('#emp_name')[0].selectize;
+                // var ser_no = $('#ser_no')[0].selectize;
+                // po_no.clear();
+                // emp_name.clear();
+                // ser_no.clear();
+            })
 
             $("#srch").click(function(){
                 var data = 1
@@ -1223,7 +1233,7 @@ $username = $_SESSION['username'];
                     })
                 }
 
-                // po_doc_date
+                // transferred_date
                 else if (from_date && to_date != "" && po_num1 == "" && emp_name == "" && brand == "" && dept == "" && vendor == ""
                     && ser_no1 == "" && rem == ""){
                     Swal.fire({
