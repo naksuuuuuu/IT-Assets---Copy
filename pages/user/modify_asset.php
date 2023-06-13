@@ -337,7 +337,7 @@ session_start();
                                         <select class="form-select" name="po_no" id="po_no" style="margin-bottom: 8px;">
                                             <option value=""></option>
                                             <?php 
-                                                $sql = "SELECT PO_NUMBER FROM IT_ASSET_HEADER1 WHERE CANCEL_ASSET_FLAG is null";
+                                                $sql = "SELECT PO_NO FROM IT_ASSET_HEADER WHERE CANCEL_ASSET_FLAG is null";
                                                 $res = oci_parse(connection(), $sql);
                                                 oci_execute($res);
 
@@ -362,9 +362,9 @@ session_start();
                                         <select type="text" name="emp_name" id='emp_name' class='form-select' required style="margin-bottom: 8px;"> 
                                         <option value=""></option>
                                             <?php
-                                                $sql = "SELECT DISTINCT A.DOCUMENT_NO, B.EMPL_ID FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B
-                                                        WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
-                                                        AND A.CANCEL_ASSET_FLAG is null";
+                                                $sql = "SELECT DISTINCT A.DOC_NO, B.EMPL_ID FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B
+                                                WHERE A.DOC_NO = B.DOC_NO
+                                                AND A.CANCEL_ASSET_FLAG is null";
 
                                                 $result = oci_parse(connection(), $sql);
                                                 oci_execute($result);                                                    
@@ -391,7 +391,7 @@ session_start();
                                         <select class="form-select" name="ser_no" id="ser_no" style="margin-bottom: 8px;">
                                             <option value=""></option>
                                             <?php 
-                                                $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS1 WHERE CANCEL_ASSET_FLAG is null";
+                                                $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS WHERE CANCEL_ASSET_FLAG is null";
                                                 $res = oci_parse(connection(), $sql);
                                                 oci_execute($res);
 
@@ -432,12 +432,18 @@ session_start();
                                                 <th style="width: 200px">PO Doc Date</th>
                                                 <th style="width: 200px">Department</th>
                                                 <th style='width: 200px'>Supplier</th>
-                                                <th style='width: 200px'>Req Group</th>
-                                                <th style='width: 200px'>Req Type</th>
-                                                <th style='width: 200px'>Asset Group</th>
-                                                <th style='width: 200px'>Asset Sub Group</th>
-                                                <th style='width: 200px'>Brand</th>
-                                                <th style='width: 200px'>Model</th>
+                                                <th hidden>Req Group Code</th>
+                                                <th hidden>Req Group Name</th>
+                                                <th hidden>Req Type Code</th>
+                                                <th hidden>Req Type Name</th>
+                                                <th hidden>Asset Group Code</th>
+                                                <th hidden>Asset Group Name</th>
+                                                <th hidden>Asset Sub Group Code</th>
+                                                <th hidden>Asset Sub Group Name</th>
+                                                <th hidden>Brand Code</th>
+                                                <th hidden>Brand Name</th>
+                                                <th hidden>Model Code</th>
+                                                <th hidden>Model Name</th>
                                                 <th hidden>PO Item</th>
                                                 <th hidden>po number</th>
                                                 <!-- <th>Status</th> -->
@@ -455,15 +461,24 @@ session_start();
                                         </tfoot> -->
                                         <tbody id="doc_tbody">
                                             <?php
-                                                $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.DOCUMENT_DATE, A.PO_NUMBER, A.PO_DOCUMENT_DATE, B.EMPL_ID, B.MTRL_SHORT, 
-                                                    C.VENDOR_NAME, B.REQ_GRP, B.REQ_TYPE, B.ASSET_GROUP, B.SUB_ASSET_GROUP, B.BRAND, B.MODEL, A.PO_NUMBER, B.PO_ITEM
-                                                    FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
-                                                    WHERE A.DOCUMENT_DATE >= TRUNC(SYSDATE, 'MM')
-                                                    AND A.DOCUMENT_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
-                                                    AND A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                $sql = "SELECT DISTINCT A.DOC_NO, A.DOC_DATE, A.PO_NO, A.PO_DOC_DATE, B.EMPL_ID, B.MTRL_SHORT, 
+                                                    C.VENDOR_NAME, A.PO_NO, B.REQ_GRP_ID, E.REQ_GRP_NAME, B.REQ_TYPE_ID, D.REQ_TYPE_NAME, 
+                                                    B.ASSET_GRP_CODE, F.ASSET_GRP_NAME, B.ASSET_SUB_GRP_CODE, G.ASSET_SUB_GRP_NAME, B.BRAND_CODE, H.BRAND_NAME, 
+                                                    B.MODEL_CODE, I.MODEL_NAME, A.PO_NO, B.PO_ITEM
+                                                    FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B, IT_ASSET_VENDORS C, IT_ASSET_REQ_TYPE D, IT_ASSET_REQ_GROUP E,
+                                                    IT_ASSET_GROUP F, IT_ASSET_SUB_GROUP G, IT_ASSET_BRAND H, IT_ASSET_MODEL I
+                                                    WHERE A.DOC_DATE >= TRUNC(SYSDATE, 'MM')
+                                                    AND A.DOC_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                                    AND A.DOC_NO = B.DOC_NO
+                                                    AND B.REQ_TYPE_ID = D.REQ_TYPE_ID
+                                                    AND B.REQ_GRP_ID = E.REQ_GRP_ID
+                                                    AND B.ASSET_SUB_GRP_CODE = G.ASSET_SUB_GRP_CODE
+                                                    AND B.ASSET_GRP_CODE = F.ASSET_GRP_CODE
+                                                    AND B.BRAND_CODE = H.BRAND_CODE
+                                                    AND B.MODEL_CODE = I.MODEL_CODE
                                                     AND A.VENDOR_CODE = C.VENDOR_CODE
                                                     AND B.CANCEL_ASSET_FLAG is null
-                                                    ORDER BY A.DOCUMENT_NO DESC";
+                                                    ORDER BY A.DOC_NO DESC";
                                         
                                                 $result = oci_parse(connection(), $sql);
                                                 oci_execute($result);                                                    
@@ -483,21 +498,27 @@ session_start();
                                                 
                                                     echo"<tr>
                                                         <td><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></td>
-                                                            <td>".$row["DOCUMENT_NO"]."</td>
-                                                            <td>".$row["PO_ITEM"]."</td>
-                                                            <td>".$row["DOCUMENT_DATE"]."</td>
-                                                            <td>".$row["PO_NUMBER"]."</td>
-                                                            <td>".$row["PO_DOCUMENT_DATE"]."</td>
-                                                            <td>".$row1["DESCR"]."</td>
-                                                            <td>".$row["VENDOR_NAME"]."</td>
-                                                            <td><input class='req_grp1' value='".$row["REQ_GRP"]."'></td>
-                                                            <td><input class='req_type1' value='".$row["REQ_TYPE"]."'></td>
-                                                            <td><input class='ass_grp1' value='".$row["ASSET_GROUP"]."'></td>
-                                                            <td><input class='ass_sub_grp1' value='".$row["SUB_ASSET_GROUP"]."'></td>
-                                                            <td><input class='brand1' value='".$row["BRAND"]."'></td>
-                                                            <td><input class='model1' value='".$row["MODEL"]."'></td>
-                                                            <td hidden><input class='po_item' value='".$row["PO_ITEM"]."' hidden></td>
-                                                            <td hidden><input class='doc_no1' value='".$row["DOCUMENT_NO"]."' hidden></td>
+                                                        <td>".$row["DOC_NO"]."</td>
+                                                        <td>".$row["PO_ITEM"]."</td>
+                                                        <td>".$row["DOC_DATE"]."</td>
+                                                        <td>".$row["PO_NO"]."</td>
+                                                        <td>".$row["PO_DOC_DATE"]."</td>
+                                                        <td>".$row1["DESCR"]."</td>
+                                                        <td>".$row["VENDOR_NAME"]."</td>
+                                                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                                                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                                                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                                                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                                                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                                                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                                                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                                                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                                                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                                                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                                                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                                                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                                                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                                                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                                                         </tr>";
                                                 }
                                             ?>
@@ -561,7 +582,7 @@ session_start();
                                         <div id="collapseOne" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingOne">
                                             <div class="panel-body">
                                                 <div class="col-md-4">
-                                                    <label class="form-label">Employee Name *</label>
+                                                    <label class="form-label">Employee Name <small style="color: red">*</small></label>
                                                     <select type="text" class="form-select" id="empl_name" placeholder=" " required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                         <option value="">Select Name....</option>
                                                         <?php 
@@ -709,42 +730,42 @@ session_start();
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Request Group *</label>
+                                                        <label class="form-label">Request Group <small style="color: red">*</small></label>
                                                         <select class="form-select" id="req_grp" name='req_grp[]' type="text" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                             <!-- <option selected=" ">Select Request Group...</option> -->
                                                         </select>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Request Type *</label>
+                                                        <label class="form-label">Request Type <small style="color: red">*</small></label>
                                                         <select id="type" name='type[]' type="text" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                 <!-- <option selected=" ">Select Request Type...</option> -->
                                                         </select>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Asset Group *</label>
+                                                        <label class="form-label">Asset Group <small style="color: red">*</small></label>
                                                         <select id="asset_group" name='asset_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                             <!-- <option selected=" ">Select Asset...</option> -->
                                                         </select>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Asset Sub Group *</label>
+                                                        <label class="form-label">Asset Sub Group <small style="color: red">*</small></label>
                                                         <select id="asset_sub_group" name='asset_sub_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                             <!-- <option selected=" ">Select Asset Sub Group...</option> -->
                                                         </select>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Brand *</label>
+                                                        <label class="form-label">Brand <small style="color: red">*</small></label>
                                                         <select id="brand" name='brand[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                 <!-- <option selected=" ">Select Brand...</option> -->
                                                         </select>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Model *</label>
+                                                        <label class="form-label">Model <small style="color: red">*</small></label>
                                                         <select id="model" name='model[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                             <!-- <option selected=" ">Select Model...</option> -->
                                                         </select>
@@ -761,7 +782,7 @@ session_start();
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Serial Number 1 *</label>
+                                                        <label class="form-label">Serial Number 1 <small style="color: red">*</small></label>
                                                         <input id="ser_no1" name='ser_no[]' type="text" autocomplete="off" class="form-control ser_no1" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
@@ -781,12 +802,12 @@ session_start();
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Asset Code *</label>
+                                                        <label class="form-label">Asset Code <small style="color: red">*</small></label>
                                                         <input id="ass_code" name='ass_code[]' type="text" autocomplete="off" class="form-control ass_code" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Delivery Note *</label>
+                                                        <label class="form-label">Delivery Note <small style="color: red">*</small></label>
                                                         <input id="del_note" name='del_note[]' type="text" autocomplete="off" class="form-control del_note" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
@@ -816,12 +837,12 @@ session_start();
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Warranty Month Start *</label>
+                                                        <label class="form-label">Warranty Month Start <small style="color: red">*</small></label>
                                                         <input id="war_start" name='war_start[]' type="date" autocomplete="off" class="form-control war_start" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Warranty Month *</label>
+                                                        <label class="form-label">Warranty Month <small style="color: red">*</small></label>
                                                         <input id="war_month" name='war_month[]' type="text" autocomplete="off" class="form-control war_month" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
@@ -831,14 +852,14 @@ session_start();
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Asset Flag *</label>
+                                                        <label class="form-label">Asset Flag <small style="color: red">*</small></label>
                                                         <select id="ass_flag" name='ass_flag[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                 <!-- <option selected=" ">Select ass_flag...</option> -->
                                                         </select>
                                                     </div>
 
                                                     <div class="col-md-12">
-                                                        <label class="form-label">Remarks *</label>
+                                                        <label class="form-label">Remarks <small style="color: red">*</small></label>
                                                         <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " 
                                                             style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                         </textarea>
@@ -1109,17 +1130,25 @@ $(document).ready(function(){
     $("#dataTable1").on("click", '.view_dtl', function(){
         var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
         var po_item = $(this).closest('tr').find('.po_item').val()
-        var req_grp1 = $(this).closest('tr').find('.req_grp1').val()
-        var req_type1 = $(this).closest('tr').find('.req_type1').val()
-        var ass_grp1 = $(this).closest('tr').find('.ass_grp1').val()
-        var ass_sub_grp1 = $(this).closest('tr').find('.ass_sub_grp1').val()
-        var brand1 = $(this).closest('tr').find('.brand1').val()
-        var model1 = $(this).closest('tr').find('.model1').val()
+        var req_grp_code = $(this).closest('tr').find('.req_grp_code').val()
+        var req_grp_name = $(this).closest('tr').find('.req_grp_name').val()
+        var req_type_code = $(this).closest('tr').find('.req_type_code').val()
+        var req_type_name = $(this).closest('tr').find('.req_type_name').val()
+        var ass_grp_code = $(this).closest('tr').find('.ass_grp_code').val()
+        var ass_grp_name = $(this).closest('tr').find('.ass_grp_name').val()
+        var ass_sub_grp_code = $(this).closest('tr').find('.ass_sub_grp_code').val()
+        var ass_sub_grp_name = $(this).closest('tr').find('.ass_sub_grp_name').val()
+        var brand_code = $(this).closest('tr').find('.brand_code').val()
+        var brand_name = $(this).closest('tr').find('.brand_name').val()
+        var model_code = $(this).closest('tr').find('.model_code').val()
+        var model_name = $(this).closest('tr').find('.model_name').val()
         $.ajax({
             type: "POST",
             url: "../../logic/mod_json.php",
-            data: {doc_no1: doc_no1, po_item:po_item, req_grp1:req_grp1, req_type1:req_type1, ass_grp1:ass_grp1, 
-                ass_sub_grp1:ass_sub_grp1, brand1:brand1, model1:model1},
+            data: {doc_no1: doc_no1, po_item:po_item, req_grp_code:req_grp_code, req_grp_name:req_grp_name, req_type_code:req_type_code, 
+                req_type_name:req_type_name, ass_grp_code:ass_grp_code, ass_grp_name:ass_grp_name, ass_sub_grp_code:ass_sub_grp_code,
+                ass_sub_grp_name:ass_sub_grp_name, brand_name:brand_name, 
+                brand_code:brand_code, model_code:model_code, model_name:model_name},
             success: function(res1){
                 $('#po_dtls').modal('show');
                 $('#po_dtls').modal({
@@ -1145,11 +1174,11 @@ $(document).ready(function(){
                 // $("#ref_person").val(res1.REF_PERSON)
                 $("#supplier").val(res1.SUPPLIER)
                 $("#req_grp").append(res1.REQ_GRP)
-                $("#type").append("<option value="+ res1.REQ_TYPE +">"+ res1.REQ_TYPE_NAME +"</option>")
-                $("#asset_group").append("<option value="+ res1.ASS_GRP +">"+ res1.ASS_GRP_NAME +"</option>")
-                $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
-                $("#brand").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
-                $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
+                $("#type").append(res1.REQ_TYPE)
+                $("#asset_group").append(res1.ASS_GRP)
+                $("#asset_sub_group").append(res1.ASS_SUB_GRP)
+                $("#brand").append(res1.BRAND)
+                $("#model").append(res1.MODEL_CODE)
                 $("#series").val(res1.SERIES)
                 $("#price").val(res1.PRICE)
                 $("#ser_no1").val(res1.SER_NO1)
@@ -1407,6 +1436,7 @@ $(document).ready(function(){
         var war_start = $(".war_start").val()
         var war_month = $(".war_month").val()
         var war_exp = $(".war_exp").val()
+        var empl_name = $("#empl_name").val()
         var remarks = $(".remarks").val()
         // var attch = $(".attch").val()
         Swal.fire({
@@ -1427,7 +1457,7 @@ $(document).ready(function(){
                     data:{po_no:po_no, po_item:po_item, req_grp:req_grp, type:type, asset_group:asset_group, 
                         asset_sub_group:asset_sub_group, brand:brand, model:model,series:series, name:name, ser_no1:ser_no1, 
                         ass_code:ass_code, del_note:del_note, license_start:license_start, license_month:license_month, 
-                        license_exp:license_exp, war_start:war_start, war_month:war_month, war_exp:war_exp, remarks:remarks},
+                        license_exp:license_exp, war_start:war_start, war_month:war_month, war_exp:war_exp, empl_name:empl_name, remarks:remarks},
                     success: function(res){
                         if(res.success == 1){
                             notify(res.icon, res.message)

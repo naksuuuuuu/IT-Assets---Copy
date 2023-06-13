@@ -22,8 +22,6 @@ session_start();
 
     <title>ITAMS - Type</title>
 
-    <!-- Custom fonts for this template -->
-    <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -32,7 +30,12 @@ session_start();
     <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../../assets//fontawesome_1/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
+    <link rel="stylesheet" href="../../datatable/datatables.css">
+    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
+    <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
 
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
@@ -245,20 +248,21 @@ session_start();
                         <h2 class="m-0 font-weight-bold text-primary">Type</h2>
                     </div>
                     <div class="card-body">
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add_type" style="margin-bottom: 10px;"> 
-                            <i class="fa fa-plus-circle"></i> Add
-                        </button>      
-
+                        <div class="col-md-4">
+                            <div class="" style='justify-content: start; display: flex; height:40px; margin-top: 10px'>
+                                <button class="btn btn-success" id="add_btn" type="button"><i class="fa-solid fa-plus"></i> Add</button>
+                            </div>
+                        </div>  
+                        <br>
                         <div class="table-responsive">
-                        <table class="table table-bordered nowrap" id="dataTable" width="100%" cellspacing="0">
+                        <table class="display nowrap" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th hidden>Request Type Code</th>
+                                    <th>Request Type ID</th>
                                     <th>Request Type Name</th>
-                                    <th>User Created</th>
-                                    <th>User Created Date</th>
-                                    <th>Last User Update</th>
-                                    <th>Last User Update Date</th>
+                                    <th hidden>Request Type ID</th>
+                                    <th hidden>Request Group</th>
+                                    <th>Modify</th>
                                 </tr>
                             </thead>
                                 <!-- <tfoot>
@@ -276,22 +280,13 @@ session_start();
                                     $query = oci_parse(connection(), $sql);
                                     oci_execute($query);
                                         while ($row = oci_fetch_assoc($query)) {
-                                            // echo "<tr id='{$row["REQ_TYPE_ID"]}'>";
-                                            // echo "<td>{$i}</td>";
-                                            // echo "<td>".$row["REQ_TYPE_NAME"]."</td>";
-                                            // echo "<td>".$row["USER_CREATED"]."</td>";
-                                            // echo "<td>".$row["USER_CREATED_DATE"]."</td>";
-                                            // echo "<td>".$row["LAST_USER_UPDATE"]."</td>";
-                                            // echo "<td>".$row["LAST_USER_UPDATE_DATE"]."</td>";
-                                            // echo "</tr>";
-                                            echo "<tr id='".$row["REQ_TYPE_ID"]."'>
-                                                <td hidden>".$row["REQ_TYPE_ID"]."</td>
-                                                <td>".$row["REQ_TYPE_NAME"]."</td>
-                                                <td>".$row["USER_CREATED"]."</td>
-                                                <td>".$row["USER_CREATED_DATE"]."</td>
-                                                <td>".$row["LAST_USER_UPDATE"]."</td>
-                                                <td>".$row["LAST_USER_UPDATE_DATE"]."</td>
-                                            </tr>";
+                                            echo "<tr>
+                                                    <td>".$row["REQ_TYPE_ID"]."</td>
+                                                    <td class='req_type'>".$row["REQ_TYPE_NAME"]."</td>
+                                                    <td hidden><input class='type_id' value='".$row["REQ_TYPE_ID"]."'></td>
+                                                    <td hidden><input class='group_id' value='".$row["REQ_GRP_ID"]."'></td>
+                                                    <td><button class='btn btn-primary edit_btn' id='edit_btn'><i class='fa-solid fa-pen-to-square'></i> Edit</button></td>
+                                                </tr>";
                                             
                                         }
                                     oci_close(connection());
@@ -330,7 +325,7 @@ session_start();
     </a>
 
     <!-- Add Type Modal -->
-    <div class="modal fade" id="add_type" tabindex="-1" role="dialog" aria-labelledby="typeModal"
+    <div class="modal fade" id="add_type_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="typeModal"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -345,30 +340,80 @@ session_start();
                         <div class="form-group">
                             <div class="form-group">
                                 <label>Select Request Group</label>
-                                <select type="text" id="req_group" name="req_group" class="form-control" required>
+                                <select type="text" id="add_req_grp" name="req_group" class="form-select" required>
                                     <option value=""></option>
-                                <?php 
-                                    $sql = "SELECT REQ_GROUP_ID, REQ_GROUP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GROUP_ID";
-                                    $result = oci_parse(connection(),$sql);
-                                    oci_execute($result);
+                                    <?php 
+                                        $sql = "SELECT REQ_GRP_ID, REQ_GRP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GRP_ID";
+                                        $result = oci_parse(connection(),$sql);
+                                        oci_execute($result);
 
-                                    while($row = oci_fetch_row($result)) {
-                                    echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
-                                    }
-                                ?>
+                                        while($row = oci_fetch_row($result)) {
+                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
+                                        }
+                                    ?>
                                 </select>
                             </div>  
                         </div>                 
                         <div class="form-group">
                             <label>Input Type</label>
-                            <input type="text" id="type" name="type" class="form-control" required>
+                            <input type="text" id="add_type" name="type" class="form-control" required>
                         </div>          
                     </div>
-                    <div class="modal-footer">
-                        <input type="hidden" value="1" name="type">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <button type="button" class="btn btn-success" id="btn-add">Add</button>
+                    <div class="col-md-12">
+                        <button id="close_btn" class="btn btn-warning" type="button"><i class="fa-solid fa-xmark"></i> Close</button>
+                        <button id="btn_add" type="button" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                     </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Type Modal -->
+    <div class="modal fade" id="edit_type_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="typeModal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="user-form">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="typeModal">Edit Request Type</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">  
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Select Request Group</label>
+                                <select type="text" id="edit_req_grp" name="req_grp1" class="form-select" required>
+                                    <option value=""></option>
+                                    <?php 
+                                        $sql = "SELECT REQ_GRP_ID, REQ_GRP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GRP_ID";
+                                        $result = oci_parse(connection(),$sql);
+                                        oci_execute($result);
+
+                                        while($row = oci_fetch_row($result)) {
+                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
+                                        }
+                                    ?>
+                                </select>
+                            </div>  
+                        </div>                 
+                        <div class="form-group">
+                            <label>Input Type</label>
+                            <input type="text" id="edit_type" name="type" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group" hidden>
+                            <label>Hidden Type ID</label>
+                            <input type="text" id="type_id1" name="type_id" class="form-control" required>
+                        </div>          
+                    </div>
+                    <div class="col-md-12">
+                        <button id="close_btn1" class="btn btn-warning" type="button"><i class="fa-solid fa-xmark"></i> Close</button>
+                        <button id="btn_edit" type="button" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    </div>
+                    <br>
                 </form>
             </div>
         </div>
@@ -405,37 +450,185 @@ session_start();
     <script src="../../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
+    <!-- <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
+    <script src="../../datatable/datatables.js"></script>
+    <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
+    <script src="../../assets/file_input/js/fileinput.js"></script>
     <!-- Page level custom scripts -->
-    <script src="../../js/demo/datatables-demo.js"></script>
+    <!-- <script src="../../js/demo/datatables-demo.js"></script> -->
+    <script src="../../assets/selectize/dist/js/selectize.js"></script>
+    <script src="../../assets/lodash.js"></script>
 
 </body>
 <script>
-    $(document).on('click','#btn-add',function() {
-    var name = '<?php echo $username ?>';
-    var type = $("#type").val();
-    var req_group =$("#req_group").val();
-    $.ajax({
-        url: "../../logic/insert_set_up.php",
-        method: "POST",
-        data: {type: type, name: name, req_group: req_group},
-        success: function(dataResult){
-            if(dataResult.statusCode==200){
-                $('#add_type').modal('hide');
-                alert('Data added successfully !'); 
-                location.reload();						
-            }
-            else if(dataResult.statusCode==201){
-                alert(dataResult.message);
-            }
-        },
-        error: function(){
-            alert("Error while processing request, please try again.");
-        }
-    });
-});
+    $(document).ready(function() {
+        const name = '<?php echo $username ?>';
+        
+        $('#dataTable').DataTable({
+            searching: false, 
+            paging: true,
+            scrollX: false, 
+            info: false,
+            ordering: false,
+            fixedColumns: {leftColumns: 1}
+        });
+
+        $("#add_btn").click(function(){
+            $("#add_type_modal").modal('show')
+        })
+
+        $("#btn_add").click(function(){
+            var add_req_grp = $("#add_req_grp").val();
+            var add_type = $("#add_type").val()
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be saved in database',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm =>{
+                if(confirm.isConfirmed){
+                    $.ajax({
+                        type: "POST",
+                        url: "../../logic/set_up/insert_type.php",
+                        data: {add_req_grp:add_req_grp, add_type:add_type, name:name},
+                        success: function(res){
+                            if(res.success == 1){
+                                notify(res.icon, res.message)
+                                window.setInterval(function(){
+                                    location.reload();	
+                                },2000)
+                            }
+                            else{
+                                notify(res.icon, res.message)
+                            }        
+                        },
+                        failure: function(response){
+                            alert("ERROR");
+                        },
+                        error: function(req, textStatus, errorThrown){
+                            console.log("ERROR ",textStatus);
+                            console.log("ERROR ",errorThrown);
+                            console.log("ERROR", req)
+                        } 
+                    });
+                }
+            })
+        })
+
+        $(".edit_btn").click(function(){
+             var req_type = $(this).closest('tr').find("td.req_type").text()
+             var type_id = $(this).closest('tr').find("input.type_id").val()
+             var group_id = $(this).closest('tr').find("input.group_id").val()
+
+             $("#edit_req_grp").val(group_id)
+             $("#edit_type").val(req_type)
+             $("#type_id1").val(type_id)
+
+             $("#edit_type_modal").modal('show')
+
+             $("#btn_edit").click(function(){
+                var edit_req_grp = $("#edit_req_grp").val()
+                var edit_type = $("#edit_type").val()
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This will be saved in database',
+                    icon: 'question',
+                    showCancelButton: true,
+                    reverseButtons: true,
+                    cancelButtonText: 'No',
+                    confirmButtonText: 'Yes',
+                    confirmButtonColor: 'green',
+                    cancelButtonColor: 'red'
+                }).then(confirm => {
+                    if(confirm.isConfirmed){
+                        $.ajax({
+                            type: "POST",
+                            url: "../../logic/set_up/update_type.php",
+                            data: {edit_req_grp:edit_req_grp, edit_type:edit_type, type_id:type_id, name:name},
+                            success: function(res){
+                                if(res.success == 1){
+                                    notify(res.icon, res.message)
+                                    window.setInterval(function(){
+                                        location.reload();	
+                                    },2000)
+                                }
+                                else{
+                                    notify(res.icon, res.message)
+                                }        
+                            },
+                            failure: function(response){
+                                alert("ERROR");
+                            },
+                            error: function(req, textStatus, errorThrown){
+                                console.log("ERROR ",textStatus);
+                                console.log("ERROR ",errorThrown);
+                                console.log("ERROR", req)
+                            } 
+                        })
+                    }
+                })
+             })
+        })
+
+        // add_type close btn
+        $("#close_btn").click(function(){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be closed',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm => {
+                if(confirm.isConfirmed){
+                    $("#add_type_modal").modal('hide')
+                }
+            })
+        })
+
+        // edit_type close btn
+        $("#close_btn1").click(function(){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be closed',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm => {
+                if(confirm.isConfirmed){
+                    $("#edit_type_modal").modal('hide')
+                }
+            })
+        })
+
+    });            
+    
+    function notify(icon, message){
+        Swal.fire({
+            icon: icon,
+            title: message,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true
+        })
+    }
+
+    
 </script>
 
 </html>

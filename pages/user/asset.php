@@ -21,7 +21,7 @@ $username = $_SESSION['username'];
     <title>ITAMS - Assets</title>
 
     <!-- Custom fonts for this template -->
-    <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> -->
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -978,7 +978,7 @@ $username = $_SESSION['username'];
                                                             <div id="collapse_One" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingOne">
                                                                 <div class="panel-body">
                                                                     <div class="col-md-4">
-                                                                        <label class="form-label">Employee Name *</label>
+                                                                        <label class="form-label">Employee Name <small style="color: red">*</small></label>
                                                                         <select type="text" class="form-select" id="empl_name" placeholder=" " required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                             <option value="">Select Name....</option>
                                                                             <?php 
@@ -1249,11 +1249,11 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Request Group *</label>
+                                                                            <label class="form-label">Request Group <small style="color: red">*</small></label>
                                                                             <select class="form-select" id="req_grp" name='req_grp[]' type="text" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Request Group...</option>
                                                                                 <?php 
-                                                                                    $sql = "SELECT REQ_GROUP_ID, REQ_GROUP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GROUP_ID";
+                                                                                    $sql = "SELECT REQ_GRP_ID, REQ_GRP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GRP_ID";
                                                                                     $res = oci_parse(connection(), $sql);
                                                                                     oci_execute($res);
 
@@ -1265,35 +1265,35 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Request Type *</label>
+                                                                            <label class="form-label">Request Type <small style="color: red">*</small></label>
                                                                             <select id="type" name='type[]' type="text" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                     <option selected=" ">Select Request Type...</option>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Group *</label>
+                                                                            <label class="form-label">Asset Group <small style="color: red">*</small></label>
                                                                             <select id="asset_group" name='asset_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Asset...</option>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Sub Group *</label>
+                                                                            <label class="form-label">Asset Sub Group <small style="color: red">*</small></label>
                                                                             <select id="asset_sub_group" name='asset_sub_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Asset Sub Group...</option>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Brand *</label>
+                                                                            <label class="form-label">Brand <small style="color: red">*</small></label>
                                                                             <select id="brand" name='brand[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                     <option selected=" ">Select Brand...</option>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Model *</label>
+                                                                            <label class="form-label">Model <small style="color: red">*</small></label>
                                                                             <select id="model" name='model[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Model...</option>
                                                                             </select>
@@ -1310,7 +1310,7 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Serial Number 1 *</label>
+                                                                            <label class="form-label">Serial Number 1 <small style="color: red">*</small></label>
                                                                             <input id="ser_no" name='ser_no[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
@@ -1330,12 +1330,12 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Code *</label>
+                                                                            <label class="form-label">Asset Code <small style="color: red">*</small></label>
                                                                             <input id="ass_code" name='ass_code[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Delivery Note *</label>
+                                                                            <label class="form-label">Delivery Note <small style="color: red">*</small></label>
                                                                             <input id="del_note" name='del_note[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
@@ -1365,12 +1365,12 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Warranty Month Start *</label>
+                                                                            <label class="form-label">Warranty Month Start <small style="color: red">*</small></label>
                                                                             <input id="war_start" name='war_start[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Warranty Month *</label>
+                                                                            <label class="form-label">Warranty Month <small style="color: red">*</small></label>
                                                                             <input id="war_month" name='war_month[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
@@ -1380,7 +1380,7 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Flag *</label>
+                                                                            <label class="form-label">Asset Flag <small style="color: red">*</small></label>
                                                                             <select id="ass_flagR" name='ass_flagR' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Asset Flag...</option>
                                                                                 <option value="asset">Asset</option>
@@ -1389,7 +1389,7 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-12">
-                                                                            <label class="form-label">Remarks *</label>
+                                                                            <label class="form-label">Remarks <small style="color: red">*</small></label>
                                                                             <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                             </textarea>
                                                                         </div>
@@ -1423,7 +1423,7 @@ $username = $_SESSION['username'];
                                                                                 <form enctype="multipart/form-data">
                                                                                     <div class="form-group">
                                                                                         <div class="file-loading">
-                                                                                            <input id="attch" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                                                                                            <input id="attch" type="file" multiple class="file">
                                                                                         </div>
                                                                                     </div>
                                                                                 </form>                       
@@ -1486,7 +1486,7 @@ $username = $_SESSION['username'];
                                                             <div id="collapse_1" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingOne">
                                                                 <div class="panel-body">
                                                                     <div class="col-md-4">
-                                                                        <label class="form-label">Employee Name *</label>
+                                                                        <label class="form-label">Employee Name <small style="color: red">*</small></label>
                                                                         <select type="text" class="form-select" id="empl_name1" placeholder=" " required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                             <option value="">Select Name....</option>
                                                                             <?php 
@@ -1758,11 +1758,11 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Request Group *</label>
+                                                                            <label class="form-label">Request Group <small style="color: red">*</small></label>
                                                                             <select class="form-select" id="req_grp1" name='req_grp[]' type="text" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Request Group...</option>
                                                                                 <?php 
-                                                                                    $sql = "SELECT REQ_GROUP_ID, REQ_GROUP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GROUP_ID";
+                                                                                    $sql = "SELECT REQ_GRP_ID, REQ_GRP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GRP_ID";
                                                                                     $res = oci_parse(connection(), $sql);
                                                                                     oci_execute($res);
 
@@ -1774,42 +1774,42 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Request Type *</label>
+                                                                            <label class="form-label">Request Type <small style="color: red">*</small></label>
                                                                             <select id="req_type1" name='type[]' type="text" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                     <option selected=" ">Select Request Type...</option>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Group *</label>
+                                                                            <label class="form-label">Asset Group <small style="color: red">*</small></label>
                                                                             <select id="asset_group1" name='asset_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Asset...</option>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Sub Group *</label>
+                                                                            <label class="form-label">Asset Sub Group <small style="color: red">*</small></label>
                                                                             <select id="asset_sub_group1" name='asset_sub_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Asset Sub Group...</option>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Brand *</label>
+                                                                            <label class="form-label">Brand <small style="color: red">*</small></label>
                                                                             <select id="brand1" name='brand[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                     <option selected=" ">Select Brand...</option>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Model *</label>
+                                                                            <label class="form-label">Model <small style="color: red">*</small></label>
                                                                             <select id="model1" name='model[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Model...</option>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Series *</label>
+                                                                            <label class="form-label">Series <small style="color: red">*</small></label>
                                                                             <input id="series1" name='series1[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                                         </div>
 
@@ -1819,7 +1819,7 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Serial Number 1 *</label>
+                                                                            <label class="form-label">Serial Number 1 <small style="color: red">*</small></label>
                                                                             <input id="ser_no11" name='ser_no[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
@@ -1839,12 +1839,12 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Code *</label>
+                                                                            <label class="form-label">Asset Code <small style="color: red">*</small></label>
                                                                             <input id="ass_code1" name='ass_code[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Delivery Note *</label>
+                                                                            <label class="form-label">Delivery Note <small style="color: red">*</small></label>
                                                                             <input id="del_note1" name='del_note[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
@@ -1874,12 +1874,12 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Warranty Month Start*</label>
+                                                                            <label class="form-label">Warranty Month Start<small style="color: red">*</small></label>
                                                                             <input id="war_start1" name='war_start[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Warranty Month *</label>
+                                                                            <label class="form-label">Warranty Month <small style="color: red">*</small></label>
                                                                             <input id="war_month1" name='war_month[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                         </div>
 
@@ -1889,7 +1889,7 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Flag *</label>
+                                                                            <label class="form-label">Asset Flag <small style="color: red">*</small></label>
                                                                             <select id="ass_flagE" name='ass_flagE' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                                 <option selected=" ">Select Asset Flag...</option>
                                                                                 <option value="asset">Asset</option>
@@ -1898,7 +1898,7 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-12">
-                                                                            <label class="form-label">Remarks *</label>
+                                                                            <label class="form-label">Remarks <small style="color: red">*</small></label>
                                                                             <textarea id="remarks1" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                             </textarea>
                                                                         </div>
@@ -2324,7 +2324,7 @@ $username = $_SESSION['username'];
                                                                                 <form enctype="multipart/form-data">
                                                                                     <div class="form-group">
                                                                                         <div class="file-loading">
-                                                                                            <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
+                                                                                            <input id="attch1" type="file" multiple class="file">
                                                                                         </div>
                                                                                     </div>
                                                                                 </form>            
@@ -2861,8 +2861,8 @@ $username = $_SESSION['username'];
                         $("#plant").val(res1.PLANT)
                         $("#status").val(res1.PO_STATUS)
                         $("#supplier").val(res1.VENDOR_CODE)
-                        $("#price").val(res1.PO_UNT_PRICE)
-                        $("#del_date").val(res1.PO_DEL_DATE)
+                        $("#price").val(res1.PO_UNIT_PRICE)
+                        $("#del_date").val(res1.PO_DELIVERY_DATE)
                         $("#malt_shrt").val(res1.MATERIAL_SHORT)
                         $("#qty"). val(res1.QUANTITY)
                         $("#unit").val(res1.UNIT)
@@ -2880,6 +2880,10 @@ $username = $_SESSION['username'];
             data:{req_grp:req_grp},
             success:function(req_grp){
                 $("#type").empty()
+                $("#asset_group").empty()
+                $("#asset_sub_group").empty()
+                $("#brand").empty()
+                $("#model").empty()
                 $("#type").append(req_grp)
             }
             })
@@ -2892,6 +2896,9 @@ $username = $_SESSION['username'];
             data:{type:type},
             success:function(type){
                 $("#asset_group").empty()
+                $("#asset_sub_group").empty()
+                $("#brand").empty()
+                $("#model").empty()
                 $("#asset_group").append(type)
             }
             })
@@ -2904,6 +2911,8 @@ $username = $_SESSION['username'];
             data:{asset_group:asset_group},
             success:function(asset_group){
                 $("#asset_sub_group").empty()
+                $("#brand").empty()
+                $("#model").empty()
                 $("#asset_sub_group").append(asset_group)
             }
             })
@@ -2916,6 +2925,7 @@ $username = $_SESSION['username'];
             data:{asset_sub_group:asset_sub_group},
             success:function(asset_sub_group){
                 $("#brand").empty()
+                $("#model").empty()
                 $("#brand").append(asset_sub_group)
             }
             })
@@ -3084,19 +3094,41 @@ $username = $_SESSION['username'];
         var imagebase64 = []
         var uploadedFilename = [];
         $("#add_btn1").click(function(){
-            imagebase64.length = 0
-            uploadedFilename.length = 0
-            var filesname= $('#attch').prop('files');
-            var file = $('#attch').prop('files')[0];
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                var base64String = event.target.result.split(',')[1];
-                imagebase64.push('data:image/jpeg;base64,' + base64String);
-            };
+            // imagebase64.length = 0
+            // uploadedFilename.length = 0
+            // var filesname= $('#attch').prop('files');
+
+            // var file = $('#attch').prop('files')[0];
+            // var reader = new FileReader();
+            // reader.onload = function(event) {
+            //     var base64String = event.target.result.split(',')[1];
+            //     imagebase64.push('data:image/jpeg;base64,' + base64String);
+            // };
+            // $.each(filesname, function(index, file) {
+            //     uploadedFilename.push(file.name);
+            // });
+            // reader.readAsDataURL(file);
+
+            imagebase64.length = 0;
+            uploadedFilename.length = 0;
+            var filesname = $('#attch').prop('files');
+
+            if (filesname.length > 0) {
+                var file = filesname[0];
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    var base64String = event.target.result.split(',')[1];
+                    imagebase64.push('data:image/jpeg;base64,' + base64String);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Handle case where no file is selected
+                imagebase64.push('');  // Push an empty string or any other default value
+            }
+
             $.each(filesname, function(index, file) {
                 uploadedFilename.push(file.name);
             });
-            reader.readAsDataURL(file);
 
             var table = $("#dtl_dataTable").DataTable();
             count_item ++

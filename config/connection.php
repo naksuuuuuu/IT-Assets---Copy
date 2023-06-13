@@ -5,7 +5,7 @@
 // define('password','CENTERPHL');
 
 function connection(){
-    $db = "TALUAT";
+    $db = "SBCETE";
     $schema = "FEED";
     $password = "FEEDPHL";
 

@@ -22,8 +22,6 @@ session_start();
 
     <title>ITAMS - Sub Asset Group</title>
 
-    <!-- Custom fonts for this template -->
-    <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -32,7 +30,13 @@ session_start();
     <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../../assets//fontawesome_1/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
+    <link rel="stylesheet" href="../../datatable/datatables.css">
+    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
+    <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
+
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
 
@@ -244,20 +248,21 @@ session_start();
                         <h2 class="m-0 font-weight-bold text-primary">Sub Asset Group</h2>
                     </div>
                     <div class="card-body">
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add_sub_ass_grp" style="margin-bottom: 10px;"> 
-                            <i class="fa fa-plus-circle"></i> Add
-                        </button> 
+                        <div class="col-md-4">
+                            <div class="" style='justify-content: start; display: flex; height:40px; margin-top: 10px'>
+                                <button class="btn btn-success" id="add_grp" type="button"><i class="fa-solid fa-plus"></i> Add</button>
+                            </div>
+                        </div>  
+                        <br>
                         <div class="table-responsive">
-                            <table class="table table-bordered nowrap" id="dataTable" width="100%" cellspacing="0">
+                            <table class="display nowrap" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th hidden> Sub Asset Group Code</th>
+                                        <th>Sub Asset Group Code</th>
                                         <th>Sub Asset Group</th>
-                                        <th>Asset Flag</th>
-                                        <th>User Created</th>
-                                        <th>User Created Date</th>
-                                        <th>Last User Update</th>
-                                        <th>Last User Update Date</th>
+                                        <th hidden>Sub Asset Group Code</th>
+                                        <th hidden>Asset Group ID</th>
+                                        <th>Modify</th>
                                     </tr>
                                 </thead>
                                 <!-- <tfoot>
@@ -276,24 +281,13 @@ session_start();
                                         $query = oci_parse(connection(), $sql);
                                         oci_execute($query);
                                             while ($row = oci_fetch_assoc($query)) {
-                                                // echo "<tr id='{$row["ASSET_SUB_GROUP_CODE"]}'>";
-                                                // echo "<td>{$i}</td>";
-                                                // echo "<td>".$row["ASSET_SUB_GROUP_NAME"]."</td>";
-                                                // echo "<td>".$row["ASSET_FLAG"]."</td>";
-                                                // echo "<td>".$row["USER_CREATED"]."</td>";
-                                                // echo "<td>".$row["USER_CREATED_DATE"]."</td>";
-                                                // echo "<td>".$row["LAST_USER_UPDATE"]."</td>";
-                                                // echo "<td>".$row["LAST_USER_UPDATE_DATE"]."</td>";
-                                                // echo "</tr>";
-                                                echo "<tr id='".$row["ASSET_SUB_GROUP_CODE"]."'>
-                                                    <td hidden>".$row["ASSET_SUB_GROUP_CODE"]."</td>
-                                                    <td>".$row["ASSET_SUB_GROUP_NAME"]."</td>
-                                                    <td>".$row["ASSET_FLAG"]."</td>
-                                                    <td>".$row["USER_CREATED"]."</td>
-                                                    <td>".$row["USER_CREATED_DATE"]."</td>
-                                                    <td>".$row["LAST_USER_UPDATE"]."</td>
-                                                    <td>".$row["LAST_USER_UPDATE_DATE"]."</td>
-                                                </tr>";
+                                                echo "<tr>
+                                                        <td>".$row["ASSET_SUB_GRP_CODE"]."</td>
+                                                        <td class='sub_ass_name'>".$row["ASSET_SUB_GRP_NAME"]."</td>
+                                                        <td hidden ><input class='sub_ass_id' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                                                        <td hidden><input class='ass_id' value='".$row["ASSET_GRP_CODE"]."'></td>
+                                                        <td><button class='btn btn-primary edit_btn' id='edit_btn'><i class='fa-solid fa-pen-to-square'></i> Edit</button></td>
+                                                    </tr>";
                                             }
                                         oci_close(connection());
                                     ?>
@@ -330,8 +324,8 @@ session_start();
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Sub Asset Group -->
-    <div class="modal fade" id="add_sub_ass_grp" tabindex="-1" role="dialog" aria-labelledby="subModal"
+    <!-- Add Sub Asset Group -->
+    <div class="modal fade" id="add_sub_ass_grp" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="subModal"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -345,10 +339,10 @@ session_start();
                     <div class="modal-body">                  
                         <div class="form-group">
                             <label>Select Asset</label>
-                            <select type="text" id="ass_group" name="ass_group" class="form-control" required>
+                            <select type="text" id="ass_group" name="ass_group" class="form-select" required>
                                 <option value=""></option>
                                 <?php 
-                                    $sql = "SELECT ASSET_GROUP_CODE, ASSET_GROUP_NAME FROM IT_ASSET_GROUP ORDER BY ASSET_GROUP_CODE";
+                                    $sql = "SELECT ASSET_GRP_CODE, ASSET_GRP_NAME FROM IT_ASSET_GROUP ORDER BY ASSET_GRP_CODE";
                                     $res = oci_parse(connection(), $sql);
                                     oci_execute($res);
 
@@ -358,24 +352,79 @@ session_start();
                                 ?>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label>Asset Flag</label>
                             <select type="text" id="ass_flg" name="ass_flg" class="form-control" required>
                                 <option value=""></option>
                                 <option value="asset">Asset</option>
                                 <option value="expense">Expense</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label>Input Sub Asset Group</label>
                             <input type="text" id="sub_ass_grp" name="sub_ass_grp" class="form-control" required>
                         </div>           
                     </div>
-                    <div class="modal-footer">
-                        <input type="hidden" value="1" name="type">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <button type="button" class="btn btn-success" id="btn-add">Add</button>
+                    <div class="col-md-12">
+                        <button id="close_btn" class="btn btn-warning" type="button"><i class="fa-solid fa-xmark"></i> Close</button>
+                        <button id="btn_add" type="button" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                     </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Sub Asset Group -->
+    <div class="modal fade" id="edit_sub_ass_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="subModal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="user-form">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="subModal">Add Sub Asset Group</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">                  
+                        <div class="form-group">
+                            <label>Select Asset</label>
+                            <select type="text" id="edit_ass_name" name="edit_ass_group" class="form-select" required>
+                                <option value=""></option>
+                                <?php 
+                                    $sql = "SELECT ASSET_GRP_CODE, ASSET_GRP_NAME FROM IT_ASSET_GROUP ORDER BY ASSET_GRP_CODE";
+                                    $res = oci_parse(connection(), $sql);
+                                    oci_execute($res);
+
+                                    while($row = oci_fetch_row($res)){
+                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label>Asset Flag</label>
+                            <select type="text" id="ass_flg" name="ass_flg" class="form-control" required>
+                                <option value=""></option>
+                                <option value="asset">Asset</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div> -->
+                        <div class="form-group">
+                            <label>Input Sub Asset Group</label>
+                            <input type="text" id="edit_sub_ass_name" name="edit_sub_ass_grp" class="form-control" required>
+                        </div>    
+                        <div class="form-group">
+                            <label>Hidden Sub Asset Group</label>
+                            <input type="text" id="edit_sub_ass_id" name="edit_sub_ass_id" class="form-control" required>
+                        </div>       
+                    </div>
+                    <div class="col-md-12">
+                        <button id="close_btn1" class="btn btn-warning" type="button"><i class="fa-solid fa-xmark"></i> Close</button>
+                        <button id="btn_edit" type="button" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    </div>
+                    <br>
                 </form>
             </div>
         </div>
@@ -412,40 +461,184 @@ session_start();
     <script src="../../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
+    <!-- <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
+    <script src="../../datatable/datatables.js"></script>
+    <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
+    <script src="../../assets/file_input/js/fileinput.js"></script>
     <!-- Page level custom scripts -->
-    <script src="../../js/demo/datatables-demo.js"></script>
+    <!-- <script src="../../js/demo/datatables-demo.js"></script> -->
+    <script src="../../assets/selectize/dist/js/selectize.js"></script>
+    <script src="../../assets/lodash.js"></script>
 
 </body>
 
 <script>
-    $(document).on('click','#btn-add',function() {
-    var name = '<?php echo $username ?>';
-    var ass_group =$("#ass_group").val();
-    var ass_flg = $('#ass_flg').val();
-    var sub_ass_grp = $("#sub_ass_grp").val();
-    
-    $.ajax({
-        url: "../../logic/insert_set_up.php",
-        method: "POST",
-        data: {ass_group: ass_group, sub_ass_grp: sub_ass_grp, name: name, ass_flg: ass_flg},
-        success: function(dataResult){
-            if(dataResult.statusCode==200){
-                $('#add_sub_ass_grp').modal('hide');
-                alert('Data added successfully !'); 
-                location.reload();						
-            }
-            else if(dataResult.statusCode==201){
-                alert(dataResult.message);
-            }
-        },
-        error: function(){
-            alert("Error while processing request, please try again.");
-        }
+
+    $(document).ready(function(){
+        const name = '<?php echo $username ?>';
+
+        $('#dataTable').DataTable({
+            searching: false, 
+            paging: true,
+            scrollX: false, 
+            info: false,
+            ordering: false,
+            fixedColumns: {leftColumns: 1}
+        });
+
+        $("#add_grp").click(function(){
+            $("#add_sub_ass_grp").modal('show')
+        })
+
+        $("#btn_add").click(function(){
+            var ass_group = $("#ass_group").val()
+            var sub_ass_grp = $("#sub_ass_grp").val()
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be saved in database',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm =>{
+                if(confirm.isConfirmed){
+                    $.ajax({
+                        type: "POST",
+                        url: "../../logic/set_up/insert_sub_asset.php",
+                        data: {ass_group:ass_group, sub_ass_grp:sub_ass_grp, name:name},
+                        success: function(res){
+                            if(res.success == 1){
+                                notify(res.icon, res.message)
+                                window.setInterval(function(){
+                                    location.reload();	
+                                },2000)
+                            }
+                            else{
+                                notify(res.icon, res.message)
+                            }        
+                        },
+                        failure: function(response){
+                            alert("ERROR");
+                        },
+                        error: function(req, textStatus, errorThrown){
+                            console.log("ERROR ",textStatus);
+                            console.log("ERROR ",errorThrown);
+                            console.log("ERROR", req)
+                        } 
+                    });
+                }
+            })
+        })
+
+        $(document).on('click', ".edit_btn", function(){
+            var sub_ass_name = $(this).closest('tr').find('td.sub_ass_name').text()
+            var sub_ass_id = $(this).closest('tr').find('input.sub_ass_id').val()
+            var ass_id = $(this).closest('tr').find('input.ass_id').val()
+
+            $("#edit_ass_name").val(ass_id)
+            $("#edit_sub_ass_name").val(sub_ass_name)
+            $("#edit_sub_ass_id").val(sub_ass_id)
+
+            $("#edit_sub_ass_modal").modal('show')
+
+            $("#btn_edit").click(function(){
+                var edit_sub_ass_name = $("#edit_sub_ass_name").val()
+                var edit_ass_name = $("#edit_ass_name").val()
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This will be saved in database',
+                    icon: 'question',
+                    showCancelButton: true,
+                    reverseButtons: true,
+                    cancelButtonText: 'No',
+                    confirmButtonText: 'Yes',
+                    confirmButtonColor: 'green',
+                    cancelButtonColor: 'red'
+                }).then(confirm => {
+                    if(confirm.isConfirmed){
+                        $.ajax({
+                            type: "POST",
+                            url: "../../logic/set_up/update_sub_asset.php",
+                            data: {edit_sub_ass_name:edit_sub_ass_name, edit_ass_name:edit_ass_name, sub_ass_id:sub_ass_id, name:name},
+                            success: function(res){
+                                if(res.success == 1){
+                                    notify(res.icon, res.message)
+                                    window.setInterval(function(){
+                                        location.reload();	
+                                    },2000)
+                                }
+                                else{
+                                    notify(res.icon, res.message)
+                                }        
+                            },
+                            failure: function(response){
+                                alert("ERROR");
+                            },
+                            error: function(req, textStatus, errorThrown){
+                                console.log("ERROR ",textStatus);
+                                console.log("ERROR ",errorThrown);
+                                console.log("ERROR", req)
+                            } 
+                        })
+                    }
+                })
+            })
+        })
+
+        // add_sub_asset close btn
+        $("#close_btn").click(function(){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be closed',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm => {
+                if(confirm.isConfirmed){
+                    $("#add_sub_ass_grp").modal('hide')
+                }
+            })
+        })
+
+        // edit_sub_asset close btn
+        $("#close_btn1").click(function(){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be closed',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm => {
+                if(confirm.isConfirmed){
+                    $("#edit_sub_ass_modal").modal('hide')
+                }
+            })
+        })
+
     });
-});  
+    function notify(icon, message){
+        Swal.fire({
+            icon: icon,
+            title: message,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true
+        })
+    }
 </script>
 
 </html>

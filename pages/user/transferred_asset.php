@@ -259,8 +259,9 @@ $username = $_SESSION['username'];
                                     <select type="text" name="po_num1" id='po_num1' class='form-select' required style="margin-bottom: 8px;"> 
                                     <option value=""></option>
                                     <?php  
-                                        $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
-                                            WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
+                                        $sql = "SELECT DISTINCT A.PO_NO FROM IT_ASSET_DETAILS A, IT_ASSET_TRANSFER_TRN_HDR B
+                                            WHERE A.DOC_NO = B.REF_DOC_NO
+                                            AND A.CANCEL_ASSET_FLAG is null";
                                         $res = oci_parse(connection(), $sql);
                                         oci_execute($res);
 
@@ -285,8 +286,9 @@ $username = $_SESSION['username'];
                                     <select type="text" name="emp_name" id='emp_name' class='form-select' required style="margin-bottom: 8px;"> 
                                     <option value=""></option>
                                         <?php
-                                            $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
-                                            WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
+                                            $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS A, IT_ASSET_TRANSFER_TRN_HDR B
+                                            WHERE A.DOC_NO = B.REF_DOC_NO
+                                            AND A.CANCEL_ASSET_FLAG is null";
 
                                             $result = oci_parse(connection(), $sql);
                                             oci_execute($result);                                                    
@@ -313,8 +315,9 @@ $username = $_SESSION['username'];
                                     <select class="form-select" name="ser_no1" id="ser_no1" style="margin-bottom: 8px;">
                                         <option value=""></option>
                                         <?php 
-                                            $sql = "SELECT DISTINCT A.SERIAL_NO1 FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
-                                                WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
+                                            $sql = "SELECT DISTINCT A.SERIAL_NO1 FROM IT_ASSET_DETAILS A, IT_ASSET_TRANSFER_TRN_HDR B
+                                                WHERE A.DOC_NO = B.REF_DOC_NO
+                                                AND A.CANCEL_ASSET_FLAG is null";
                                             $res = oci_parse(connection(), $sql);
                                             oci_execute($res);
 
@@ -330,8 +333,9 @@ $username = $_SESSION['username'];
                                     <select class="form-select" name="rem" id="rem" style="margin-bottom: 8px;">
                                         <option value=""></option>
                                         <?php 
-                                            $sql = "SELECT DISTINCT A.REMARKS FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
-                                            WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
+                                            $sql = "SELECT DISTINCT A.REMARKS FROM IT_ASSET_DETAILS A, IT_ASSET_TRANSFER_TRN_HDR B
+                                            WHERE A.DOC_NO = B.REF_DOC_NO
+                                            AND A.CANCEL_ASSET_FLAG is null";
                                             $res = oci_parse(connection(), $sql);
                                             oci_execute($res);
 
@@ -347,10 +351,11 @@ $username = $_SESSION['username'];
                                     <select type="text" name="vendor" id='vendor' class='form-select' required style="margin-bottom: 8px;"> 
                                         <option value=""></option>
                                         <?php 
-                                            $sql = "SELECT DISTINCT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER1 A, IT_ASSET_VENDORS B, IT_ASSET_DETAILS1 C, IT_ASSET_TRANSFER_TRN_HDR D
+                                            $sql = "SELECT DISTINCT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER A, IT_ASSET_VENDORS B, IT_ASSET_DETAILS C, IT_ASSET_TRANSFER_TRN_HDR D
                                             WHERE A.VENDOR_CODE = B.VENDOR_CODE
-                                            AND A.DOCUMENT_NO = C.DOCUMENT_NO
-                                            AND C.DOCUMENT_NO = D.REF_DOC_NO";
+                                            AND A.DOC_NO = C.DOC_NO
+                                            AND C.DOC_NO = D.REF_DOC_NO
+                                            AND C.CANCEL_ASSET_FLAG is null";
 
                                             $res = oci_parse(connection(), $sql);
                                             oci_execute($res);
@@ -366,8 +371,9 @@ $username = $_SESSION['username'];
                                     <select type="text" name="dept" id='dept' class='form-select' required style="margin-bottom: 8px;"> 
                                         <option value=""></option>
                                         <?php
-                                            $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_TRANSFER_TRN_HDR B
-                                            WHERE A.DOCUMENT_NO = B.REF_DOC_NO";
+                                            $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS A, IT_ASSET_TRANSFER_TRN_HDR B
+                                            WHERE A.DOC_NO = B.REF_DOC_NO
+                                            AND A.CANCEL_ASSET_FLAG is null";
                                             $result = oci_parse(connection(), $sql);
                                             oci_execute($result);                                                    
 
@@ -395,9 +401,10 @@ $username = $_SESSION['username'];
                                     <select type="text" name="brand" id='brand' class='form-select' required style="margin-bottom: 8px;"> 
                                         <option value=""></option>
                                         <?php 
-                                            $sql = "SELECT A.BRAND, B.BRAND_NAME FROM IT_ASSET_DETAILS1 A, IT_ASSET_BRAND B, IT_ASSET_TRANSFER_TRN_HDR C
-                                                WHERE A.BRAND = B.BRAND_CODE
-                                                AND C.REF_DOC_NO = A.DOCUMENT_NO";
+                                            $sql = "SELECT A.BRAND_CODE, B.BRAND_NAME FROM IT_ASSET_DETAILS A, IT_ASSET_BRAND B, IT_ASSET_TRANSFER_TRN_HDR C
+                                                WHERE A.BRAND_CODE = B.BRAND_CODE
+                                                AND C.REF_DOC_NO = A.DOC_NO
+                                                AND A.CANCEL_ASSET_FLAG is null";
                                             
                                             $res = oci_parse(connection(), $sql);
                                             oci_execute($res);
@@ -436,25 +443,23 @@ $username = $_SESSION['username'];
                                             <th>Model</th>
                                             <th hidden>Sub Asset Group Code</th>
                                             <th hidden>Employee Id</th>
-                                            <!-- <th hidden>PO Item</th> -->
-                                            <!-- <th hidden>po number</th> -->
                                             <th hidden>Doc No1</th>
                                         </tr>
                                     </thead>
                                     <tbody id="doc_tbody">
                                     <?php
-                                            $query = "SELECT DISTINCT f.DOCUMENT_NO, b.ASSET_ID, b.EMPL_ID, b.sub_ASSET_GROUP, c.MODEL, d.BRAND_NAME, b.PO_item, 
-                                                b.PO_NUMBER, e.ASSET_SUB_GROUP_NAME  
-                                                FROM IT_ASSET_HEADER1 a, IT_ASSET_DETAILS1 b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e, IT_ASSET_TRANSFER_TRN_HDR f
-                                                where f.TRANSFER_DATE >= TRUNC(SYSDATE, 'MM')
-                                                AND f.TRANSFER_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
-                                                AND a.DOCUMENT_NO	= b.DOCUMENT_NO
-                                                and a.DOCUMENT_NO = f.REF_DOC_NO
-                                                and b.MODEL = c.MODEL_code
-                                                and b.BRAND = d.BRAND_CODE
-                                                and b.CANCEL_ASSET_FLAG is null
-                                                and b.SUB_ASSET_GROUP = e.ASSET_SUB_GROUP_CODE
-                                                order by f.document_no DESC";
+                                            $query = "SELECT DISTINCT f.DOC_NO, b.ASSET_ID, b.EMPL_ID, b.ASSET_SUB_GRP_CODE, c.MODEL_NAME, d.BRAND_NAME, b.PO_ITEM, 
+                                            b.PO_NO, e.ASSET_SUB_GRP_NAME  
+                                            FROM IT_ASSET_HEADER a, IT_ASSET_DETAILS b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e, IT_ASSET_TRANSFER_TRN_HDR f
+                                            where f.TRANSFER_DATE >= TRUNC(SYSDATE, 'MM')
+                                            AND f.TRANSFER_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                            AND a.DOC_NO = b.DOC_NO
+                                            and a.DOC_NO = f.REF_DOC_NO
+                                            and b.MODEL_CODE = c.MODEL_code
+                                            and b.BRAND_CODE = d.BRAND_CODE
+                                            and b.CANCEL_ASSET_FLAG is null
+                                            and b.ASSET_SUB_GRP_CODE = e.ASSET_SUB_GRP_CODE
+                                            order by f.DOC_NO DESC";
                                             $stmt = oci_parse(connection(), $query);
                                             oci_execute($stmt);
                                             while ($row = oci_fetch_assoc($stmt)) {
@@ -468,16 +473,16 @@ $username = $_SESSION['username'];
                                                 $row1 = oci_fetch_assoc($stmt1);
                                                 echo "<tr>
                                                         <td><img id='plusImg' src='../../assets/add-free-icon-font.png' class='view_dtl'></td>
-                                                        <td>" . $row['DOCUMENT_NO'] . "</td>
+                                                        <td>" . $row['DOC_NO'] . "</td>
                                                         <td>" . $row['PO_ITEM'] . "</td>
                                                         <td>" . $row['ASSET_ID'] . "</td>
                                                         <td>" . $row1['NAMEENG'] . "</td>
-                                                        <td>" . $row['ASSET_SUB_GROUP_NAME'] . "</td>
+                                                        <td>" . $row['ASSET_SUB_GRP_NAME'] . "</td>
                                                         <td>" . $row['BRAND_NAME'] . "</td>
-                                                        <td>" . $row['MODEL'] . "</td>
-                                                        <td hidden>" . $row['SUB_ASSET_GROUP'] . " hidden</td>
+                                                        <td>" . $row['MODEL_NAME'] . "</td>
+                                                        <td hidden>" . $row['ASSET_SUB_GRP_CODE'] . " hidden</td>
                                                         <td hidden>" . $row['EMPL_ID'] . " hidden</td>
-                                                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
+                                                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                                                     </tr>";
                                             }
                                         ?>
@@ -715,7 +720,7 @@ $username = $_SESSION['username'];
                                                 <div class="row g-3" style="margin: auto">
                                                     <div class="col-md-4">
                                                         <label class="form-label">Department</label>
-                                                        <input type="text" class="form-control" id="dept" readonly style="background-color: #e6e6e6;">
+                                                        <input type="text" class="form-control" id="dept1" readonly style="background-color: #e6e6e6;">
                                                     </div>
 
                                                     <div class="col-md-4">
@@ -957,7 +962,7 @@ $username = $_SESSION['username'];
                         var select2 = selectize2[0].selectize
                         select2.setValue(res1.EMP_ID2, false);
 
-                        $("#dept").val(res1.DEPT2)
+                        $("#dept1").val(res1.DEPT2)
                         $("#emp_id").val(res1.EMP_ID2)
                         $("#work_loc").val(res1.WORK_LOC2)
                         $("#bus_email").val(res1.BUS_EMAIL2)
@@ -984,6 +989,7 @@ $username = $_SESSION['username'];
                         $("#po_item").val(res1.PO_ITEM)
                         $("#ref_doc_no").val(res1.DOC_NO)
                         $("#ass_id").val(res1.ASS_ID)
+                        $("#remarks_1").val(res1.TRANSFER_REMARKS)
                     },
                     failure: function(response){
                         alert("ERROR");

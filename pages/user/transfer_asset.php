@@ -258,7 +258,7 @@ $username = $_SESSION['username'];
                                     <select class="form-select" name="po_no" id="po_no" style="margin-bottom: 8px;">
                                         <option value=""></option>
                                         <?php 
-                                            $sql = "SELECT PO_NUMBER FROM IT_ASSET_HEADER1 WHERE CANCEL_ASSET_FLAG is null";
+                                            $sql = "SELECT PO_NO FROM IT_ASSET_HEADER WHERE CANCEL_ASSET_FLAG is null";
                                             $res = oci_parse(connection(), $sql);
                                             oci_execute($res);
 
@@ -283,8 +283,8 @@ $username = $_SESSION['username'];
                                     <select type="text" name="emp_name" id='emp_name' class='form-select' required style="margin-bottom: 8px;"> 
                                     <option value=""></option>
                                         <?php
-                                            $sql = "SELECT DISTINCT A.DOCUMENT_NO, B.EMPL_ID FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B
-                                                    WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
+                                            $sql = "SELECT DISTINCT A.DOC_NO, B.EMPL_ID FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B
+                                                    WHERE A.DOC_NO = B.DOC_NO
                                                     AND A.CANCEL_ASSET_FLAG is null";
 
                                             $result = oci_parse(connection(), $sql);
@@ -312,7 +312,7 @@ $username = $_SESSION['username'];
                                     <select class="form-select" name="ser_no" id="ser_no" style="margin-bottom: 8px;">
                                         <option value=""></option>
                                         <?php 
-                                            $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS1 WHERE CANCEL_ASSET_FLAG is null";
+                                            $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS WHERE CANCEL_ASSET_FLAG is null";
                                             $res = oci_parse(connection(), $sql);
                                             oci_execute($res);
 
@@ -348,7 +348,18 @@ $username = $_SESSION['username'];
                                             <th>Sub Asset Group Name</th>
                                             <th>Brand</th>
                                             <th>Model</th>
-                                            <th hidden>Sub Asset Group Code</th>
+                                            <th hidden>Req Group Code</th>
+                                            <th hidden>Req Group Name</th>
+                                            <th hidden>Req Type Code</th>
+                                            <th hidden>Req Type Name</th>
+                                            <th hidden>Asset Group Code</th>
+                                            <th hidden>Asset Group Name</th>
+                                            <th hidden>Asset Sub Group Code</th>
+                                            <th hidden>Asset Sub Group Name</th>
+                                            <th hidden>Brand Code</th>
+                                            <th hidden>Brand Name</th>
+                                            <th hidden>Model Code</th>
+                                            <th hidden>Model Name</th>
                                             <th hidden>Employee Id</th>
                                             <th hidden>PO Item</th>
                                             <th hidden>po number</th>
@@ -356,17 +367,24 @@ $username = $_SESSION['username'];
                                     </thead>
                                     <tbody id="doc_tbody">
                                     <?php
-                                            $query = "SELECT a.DOCUMENT_NO, b.ASSET_ID, b.EMPL_ID, b.sub_ASSET_GROUP, c.MODEL, d.BRAND_NAME, b.PO_item, 
-                                                b.PO_NUMBER, e.ASSET_SUB_GROUP_NAME  
-                                                FROM IT_ASSET_HEADER1 a, IT_ASSET_DETAILS1 b, IT_ASSET_MODEL c, IT_ASSET_BRAND d, IT_ASSET_SUB_GROUP e
-                                                where  a.DOCUMENT_DATE >= TRUNC(SYSDATE, 'MM')
-                                                and a.DOCUMENT_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
-                                                and a.DOCUMENT_NO	= b.DOCUMENT_NO
-                                                and b.MODEL = c.MODEL_code
-                                                and b.BRAND = d.BRAND_CODE
-                                                and b.CANCEL_ASSET_FLAG is null
-                                                and b.SUB_ASSET_GROUP = e.ASSET_SUB_GROUP_CODE
-                                                order by a.document_no DESC";
+                                            $query = "SELECT a.DOC_NO, b.ASSET_ID, b.EMPL_ID, G.ASSET_SUB_GRP_NAME, I.MODEL_NAME, H.BRAND_NAME, b.PO_item, 
+                                                b.PO_NO, b.REQ_GRP_ID, E.REQ_GRP_NAME, b.REQ_TYPE_ID, D.REQ_TYPE_NAME, b.ASSET_GRP_CODE, F.ASSET_GRP_NAME, 
+                                                b.ASSET_SUB_GRP_CODE, G.ASSET_SUB_GRP_NAME as SUB_NAME, b.BRAND_CODE, H.BRAND_NAME as BR_NAME, 
+                                                b.MODEL_CODE AS MODEL_CODE, I.MODEL_NAME AS MODEL_NAME_HIDDEN
+                                                FROM IT_ASSET_HEADER a, IT_ASSET_DETAILS b, IT_ASSET_REQ_TYPE D, IT_ASSET_REQ_GROUP E,
+                                                IT_ASSET_GROUP F, IT_ASSET_SUB_GROUP G, IT_ASSET_BRAND H, IT_ASSET_MODEL I
+                                                WHERE A.DOC_DATE >= TRUNC(SYSDATE, 'MM')
+                                                AND A.DOC_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                                AND A.DOC_NO = B.DOC_NO
+                                                AND b.REQ_TYPE_ID = D.REQ_TYPE_ID
+                                                AND b.REQ_GRP_ID = E.REQ_GRP_ID
+                                                AND B.ASSET_SUB_GRP_CODE = G.ASSET_SUB_GRP_CODE
+                                                AND B.ASSET_GRP_CODE = F.ASSET_GRP_CODE
+                                                AND B.BRAND_CODE = H.BRAND_CODE
+                                                AND B.MODEL_CODE = I.MODEL_CODE
+                                                AND B.CANCEL_ASSET_FLAG is null
+                                                ORDER BY A.DOC_NO DESC";
+
                                             $stmt = oci_parse(connection(), $query);
                                             oci_execute($stmt);
                                             while ($row = oci_fetch_assoc($stmt)) {
@@ -380,17 +398,28 @@ $username = $_SESSION['username'];
                                                 $row1 = oci_fetch_assoc($stmt1);
                                                 echo "<tr>
                                                         <td><img id='plusImg' src='../../assets/add-free-icon-font.png' class='view_dtl'></td>
-                                                        <td>" . $row['DOCUMENT_NO'] . "</td>
-                                                        <td>" . $row['PO_ITEM'] . "</td>
-                                                        <td>" . $row['ASSET_ID'] . "</td>
-                                                        <td>" . $row1['NAMEENG'] . "</td>
-                                                        <td>" . $row['ASSET_SUB_GROUP_NAME'] . "</td>
-                                                        <td>" . $row['BRAND_NAME'] . "</td>
-                                                        <td>" . $row['MODEL'] . "</td>
-                                                        <td hidden>" . $row['SUB_ASSET_GROUP'] . "</td>
+                                                        <td>".$row["DOC_NO"]."</td>
+                                                        <td>".$row["PO_ITEM"]."</td>
+                                                        <td>".$row["ASSET_ID"]."</td>
+                                                        <td>".$row1["NAMEENG"]."</td>
+                                                        <td>".$row["ASSET_SUB_GRP_NAME"]."</td>
+                                                        <td>".$row["BRAND_NAME"]."</td>
+                                                        <td>".$row["MODEL_NAME"]."</td>
+                                                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                                                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                                                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                                                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                                                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                                                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                                                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                                                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                                                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                                                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                                                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                                                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
                                                         <td hidden>" . $row['EMPL_ID'] . "</td>
                                                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                                                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
+                                                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                                                     </tr>";
                                             }
                                         ?>
@@ -510,21 +539,21 @@ $username = $_SESSION['username'];
                                             <div class="panel-body">
                                                 <div class="row g-3" style="margin: auto">
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Asset Sub Group *</label>
+                                                        <label class="form-label">Asset Sub Group <small style="color: red">*</small></label>
                                                         <select id="asset_sub_group" name='asset_sub_group' type="text" readonly autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                             <!-- <option selected=" ">Select Asset Sub Group...</option> -->
                                                         </select>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Brand *</label>
+                                                        <label class="form-label">Brand <small style="color: red">*</small></label>
                                                         <select id="brand" name='brand' type="text" autocomplete="off" readonly class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                                 <!-- <option selected=" ">Select Brand...</option> -->
                                                         </select>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Model *</label>
+                                                        <label class="form-label">Model <small style="color: red">*</small></label>
                                                         <select id="model" name='model' type="text" autocomplete="off" readonly class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                             <!-- <option selected=" ">Select Model...</option> -->
                                                         </select>
@@ -541,7 +570,7 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Serial Number 1 *</label>
+                                                        <label class="form-label">Serial Number 1 <small style="color: red">*</small></label>
                                                         <input id="ser_no1" name='ser_no' type="text" autocomplete="off" readonly class="form-control ser_no1" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div>
 
@@ -561,14 +590,14 @@ $username = $_SESSION['username'];
                                                     </div>
 
                                                     <div class="col-md-12">
-                                                        <label class="form-label">Remarks *</label>
+                                                        <label class="form-label">Remarks <small style="color: red">*</small></label>
                                                         <textarea id="remarks" name='remarks' type="text" autocomplete="off" readonly class="form-control remarks" required placeholder=" " 
                                                             style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                         </textarea>
                                                     </div>
 
                                                     <!-- <div class="col-md-4">
-                                                        <label class="form-label">Attachment *</label>
+                                                        <label class="form-label">Attachment <small style="color: red">*</small></label>
                                                         <input id="attch" name='attch' type="file" type="text" autocomplete="off" class="form-control attch" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                     </div> -->
                                                     <div class="col-md-4" hidden>
@@ -608,7 +637,7 @@ $username = $_SESSION['username'];
                                         <div id="collapse_Two" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_Two">
                                             <div class="panel-body">
                                                 <div class="col-md-4">
-                                                    <label class="form-label">Employee Name *</label>
+                                                    <label class="form-label">Employee Name <small style="color: red">*</small></label>
                                                     <select type="text" class="form-select" id="empl_name" placeholder=" " disabled required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                         <option value="">Select Name....</option>
                                                         <?php 
@@ -664,7 +693,7 @@ $username = $_SESSION['username'];
                                         <div id="collapse_Three" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">
                                                 <div class="col-md-4">
-                                                    <label class="form-label">Employee Name *</label>
+                                                    <label class="form-label">Employee Name <small style="color: red">*</small></label>
                                                     <select type="text" class="form-select" id="empl_name2" placeholder=" " required readonly style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                         <option value="">Select Name....</option>
                                                         <?php 
@@ -707,7 +736,7 @@ $username = $_SESSION['username'];
                                                         <input type="text" class="form-control" id="ref_person" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
                                                     </div> -->
                                                     <div class="col-md-12">
-                                                        <label class="form-label">Remarks *</label>
+                                                        <label class="form-label">Remarks <small style="color: red">*</small></label>
                                                         <textarea id="remarks_1" name='remarks_1[]' type="text" autocomplete="off" class="form-control remarks" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
                                                         </textarea>
                                                     </div>
@@ -857,10 +886,25 @@ $username = $_SESSION['username'];
             $("#myTable").on("click", ".view_dtl", function(){
                 var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
                 var po_item = $(this).closest('tr').find('.po_item').val()
+                var req_grp_code = $(this).closest('tr').find('.req_grp_code').val()
+                var req_grp_name = $(this).closest('tr').find('.req_grp_name').val()
+                var req_type_code = $(this).closest('tr').find('.req_type_code').val()
+                var req_type_name = $(this).closest('tr').find('.req_type_name').val()
+                var ass_grp_code = $(this).closest('tr').find('.ass_grp_code').val()
+                var ass_grp_name = $(this).closest('tr').find('.ass_grp_name').val()
+                var ass_sub_grp_code = $(this).closest('tr').find('.ass_sub_grp_code').val()
+                var ass_sub_grp_name = $(this).closest('tr').find('.ass_sub_grp_name').val()
+                var brand_code = $(this).closest('tr').find('.brand_code').val()
+                var brand_name = $(this).closest('tr').find('.brand_name').val()
+                var model_code = $(this).closest('tr').find('.model_code').val()
+                var model_name = $(this).closest('tr').find('.model_name').val()
                 $.ajax({
                     type: "POST",
                     url: "../../logic/mod_json.php",
-                    data: {doc_no1:doc_no1, po_item:po_item},
+                    data: {doc_no1:doc_no1, po_item:po_item, req_grp_code:req_grp_code, req_grp_name:req_grp_name, req_type_code:req_type_code, 
+                            req_type_name:req_type_name, ass_grp_code:ass_grp_code, ass_grp_name:ass_grp_name, ass_sub_grp_code:ass_sub_grp_code,
+                            ass_sub_grp_name:ass_sub_grp_name, brand_name:brand_name, 
+                            brand_code:brand_code, model_code:model_code, model_name:model_name},
                     success: function(res1){
 
                         $('#container1_modal').modal('show');
@@ -872,12 +916,12 @@ $username = $_SESSION['username'];
                         $("#emp_id").val(res1.EMP_ID)
                         $("#work_loc").val(res1.WORK_LOC)
                         $("#bus_email").val(res1.BUS_EMAIL)
-                        $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
-                        $("#brand").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
-                        $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
-                        // $("#asset_sub_group").val(res1.ASS_SUB_GRP_NAME)
-                        // $("#brand").val(res1.BRAND_NAME)
-                        // $("#model").val(res1.res1.MODEL_NAME)
+                        $("#req_grp").append(res1.REQ_GRP)
+                        $("#type").append(res1.REQ_TYPE)
+                        $("#asset_group").append(res1.ASS_GRP)
+                        $("#asset_sub_group").append(res1.ASS_SUB_GRP)
+                        $("#brand").append(res1.BRAND)
+                        $("#model").append(res1.MODEL_CODE)
                         $("#series").val(res1.SERIES)
                         $("#price").val(res1.PRICE)
                         $("#ser_no1").val(res1.SER_NO1)

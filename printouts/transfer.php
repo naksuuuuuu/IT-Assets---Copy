@@ -9,15 +9,15 @@ $empId2 = $_POST['employee_id2'];
 $poNo = $_POST['po_number'];
 $poItem = $_POST['po_item'];
 
-        $query = "SELECT a.SERIAL_NO1, a.SERIAL_NO2, a.SERIAL_NO3, a.SERIAL_NO4, b.BRAND_NAME, c.MODEL, d.ASSET_SUB_GROUP_NAME, 
-        to_date(e.TRANSFER_DATE, 'DD/MM/YY') as transfer_date, a.ASS_CODE, a.MTRL_SHORT
-        from IT_ASSET_DETAILS1 a, IT_ASSET_BRAND b, IT_ASSET_MODEL c, IT_ASSET_SUB_GROUP d, IT_ASSET_TRANSFER_TRN_HDR e
-        where a.PO_NUMBER = :poNo
-        and a.PO_ITEM = :poItem
-        and a.MODEL = c.MODEL_CODE
-        and a.BRAND = b.BRAND_CODE
-        and a.SUB_ASSET_GROUP = d.ASSET_SUB_GROUP_CODE
-        and a.DOCUMENT_NO = e.REF_DOC_NO	";
+        $query = "SELECT a.SERIAL_NO1, a.SERIAL_NO2, a.SERIAL_NO3, a.SERIAL_NO4, b.BRAND_NAME, c.MODEL_NAME, d.ASSET_SUB_GRP_NAME, 
+            to_date(e.TRANSFER_DATE, 'DD/MM/YY') as transfer_date, a.ASS_CODE, a.MTRL_SHORT
+            from IT_ASSET_DETAILS a, IT_ASSET_BRAND b, IT_ASSET_MODEL c, IT_ASSET_SUB_GROUP d, IT_ASSET_TRANSFER_TRN_HDR e
+            where a.MODEL_CODE = c.MODEL_CODE
+            and a.BRAND_CODE = b.BRAND_CODE
+            and a.ASSET_SUB_GRP_CODE = d.ASSET_SUB_GRP_CODE
+            and a.DOC_NO = e.REF_DOC_NO
+            and a.PO_NO = :poNo
+            and a.PO_ITEM = :poItem";
         
         $stmt = oci_parse(connection(), $query);
         oci_bind_by_name($stmt, ':poNo', $poNo);
@@ -49,7 +49,7 @@ $poItem = $_POST['po_item'];
     oci_execute($res3);
     $row3 = oci_fetch_assoc($res3);
 
-    $max_doc = "SELECT max(DOCUMENT_NO) AS DOCUMENT_NO FROM IT_ASSET_TRANSFER_TRN_HDR";
+    $max_doc = "SELECT max(DOC_NO) AS DOC_NO FROM IT_ASSET_TRANSFER_TRN_HDR";
     $res4 = oci_parse(connection(), $max_doc);
     oci_execute($res4);
     $row4 = oci_fetch_assoc($res4);
@@ -61,12 +61,11 @@ $poItem = $_POST['po_item'];
         $pdf -> SetLeftMargin(4);
         $x = $pdf -> GetX();
         $pdf -> SetFont('Gothic','B',10);
-        $pdf -> Cell(0,5,'Doc No: '.$row4['DOCUMENT_NO'],0,0,'R'); //doc no
+        $pdf -> Cell(0,5,'Doc No: '.$row4['DOC_NO'],0,0,'R'); //doc no
         $pdf -> Image('itcenter.png', 17,7,35,0,'PNG');
         $pdf -> SetX($x+5);
         $pdf -> SetFont('Gothic','B',14);
         $pdf -> Cell(0,15,'ASSET TRANSFER NOTIFICATION', 0,1,'C');
-        $x = $pdf -> GetX();
         $pdf -> SetX($x+5);
         $pdf -> SetFont('Gothic','',10);
         $pdf -> Cell(0,5,'Date: '.date("d/m/Y", strtotime($row["TRANSFER_DATE"])),0,0,'R');  //dynamic
@@ -77,70 +76,71 @@ $poItem = $_POST['po_item'];
         $pdf -> Cell(0,5,'PART I - TRANSFER BY', 0,1,'C');
         $pdf -> Ln(5);
         $pdf -> SetFont('Gothic','',8);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Transferred By:', 0,0,'L');
         $pdf -> Cell(135,5,$row2["NAMEENG"], 1,1,'L'); //dynamic
         $pdf -> Ln(3);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Department/Position:', 0,0,'L');
         $pdf -> Cell(135,5,$row2['DESCR'], 1,1,'L'); //dynamic
         $pdf -> Ln(3);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Location:', 0,0,'L');
         $pdf -> MultiCell(135,5,$row2['LOCATION'],1,'L',false,0); //dynamic
         $pdf -> Ln(3);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Signature:', 0,0,'L');
         $pdf -> Cell(135,5,'_________________________________________', 0,1,'C');
         $pdf -> Ln(3);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Date:', 0,0,'L');
         $pdf -> Cell(135,5,'_____________/_____________/_____________', 0,1,'C');
         $pdf -> Ln(0);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(15,5,'__________________________________________________________________________________________________________________________________', 0,0,'J');
         $pdf -> Ln(1);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(15,5,'__________________________________________________________________________________________________________________________________', 0,0,'J');
         $pdf -> Ln(5);
         $pdf -> SetFont('Gothic','B',10);
         $pdf -> Cell(0,5,'PART II - TRANSFER TO', 0,1,'C');
         $pdf -> Ln(5);
         $pdf -> SetFont('Gothic','',8);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Transferred To/New Custodian:', 0,0,'L');
         $pdf -> Cell(135,5,$row3["NAMEENG"], 1,1,'L'); //dynamic
         $pdf -> Ln(3);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Department/ Position:', 0,0,'L');
         $pdf -> Cell(135,5,$row3['DESCR'], 1,1,'L'); //dynamic
         $pdf -> Ln(3);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Location:', 0,0,'L');
         $pdf -> MultiCell(135,5,$row3['LOCATION'],1,'L',false,0); //dynamic
         $pdf -> Ln(3);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Signature:', 0,0,'L');
         $pdf -> Cell(135,5,'_________________________________________', 0,1,'C');
         $pdf -> Ln(3);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Date:', 0,0,'L');
         $pdf -> Cell(135,5,'_____________/_____________/_____________', 0,1,'C');
         $pdf -> Ln(0);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(15,5,'__________________________________________________________________________________________________________________________________', 0,0,'J');
         $pdf -> Ln(1);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(15,5,'__________________________________________________________________________________________________________________________________', 0,0,'J');
         $pdf -> Ln(5);
         $pdf -> SetFont('Gothic','B',10);
+        $pdf -> SetX($x+5);
         $pdf -> Cell(0,5,'Asset assigned to employee for work and reponsibility', 0,1,'C');
         $pdf -> Ln(5);
         $pdf -> SetFont('Gothic','B',10);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5,'Asset Type:', 0,0,'L');
         $pdf -> SetFont('Gothic','',8);
-        $pdf -> Cell(40,5,$row["ASSET_SUB_GROUP_NAME"],'B',1,'C'); //dynamic
+        $pdf -> Cell(45,5,$row["ASSET_SUB_GRP_NAME"],'B',1,'C'); //dynamic
         // $x = $pdf -> GetX();
         // $pdf -> SetX($x+18);
         // $pdf -> Cell(45,5,'Desktop', 0,0,'L');
@@ -174,23 +174,23 @@ $poItem = $_POST['po_item'];
         // $pdf -> Cell(45,7,'External DVD', 0,0,'L');
         // $pdf -> Image('../image/circle.png',105,160,4,3);
         $pdf -> Ln(5);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> SetFont('Gothic','',8);
         $pdf -> Cell(50,5, 'Brand:',0,0,'L');
         $pdf -> Cell(135,5,$row['BRAND_NAME'],1,1,'L'); //dynamic
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5, 'Model:',0,0,'L');
-        $pdf -> Cell(135,5,$row["MODEL"],1,1,'L'); //dynamic
-        $pdf -> SetX($x+5);
+        $pdf -> Cell(135,5,$row["MODEL_NAME"],1,1,'L'); //dynamic
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5, 'Serial Number 1:',0,0,'L');
         $pdf -> Cell(135,5,$row["SERIAL_NO1"],1,1,'L'); //dynamic
-        $pdf -> SetX($x+5); 
+        $pdf -> SetX($x+-1); 
         $pdf -> Cell(50,5, 'Serial Number 2:',0,0,'L');
         $pdf -> Cell(135,5,$row["SERIAL_NO2"],1,1,'L'); //dynamic
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5, 'Asset Code:',0,0,'L');
         $pdf -> Cell(135,5,$row["ASS_CODE"],1,1,'L'); //dynamic
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> Cell(50,5, 'Item Description(s):',0,0,'L');
         $pdf -> MultiCell(135,5,$row["MTRL_SHORT"],1,'L',false,0); //dynamic
         $pdf -> Ln(5);
@@ -210,27 +210,27 @@ $poItem = $_POST['po_item'];
         $pdf -> Ln(1);
         $pdf -> Cell(15,5,'     __________________________________________________________________________________________________________________________________', 0,0,'J');
         $pdf -> Ln(10);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> SetFont('Gothic','B',8);
         $pdf -> Cell(90,5,'IT DEPARTMENT', 1,0,'C');
         $pdf -> Cell(95,5,'DEPARTMENT MANAGER',1,1,'C');
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+-1);
         $pdf -> SetFont('Gothic','',8);
         $pdf -> Rect(9,235,90,47);
         $pdf -> Cell(90,5,'Notified to', 0,0,'C');
         $pdf -> Rect(99,235,95,47);
         $pdf -> Cell(95,5,'Approved by',0,1,'C');
         $pdf -> Ln(13);
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+2);
         $pdf -> Cell(90,5,'__________________________________',0,0,'C');
         $pdf -> Cell(95,5,'__________________________________',0,1,'C');
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+2);
         $pdf -> Cell(90,5,'(                                                           )',0,0,'C');
         $pdf -> Cell(95,5,'(                                                           )',0,1,'C');
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+2);
         $pdf -> Cell(90,5,'Position:',0,0,'C');
         $pdf -> Cell(95,5,'Position:',0,1,'C');
-        $pdf -> SetX($x+5);
+        $pdf -> SetX($x+2);
         $pdf -> Cell(90,5,'__________/__________/__________',0,0,'C');
         $pdf -> Cell(95,5,'__________/__________/__________',0,1,'C');
 

@@ -1,0 +1,43 @@
+<?php 
+    require "../../config/connection.php";
+
+    header("Content-Type:application/json");
+   
+    date_default_timezone_set('Asia/Manila');
+    $date = date('d/m/Y h:i:s a');
+
+    if (isset($_POST['add_ass_name'])){
+        $name = $_POST ['name'];
+        $add_type = $_POST['add_type'];
+        $add_ass_name = $_POST['add_ass_name'];
+    
+        $sql2 = "SELECT  MAX (ASSET_GRP_CODE) FROM IT_ASSET_GROUP";
+        $stmt = oci_parse(connection(), $sql2);
+        oci_execute($stmt);
+        $row = oci_fetch_row($stmt);
+        $row[0]++;
+    
+        $sql = "INSERT INTO IT_ASSET_GROUP (ASSET_GRP_CODE, REQ_TYPE_ID, ASSET_GRP_NAME, USER_CREATED, USER_CREATED_DATE) 
+        VALUES (:ass_grp_code, :req_type_id, :ass_grp_name, :user_created, to_date(:user_created_date, 'DD/MM/YY HH:MI:SSam'))";
+    
+        $res= oci_parse(connection(), $sql);
+    
+        oci_bind_by_name($res, ':ass_grp_code', $row[0]);
+        oci_bind_by_name($res, ':req_type_id', $add_type);
+        oci_bind_by_name($res, ':ass_grp_name', $add_ass_name);
+        oci_bind_by_name($res, ':user_created', $name);
+        oci_bind_by_name($res, ':user_created_date', $date);
+    
+        if(oci_execute($res)){
+            echo json_encode(array('success' => 1, 'message' => "SUCCESS", 'icon' => "success"));
+        }
+        else{
+            echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));
+        }
+        oci_free_statement($stmt);
+        oci_free_statement($res);
+        oci_close(connection());
+    }
+
+
+?>

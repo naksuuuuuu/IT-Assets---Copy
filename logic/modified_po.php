@@ -26,17 +26,18 @@
         $war_start = date_format(date_create($_POST['war_start']), 'd/m/Y');
         $war_month = $_POST['war_month'];
         $war_exp = date_format(date_create($_POST['war_exp']), 'd/m/Y');
+        $empl_name = $_POST['empl_name'];
         $remarks = $_POST['remarks'];
         
-            $sql = "UPDATE IT_ASSET_DETAILS1 SET REQ_GRP = :req_grp, REQ_TYPE = :type, ASSET_GROUP = :asset_group, 
-            SUB_ASSET_GROUP = :asset_sub_group, BRAND = :brand, MODEL = :model,
+            $sql = "UPDATE IT_ASSET_DETAILS SET REQ_GRP_ID = :req_grp, REQ_TYPE_ID = :type, ASSET_GRP_CODE = :asset_group, 
+            ASSET_SUB_GRP_CODE = :asset_sub_group, BRAND_CODE = :brand, MODEL_CODE = :model,
             SERIAL_NO1 = :ser_no1, ASS_CODE = :ass_code, DEL_NOTE = :del_note,
             LICENSE_START_DATE = to_date(:license_start, 'DD/MM/YY'), LICENSE_MONTH = :license_month, 
             LICENSE_EXPIRE_DATE = to_date(:license_exp, 'DD/MM/YY'),
             WARRANTY_START_DATE = to_date(:war_start, 'DD/MM/YY'), WARRANTY_MONTH = :war_month, 
             WARRANTY_EXPIRE_DATE = to_date(:war_exp, 'DD/MM/YY'), REMARKS = :remarks, LAST_USER_UPDATE = :username, 
-            LAST_USER_UPDATE_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am'), SERIES = :series
-            WHERE PO_NUMBER = :po_no AND PO_ITEM = :po_item";
+            LAST_USER_UPDATE_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am'), SERIES = :series, EMPL_ID = :empl_name
+            WHERE PO_NO = :po_no AND PO_ITEM = :po_item";
             $res = oci_parse(connection(), $sql);
             oci_bind_by_name($res, ':username', $name);
             oci_bind_by_name($res, ':update_date', $date);
@@ -59,6 +60,7 @@
             oci_bind_by_name($res, ':war_month', $war_month);
             oci_bind_by_name($res, ':war_exp', $war_exp);
             oci_bind_by_name($res, ':remarks', $remarks);
+            oci_bind_by_name($res, ':empl_name', $empl_name);
 
             if (oci_execute($res, OCI_NO_AUTO_COMMIT)) {
                 oci_commit(connection());

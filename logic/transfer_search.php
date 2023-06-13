@@ -8,14 +8,20 @@ if (isset($_POST['data'])){
     and !isset($_POST['emp_name'])){
         $po_no = $_POST['po_no'];
 
-        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, E.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
-        FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_HEADER1 E
-        WHERE A.SUB_ASSET_GROUP = B.ASSET_SUB_GROUP_CODE
-        AND A.BRAND = C.BRAND_CODE
-        AND A.MODEL = D.MODEL_CODE
-        AND A.DOCUMENT_NO = E.DOCUMENT_NO
-        AND A.PO_NUMBER = :po_no
-        ORDER BY E.DOCUMENT_NO DESC";
+        $sql1 = "SELECT a.DOC_NO, b.ASSET_ID, b.EMPL_ID, G.ASSET_SUB_GRP_NAME, I.MODEL_NAME, H.BRAND_NAME, b.PO_item, 
+            b.PO_NO, b.REQ_GRP_ID, E.REQ_GRP_NAME, b.REQ_TYPE_ID, D.REQ_TYPE_NAME, b.ASSET_GRP_CODE, F.ASSET_GRP_NAME, 
+            b.ASSET_SUB_GRP_CODE, G.ASSET_SUB_GRP_NAME as SUB_NAME, b.BRAND_CODE, H.BRAND_NAME as BR_NAME, b.MODEL_CODE AS MODEL_CODE, I.MODEL_NAME AS MODEL_NAME_HIDDEN
+            FROM IT_ASSET_HEADER a, IT_ASSET_DETAILS b, IT_ASSET_REQ_TYPE D, IT_ASSET_REQ_GROUP E,
+            IT_ASSET_GROUP F, IT_ASSET_SUB_GROUP G, IT_ASSET_BRAND H, IT_ASSET_MODEL I
+            WHERE b.REQ_TYPE_ID = D.REQ_TYPE_ID
+            AND b.REQ_GRP_ID = E.REQ_GRP_ID
+            AND B.ASSET_SUB_GRP_CODE = G.ASSET_SUB_GRP_CODE
+            AND B.ASSET_GRP_CODE = F.ASSET_GRP_CODE
+            AND B.BRAND_CODE = H.BRAND_CODE
+            AND B.MODEL_CODE = I.MODEL_CODE
+            AND A.DOC_NO	= B.DOC_NO
+            AND B.PO_NO = :po_no
+            ORDER BY A.DOC_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':po_no', $po_no);
@@ -35,15 +41,28 @@ if (isset($_POST['data'])){
 
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                        <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["DOC_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["ASSET_ID"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
-                        <td>".$row["ASSET_SUB_GROUP_NAME"]."</td>
+                        <td>".$row["ASSET_SUB_GRP_NAME"]."</td>
                         <td>".$row["BRAND_NAME"]."</td>
-                        <td>".$row["MODEL"]."</td>
+                        <td>".$row["MODEL_NAME"]."</td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden>" . $row['EMPL_ID'] . "</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -55,14 +74,20 @@ if (isset($_POST['data'])){
         and !isset($_POST['emp_name'])){
         $ser_no = $_POST['ser_no'];
 
-        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, E.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
-            FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_HEADER1 E
-            WHERE A.SUB_ASSET_GROUP = B.ASSET_SUB_GROUP_CODE
-            AND A.BRAND = C.BRAND_CODE
-            AND A.MODEL = D.MODEL_CODE
-            AND A.DOCUMENT_NO = E.DOCUMENT_NO
-            AND A.SERIAL_NO1 = :ser_no
-            ORDER BY E.DOCUMENT_NO DESC";
+        $sql1 = "SELECT a.DOC_NO, b.ASSET_ID, b.EMPL_ID, G.ASSET_SUB_GRP_NAME, I.MODEL_NAME, H.BRAND_NAME, b.PO_item, 
+            b.PO_NO, b.REQ_GRP_ID, E.REQ_GRP_NAME, b.REQ_TYPE_ID, D.REQ_TYPE_NAME, b.ASSET_GRP_CODE, F.ASSET_GRP_NAME, 
+            b.ASSET_SUB_GRP_CODE, G.ASSET_SUB_GRP_NAME as SUB_NAME, b.BRAND_CODE, H.BRAND_NAME as BR_NAME, b.MODEL_CODE AS MODEL_CODE, I.MODEL_NAME AS MODEL_NAME_HIDDEN
+            FROM IT_ASSET_HEADER a, IT_ASSET_DETAILS b, IT_ASSET_REQ_TYPE D, IT_ASSET_REQ_GROUP E,
+            IT_ASSET_GROUP F, IT_ASSET_SUB_GROUP G, IT_ASSET_BRAND H, IT_ASSET_MODEL I
+            WHERE b.REQ_TYPE_ID = D.REQ_TYPE_ID
+            AND b.REQ_GRP_ID = E.REQ_GRP_ID
+            AND B.ASSET_SUB_GRP_CODE = G.ASSET_SUB_GRP_CODE
+            AND B.ASSET_GRP_CODE = F.ASSET_GRP_CODE
+            AND B.BRAND_CODE = H.BRAND_CODE
+            AND B.MODEL_CODE = I.MODEL_CODE
+            AND A.DOC_NO	= B.DOC_NO
+            AND B.SERIAL_NO1 = :ser_no
+            ORDER BY A.DOC_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':ser_no', $ser_no);
@@ -82,15 +107,28 @@ if (isset($_POST['data'])){
 
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                        <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["DOC_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["ASSET_ID"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
-                        <td>".$row["ASSET_SUB_GROUP_NAME"]."</td>
+                        <td>".$row["ASSET_SUB_GRP_NAME"]."</td>
                         <td>".$row["BRAND_NAME"]."</td>
-                        <td>".$row["MODEL"]."</td>
+                        <td>".$row["MODEL_NAME"]."</td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden>" . $row['EMPL_ID'] . "</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -103,15 +141,21 @@ if (isset($_POST['data'])){
         $from_date = date_format(date_create($_POST['from_date']), 'd/m/Y');
         $to_date = date_format(date_create($_POST['to_date']), 'd/m/Y');
 
-        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, E.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
-            FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_HEADER1 E
-            WHERE A.SUB_ASSET_GROUP = B.ASSET_SUB_GROUP_CODE
-            AND A.BRAND = C.BRAND_CODE
-            AND A.MODEL = D.MODEL_CODE
-            AND A.DOCUMENT_NO = E.DOCUMENT_NO
-            AND E.DOCUMENT_DATE
+        $sql1 = "SELECT a.DOC_NO, b.ASSET_ID, b.EMPL_ID, G.ASSET_SUB_GRP_NAME, I.MODEL_NAME, H.BRAND_NAME, b.PO_item, 
+            b.PO_NO, b.REQ_GRP_ID, E.REQ_GRP_NAME, b.REQ_TYPE_ID, D.REQ_TYPE_NAME, b.ASSET_GRP_CODE, F.ASSET_GRP_NAME, 
+            b.ASSET_SUB_GRP_CODE, G.ASSET_SUB_GRP_NAME as SUB_NAME, b.BRAND_CODE, H.BRAND_NAME as BR_NAME, b.MODEL_CODE AS MODEL_CODE, I.MODEL_NAME AS MODEL_NAME_HIDDEN
+            FROM IT_ASSET_HEADER a, IT_ASSET_DETAILS b, IT_ASSET_REQ_TYPE D, IT_ASSET_REQ_GROUP E,
+            IT_ASSET_GROUP F, IT_ASSET_SUB_GROUP G, IT_ASSET_BRAND H, IT_ASSET_MODEL I
+            WHERE b.REQ_TYPE_ID = D.REQ_TYPE_ID
+            AND b.REQ_GRP_ID = E.REQ_GRP_ID
+            AND B.ASSET_SUB_GRP_CODE = G.ASSET_SUB_GRP_CODE
+            AND B.ASSET_GRP_CODE = F.ASSET_GRP_CODE
+            AND B.BRAND_CODE = H.BRAND_CODE
+            AND B.MODEL_CODE = I.MODEL_CODE
+            AND A.DOC_NO	= B.DOC_NO
+            AND A.DOC_DATE
             BETWEEN to_date(:from_date, 'DD/MM/YY') AND to_date(:to_date, 'DD/MM/YY')
-            ORDER BY E.DOCUMENT_NO DESC";
+            ORDER BY A.DOC_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':from_date', $from_date);
@@ -132,15 +176,28 @@ if (isset($_POST['data'])){
 
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                        <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["DOC_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["ASSET_ID"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
-                        <td>".$row["ASSET_SUB_GROUP_NAME"]."</td>
+                        <td>".$row["ASSET_SUB_GRP_NAME"]."</td>
                         <td>".$row["BRAND_NAME"]."</td>
-                        <td>".$row["MODEL"]."</td>
+                        <td>".$row["MODEL_NAME"]."</td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden>" . $row['EMPL_ID'] . "</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -152,14 +209,20 @@ if (isset($_POST['data'])){
         
         $emp_name = $_POST['emp_name'];
 
-        $sql1 = "SELECT DISTINCT E.DOCUMENT_NO, A.PO_ITEM, E.PO_NUMBER, A.ASSET_ID, A.EMPL_ID, B.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, D.MODEL
-                FROM IT_ASSET_DETAILS1 A, IT_ASSET_SUB_GROUP B, IT_ASSET_BRAND C, IT_ASSET_MODEL D, IT_ASSET_HEADER1 E
-                WHERE A.SUB_ASSET_GROUP = B.ASSET_SUB_GROUP_CODE
-                AND A.BRAND = C.BRAND_CODE
-                AND A.MODEL = D.MODEL_CODE
-                AND A.DOCUMENT_NO = E.DOCUMENT_NO
-                AND A.EMPL_ID = :emp_name
-                ORDER BY E.DOCUMENT_NO DESC";
+        $sql1 = "SELECT a.DOC_NO, b.ASSET_ID, b.EMPL_ID, G.ASSET_SUB_GRP_NAME, I.MODEL_NAME, H.BRAND_NAME, b.PO_item, 
+                b.PO_NO, b.REQ_GRP_ID, E.REQ_GRP_NAME, b.REQ_TYPE_ID, D.REQ_TYPE_NAME, b.ASSET_GRP_CODE, F.ASSET_GRP_NAME, 
+                b.ASSET_SUB_GRP_CODE, G.ASSET_SUB_GRP_NAME as SUB_NAME, b.BRAND_CODE, H.BRAND_NAME as BR_NAME, b.MODEL_CODE AS MODEL_CODE, I.MODEL_NAME AS MODEL_NAME_HIDDEN
+                FROM IT_ASSET_HEADER a, IT_ASSET_DETAILS b, IT_ASSET_REQ_TYPE D, IT_ASSET_REQ_GROUP E,
+                IT_ASSET_GROUP F, IT_ASSET_SUB_GROUP G, IT_ASSET_BRAND H, IT_ASSET_MODEL I
+                WHERE b.REQ_TYPE_ID = D.REQ_TYPE_ID
+                AND b.REQ_GRP_ID = E.REQ_GRP_ID
+                AND B.ASSET_SUB_GRP_CODE = G.ASSET_SUB_GRP_CODE
+                AND B.ASSET_GRP_CODE = F.ASSET_GRP_CODE
+                AND B.BRAND_CODE = H.BRAND_CODE
+                AND B.MODEL_CODE = I.MODEL_CODE
+                AND A.DOC_NO	= B.DOC_NO
+                AND B.EMPL_ID = :emp_name
+                ORDER BY A.DOC_NO DESC";
                 
         $res = oci_parse(connection(), $sql1);
         oci_bind_by_name($res, ':emp_name', $emp_name);
@@ -179,15 +242,28 @@ if (isset($_POST['data'])){
 
             $result.="<tr>
                         <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                        <td>".$row["DOCUMENT_NO"]."</td>
+                        <td>".$row["DOC_NO"]."</td>
                         <td>".$row["PO_ITEM"]."</td>
                         <td>".$row["ASSET_ID"]."</td>
                         <td>".$row1["NAMEENG"]."</td>
-                        <td>".$row["ASSET_SUB_GROUP_NAME"]."</td>
+                        <td>".$row["ASSET_SUB_GRP_NAME"]."</td>
                         <td>".$row["BRAND_NAME"]."</td>
-                        <td>".$row["MODEL"]."</td>
+                        <td>".$row["MODEL_NAME"]."</td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden>" . $row['EMPL_ID'] . "</td>
                         <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                        <td hidden><input class='doc_no1' value=".$row["DOCUMENT_NO"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;

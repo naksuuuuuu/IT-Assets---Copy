@@ -32,7 +32,13 @@ session_start();
     <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../../assets//fontawesome_1/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
+    <link rel="stylesheet" href="../../datatable/datatables.css">
+    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
+    <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
+
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
 
@@ -244,19 +250,21 @@ session_start();
                         <h2 class="m-0 font-weight-bold text-primary">Model</h2>
                     </div>
                     <div class="card-body">
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add_model" style="margin-bottom: 10px;"> 
-                            <i class="fa fa-plus-circle"></i> Add
-                        </button> 
+                        <div class="col-md-4">
+                            <div class="" style='justify-content: start; display: flex; height:40px; margin-top: 10px'>
+                                <button class="btn btn-success" id="add_model_btn" type="button"><i class="fa-solid fa-plus"></i> Add</button>
+                            </div>
+                        </div>  
+                        <br> 
                         <div class="table-responsive">
-                            <table class="table table-bordered nowrap" id="dataTable" width="100%" cellspacing="0">
+                            <table class="display nowrap" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th hidden>Model Code</th>
+                                        <th>Model Code</th>
                                         <th>Model</th>
-                                        <th>User Created</th>
-                                        <th>User Created Date</th>
-                                        <th>Last User Update</th>
-                                        <th>Last User Update Date</th>
+                                        <th hidden>Model Code</th>
+                                        <th hidden>BRAND Code</th>
+                                        <th>Modify</th>
                                     </tr>
                                 </thead>
                                 <!-- <tfoot>
@@ -275,22 +283,12 @@ session_start();
                                     $query = oci_parse(connection(), $sql);
                                     oci_execute($query);
                                         while ($row = oci_fetch_assoc($query)) {
-                                            // echo "<tr id='{$row["ASSET_SUB_GROUP_CODE"]}'>";
-                                            // echo "<td>{$i}</td>";
-                                            // echo "<td>".$row["ASSET_SUB_GROUP_NAME"]."</td>";
-                                             // echo "<td>".$row["ASSET_FLAG"]."</td>";
-                                            // echo "<td>".$row["USER_CREATED"]."</td>";
-                                            // echo "<td>".$row["USER_CREATED_DATE"]."</td>";
-                                            // echo "<td>".$row["LAST_USER_UPDATE"]."</td>";
-                                            // echo "<td>".$row["LAST_USER_UPDATE_DATE"]."</td>";
-                                            // echo "</tr>";
-                                            echo "<tr id='".$row["MODEL_CODE"]."'>
-                                                <td hidden>".$row["MODEL_CODE"]."</td>
-                                                <td>".$row["MODEL"]."</td>
-                                                <td>".$row["USER_CREATED"]."</td>
-                                                <td>".$row["USER_CREATED_DATE"]."</td>
-                                                <td>".$row["LAST_USER_UPDATE"]."</td>
-                                                <td>".$row["LAST_USER_UPDATE_DATE"]."</td>
+                                            echo "<tr>
+                                                <td>".$row["MODEL_CODE"]."</td>
+                                                <td class='model_name'>".$row["MODEL_NAME"]."</td>
+                                                <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                                                <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                                                <td><button class='btn btn-primary edit_btn' id='edit_btn'><i class='fa-solid fa-pen-to-square'></i> Edit</button></td>
                                             </tr>";
                                         }
                                     oci_close(connection());
@@ -307,13 +305,13 @@ session_start();
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <!-- <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; Your Website 2020</span>
                     </div>
                 </div>
-            </footer>
+            </footer> -->
             <!-- End of Footer -->
 
         </div>
@@ -327,8 +325,8 @@ session_start();
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Model Modal -->
-    <div class="modal fade" id="add_model" tabindex="-1" role="dialog" aria-labelledby="modelModal"
+    <!-- Add Model Modal -->
+    <div class="modal fade" id="add_model_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modelModal"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -341,8 +339,8 @@ session_start();
                     </div>
                     <div class="modal-body">                  
                         <div class="form-group">
-                            <label>Input Brand</label>
-                            <select type="text" id="brand1" name="brand1" class="form-control" required>
+                            <label>Select Brand</label>
+                            <select type="text" id="add_brand" name="add_brand" class="form-select" required>
                                 <option value=""></option>
                                 <?php 
                                     $sql = "SELECT BRAND_CODE, BRAND_NAME FROM IT_ASSET_BRAND ORDER BY BRAND_CODE";
@@ -357,15 +355,64 @@ session_start();
                         </div>   
                         <div class="form-group">
                             <label>Input Model</label>
-                            <input type="model" id="model" name="model" class="form-control" required>
+                            <input type="model" id="add_model" name="add_model" class="form-control" required>
                         </div>
 
                     </div>
-                    <div class="modal-footer">
-                        <input type="hidden" value="1" name="type">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <button type="button" class="btn btn-success" id="btn-add">Add</button>
+                    <div class="col-md-12">
+                        <button id="close_btn" class="btn btn-warning" type="button"><i class="fa-solid fa-xmark"></i> Close</button>
+                        <button id="btn_add" type="button" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                     </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Model Modal -->
+    <div class="modal fade" id="edit_model_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modelModal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modelModal">Edit Model</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">                  
+                        <div class="form-group">
+                            <label>Select Brand</label>
+                            <select type="text" id="edit_brand_code" name="edit_brand" class="form-select" required>
+                                <option value=""></option>
+                                <?php 
+                                    $sql = "SELECT BRAND_CODE, BRAND_NAME FROM IT_ASSET_BRAND ORDER BY BRAND_CODE";
+                                    $res = oci_parse(connection(), $sql);
+                                    oci_execute($res);
+
+                                    while($row = oci_fetch_row($res)){
+                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[1],ENT_IGNORE)."</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>   
+                        <div class="form-group">
+                            <label>Input Model</label>
+                            <input type="model" id="edit_model_name" name="edit_model_name" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>HIDDEN Model</label>
+                            <input type="model" id="edit_model_id" name="edit_model_id" class="form-control" required>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <button id="close_btn1" class="btn btn-warning" type="button"><i class="fa-solid fa-xmark"></i> Close</button>
+                        <button id="btn_edit" type="button" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    </div>
+                    <br>
                 </form>
             </div>
         </div>
@@ -402,39 +449,185 @@ session_start();
     <script src="../../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
+    <!-- <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
+    <script src="../../datatable/datatables.js"></script>
+    <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
+    <script src="../../assets/file_input/js/fileinput.js"></script>
     <!-- Page level custom scripts -->
-    <script src="../../js/demo/datatables-demo.js"></script>
+    <!-- <script src="../../js/demo/datatables-demo.js"></script> -->
+    <script src="../../assets/selectize/dist/js/selectize.js"></script>
+    <script src="../../assets/lodash.js"></script>
 
 </body>
 
 <script>
-    $(document).on('click','#btn-add',function() {
-        var name = '<?php echo $username ?>';
-        var brand1 =$("#brand1").val();
-        var model = $("#model").val();
-        
-        $.ajax({
-            url: "../../logic/insert_set_up.php",
-            method: "POST",
-            data: {brand1: brand1, model: model, name: name},
-            success: function(dataResult){
-                if(dataResult.statusCode==200){
-                    $('#add_model').modal('hide');
-                    alert('Data added successfully !'); 
-                    location.reload();						
-                }
-                else if(dataResult.statusCode==201){
-                    alert(dataResult.message);
-                }
-            },
-            error: function(){
-                alert("Error while processing request, please try again.");
-            }
+
+    $(document).ready(function(){
+        const name = '<?php echo $username ?>';
+
+        $('#dataTable').DataTable({
+            searching: false, 
+            paging: true,
+            scrollX: false, 
+            info: false,
+            ordering: false,
+            fixedColumns: {leftColumns: 1}
         });
-    });  
+
+        $("#add_model_btn").click(function(){
+            $("#add_model_modal").modal('show')
+        })
+
+        $("#btn_add").click(function(){
+            var add_brand = $("#add_brand").val()
+            var add_model = $("#add_model").val()
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be saved in database',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm =>{
+                if(confirm.isConfirmed){
+                    $.ajax({
+                        type: "POST",
+                        url: "../../logic/set_up/insert_model.php",
+                        data: {add_brand:add_brand, add_model:add_model, name:name},
+                        success: function(res){
+                            if(res.success == 1){
+                                notify(res.icon, res.message)
+                                window.setInterval(function(){
+                                    location.reload();	
+                                },2000)
+                            }
+                            else{
+                                notify(res.icon, res.message)
+                            }        
+                        },
+                        failure: function(response){
+                            alert("ERROR");
+                        },
+                        error: function(req, textStatus, errorThrown){
+                            console.log("ERROR ",textStatus);
+                            console.log("ERROR ",errorThrown);
+                            console.log("ERROR", req)
+                        } 
+                    });
+                }
+            })
+        })
+
+        $(document).on('click', ".edit_btn", function(){
+            var model_name = $(this).closest('tr').find('td.model_name').text()
+            var model_code = $(this).closest('tr').find('input.model_code').val()
+            var brand_code = $(this).closest('tr').find('input.brand_code').val()
+
+            $("#edit_brand_code").val(brand_code)
+            $("#edit_model_name").val(model_name)
+            $("#edit_model_id").val(model_code)
+
+            $("#edit_model_modal").modal('show')
+
+            $("#btn_edit").click(function(){
+                var edit_brand_code = $("#edit_brand_code").val()
+                var edit_model_name = $("#edit_model_name").val()
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This will be saved in database',
+                    icon: 'question',
+                    showCancelButton: true,
+                    reverseButtons: true,
+                    cancelButtonText: 'No',
+                    confirmButtonText: 'Yes',
+                    confirmButtonColor: 'green',
+                    cancelButtonColor: 'red'
+                }).then(confirm => {
+                    if(confirm.isConfirmed){
+                        $.ajax({
+                            type: "POST",
+                            url: "../../logic/set_up/update_model.php",
+                            data: {edit_brand_code:edit_brand_code, edit_model_name:edit_model_name, model_code:model_code, name:name},
+                            success: function(res){
+                                if(res.success == 1){
+                                    notify(res.icon, res.message)
+                                    window.setInterval(function(){
+                                        location.reload();	
+                                    },2000)
+                                }
+                                else{
+                                    notify(res.icon, res.message)
+                                }        
+                            },
+                            failure: function(response){
+                                alert("ERROR");
+                            },
+                            error: function(req, textStatus, errorThrown){
+                                console.log("ERROR ",textStatus);
+                                console.log("ERROR ",errorThrown);
+                                console.log("ERROR", req)
+                            } 
+                        })
+                    }
+                })
+            })
+        })
+
+        // add_model close btn
+        $("#close_btn").click(function(){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be closed',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm => {
+                if(confirm.isConfirmed){
+                    $("#add_model_modal").modal('hide')
+                }
+            })
+        })
+
+        // edit_model close btn
+        $("#close_btn1").click(function(){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be closed',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm => {
+                if(confirm.isConfirmed){
+                    $("#edit_model_modal").modal('hide')
+                }
+            })
+        })
+    });
+    function notify(icon, message){
+        Swal.fire({
+            icon: icon,
+            title: message,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top',
+            timer: 2000,
+            timerProgressBar: true
+        })
+    }
+
+      
 </script>
 
 </html>

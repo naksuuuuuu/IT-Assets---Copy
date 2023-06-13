@@ -7,16 +7,16 @@ if(isset($_POST['po_number'])){
     $po_no = $_POST['po_number'];
     $po_item = $_POST['po_item'];
 
-    $sql = "SELECT DISTINCT D.ASSET_SUB_GROUP_NAME, C.BRAND_NAME, B.SERIAL_NO1, B.DEL_DATE, B.ASS_CODE, 
-        A.PO_NUMBER, B.DEL_NOTE, A.DOCUMENT_NO, A.STATUS, B.REMARKS, B.EMPL_ID, B.ASSET_ID, B.DOCUMENT_DATE
-        FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_BRAND C, IT_ASSET_SUB_GROUP D
-        WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
-        AND B.SUB_ASSET_GROUP = D.ASSET_SUB_GROUP_CODE
-        AND B.BRAND = C.BRAND_CODE
+    $sql = "SELECT DISTINCT D.ASSET_SUB_GRP_NAME, C.BRAND_NAME, B.SERIAL_NO1, B.DEL_DATE, B.ASS_CODE, 
+        A.PO_NO, B.DEL_NOTE, A.DOC_NO, A.STATUS, B.REMARKS, B.EMPL_ID, B.ASSET_ID, B.DOC_DATE
+        FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B, IT_ASSET_BRAND C, IT_ASSET_SUB_GROUP D
+        WHERE A.DOC_NO = B.DOC_NO
+        AND B.ASSET_SUB_GRP_CODE = D.ASSET_SUB_GRP_CODE
+        AND B.BRAND_CODE = C.BRAND_CODE
         AND A.CANCEL_ASSET_FLAG is null
-        AND B.PO_NUMBER = :po_no
+        AND B.PO_NO = :po_no
         AND B.PO_ITEM = :po_item
-        ORDER BY A.DOCUMENT_NO DESC";
+        ORDER BY A.DOC_NO DESC";
 
     $res = oci_parse(connection(), $sql);
     oci_bind_by_name($res, ':po_no', $po_no);
@@ -54,7 +54,7 @@ if(isset($_POST['po_number'])){
         $pdf -> Cell(0,5,'Receiving / Returning of Asset Form',0,1,'C');
         $pdf -> Ln(5);
         $pdf -> SetFont('Gothic','',11);
-        $pdf -> Cell(0,5,'Date:    ' .date("d/m/Y", strtotime($row["DOCUMENT_DATE"])), 0,1,'R'); //dynamic
+        $pdf -> Cell(0,5,'Date:    ' .date("d/m/Y", strtotime($row["DOC_DATE"])), 0,1,'R'); //dynamic
         $pdf -> Ln(4);
         $pdf -> SetFont('Gothic','',10);
         $pdf -> Cell(50,5,'Name: ',0,0,'L');
@@ -86,20 +86,20 @@ if(isset($_POST['po_number'])){
         $pdf -> Ln(1);
         $pdf -> Cell(50,5,'Employee ID Card Number: ',0,0,'L');
         $pdf -> Cell(68,5,$row["EMPL_ID"],'B',1,'L'); //dynamic
-        $pdf -> Rect(5,83,190,75);
+        $pdf -> Rect(7,83,190,75);
         $pdf -> Ln(7);
         $pdf -> SetFont('Gothic','B',10);
         $pdf -> Cell(0,5,'Assets assigned to employee for work and responsiblity',0,1,'C');
-        $pdf -> Line(5,90,195,90);
+        $pdf -> Line(7,90,197,90);
 
         $pdf -> SetFont('Gothic','',10);
         $x = $pdf -> GetX();
         $pdf -> Ln(8);
-        $pdf -> SetX($x+2);
+        $pdf -> SetX($x+4);
 
-        $pdf -> Cell(30,5,'Asset Type: ',0,0,'L');
+        $pdf -> Cell(20,5,'Asset Type: ',0,0,'L');
         $pdf -> SetFont('Gothic','B',10);
-        $pdf -> Cell(130,5,$row["ASSET_SUB_GROUP_NAME"],'B',1,'L'); //dynamic
+        $pdf -> Cell(90,5,$row["ASSET_SUB_GRP_NAME"],'B',1,'L'); //dynamic
         $pdf -> Ln(10);
         $pdf -> SetX($x+20);
         $pdf -> SetFont('Gothic','',10);
@@ -108,7 +108,7 @@ if(isset($_POST['po_number'])){
         $x = $pdf -> GetX();
         $pdf -> SetX($x+10);
         $pdf -> Cell(25,5,'PO Number: ',0,0,'L');
-        $pdf -> Cell(27,5,$row["PO_NUMBER"], 'B',1,'L'); //dynamic
+        $pdf -> Cell(27,5,$row["PO_NO"], 'B',1,'L'); //dynamic
         $pdf -> Ln(1);
         $x = $pdf -> GetX();
         $pdf -> SetX($x+20);
@@ -133,7 +133,7 @@ if(isset($_POST['po_number'])){
         $pdf -> Cell(27,5,$row["STATUS"], 'B',1,'L'); //dynamic
         $pdf -> Ln(5);
         $x = $pdf -> GetX();
-        $pdf -> SetX($x+2);
+        $pdf -> SetX($x+4);
         $pdf -> Cell(18,5,'Remarks: ',0,0,'L');
 
         $pdf -> MultiCell(160,5,$row["REMARKS"],0,'L'); //dynamic
@@ -156,8 +156,10 @@ if(isset($_POST['po_number'])){
         $pdf -> Cell(90,8,'________________________________',0,1,'R');
         $pdf -> Cell(105,5,'(                                                       )',0,0,'L');
         $pdf -> Cell(90,5,'(                                                       )',0,1,'R');
-        $pdf -> Cell(105,2,'              (......./......./.......)',0,0,'L');
-        $pdf -> Cell(90,2,'(......./......./.......)               ',0,1,'R');
+        $pdf -> SetX($x+15);
+        $pdf -> Cell(105,2,'(......./......./.......)',0,0,'L');
+        $pdf -> SetX($x+90);
+        $pdf -> Cell(90,2,'(......./......./.......)',0,1,'R');
 
         $pdf -> Ln(10);
         $pdf -> Cell(105,5,'    Receive (Reference Person)',0,0,'L');
@@ -166,8 +168,10 @@ if(isset($_POST['po_number'])){
         $pdf -> Cell(90,8,'________________________________',0,1,'R');
         $pdf -> Cell(105,5,'(                                                       )',0,0,'L');
         $pdf -> Cell(90,5,'(                                                       )',0,1,'R');
-        $pdf -> Cell(105,2,'              (......./......./.......)',0,0,'L');
-        $pdf -> Cell(90,2,'(......./......./.......)               ',0,1,'R');
+        $pdf -> SetX($x+15);
+        $pdf -> Cell(105,2,'(......./......./.......)',0,0,'L');
+        $pdf -> SetX($x+90);
+        $pdf -> Cell(90,2,'(......./......./.......)',0,1,'R');
 
         $pdf -> Ln(10);
         $pdf -> Cell(105,5,'    Receive (Reference Person)',0,0,'L');
@@ -176,8 +180,10 @@ if(isset($_POST['po_number'])){
         $pdf -> Cell(90,8,'________________________________',0,1,'R');
         $pdf -> Cell(105,5,'(                                                       )',0,0,'L');
         $pdf -> Cell(90,5,'(                                                       )',0,1,'R');
-        $pdf -> Cell(105,2,'              (......./......./.......)',0,0,'L');
-        $pdf -> Cell(90,2,'(......./......./.......)               ',0,1,'R');
+        $pdf -> SetX($x+15);
+        $pdf -> Cell(105,2,'(......./......./.......)',0,0,'L');
+        $pdf -> SetX($x+90);
+        $pdf -> Cell(90,2,'(......./......./.......)',0,1,'R');
 
         $pdf -> Output('Hello.pdf', 'I');
     }

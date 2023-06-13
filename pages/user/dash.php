@@ -248,7 +248,7 @@ session_start();
                                                         Total Assets</div>
                                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                         <?php 
-                                                            $sql = "SELECT COUNT(UNIT_PRICE) FROM IT_ASSET_DETAILS1 WHERE UNIT_PRICE >= 5000";
+                                                            $sql = "SELECT COUNT(UNIT_PRICE) FROM IT_ASSET_DETAILS WHERE UNIT_PRICE >= 5000";
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
@@ -275,7 +275,7 @@ session_start();
                                                         Total Expense</div>
                                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                         <?php 
-                                                            $sql = "SELECT COUNT(UNIT_PRICE) FROM IT_ASSET_DETAILS1 WHERE UNIT_PRICE <= 5000";
+                                                            $sql = "SELECT COUNT(UNIT_PRICE) FROM IT_ASSET_DETAILS WHERE UNIT_PRICE <= 5000";
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
@@ -301,7 +301,7 @@ session_start();
                                                         Active Assets</div>
                                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                         <?php 
-                                                            $sql = "SELECT COUNT(DOCUMENT_NO) FROM IT_ASSET_HEADER1 WHERE CANCEL_ASSET_FLAG is null";
+                                                            $sql = "SELECT COUNT(DOC_NO) FROM IT_ASSET_HEADER WHERE CANCEL_ASSET_FLAG is null";
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
@@ -329,7 +329,7 @@ session_start();
                                                         <div class="col-auto">
                                                             <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
                                                             <?php 
-                                                                $sql = "SELECT COUNT(CANCEL_ASSET_FLAG) FROM IT_ASSET_HEADER1";
+                                                                $sql = "SELECT COUNT(CANCEL_ASSET_FLAG) FROM IT_ASSET_HEADER";
                                                                 $stmt = oci_parse(connection(), $sql);
                                                                 oci_execute($stmt);
                                                                 $result = oci_fetch_row($stmt);
@@ -357,7 +357,7 @@ session_start();
                                                     Total Asset Costs</div>
                                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                         <?php 
-                                                            $sql = "SELECT SUM(UNIT_PRICE) FROM IT_ASSET_DETAILS1 WHERE UNIT_PRICE >= 5000";
+                                                            $sql = "SELECT SUM(UNIT_PRICE) FROM IT_ASSET_DETAILS WHERE UNIT_PRICE >= 5000";
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
@@ -383,7 +383,7 @@ session_start();
                                                     Total Expense Costs</div>
                                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                         <?php 
-                                                            $sql = "SELECT SUM(UNIT_PRICE) FROM IT_ASSET_DETAILS1 WHERE UNIT_PRICE <= 5000";
+                                                            $sql = "SELECT SUM(UNIT_PRICE) FROM IT_ASSET_DETAILS WHERE UNIT_PRICE <= 5000";
                                                             $stmt = oci_parse(connection(), $sql);
                                                             oci_execute($stmt);
                                                             $result = oci_fetch_row($stmt);
@@ -412,10 +412,10 @@ session_start();
                                         <div id="chartContainer" style="height: 400px;"></div>
                                         <?php 
                                             $sql = "SELECT sum(UNIT_PRICE) as y, extract(YEAR from labelss) as x FROM (
-                                                SELECT a.UNIT_PRICE, to_date(b.PO_DOCUMENT_DATE, 'DD/MM/YY') as labelss 
-                                                FROM IT_ASSET_DETAILS1 a, IT_ASSET_HEADER1 b
+                                                SELECT a.UNIT_PRICE, to_date(b.PO_DOC_DATE, 'DD/MM/YY') as labelss 
+                                                FROM IT_ASSET_DETAILS a, IT_ASSET_HEADER b
                                                 WHERE a.unit_price >= 5000
-                                                AND a.PO_NUMBER = b.PO_NUMBER
+                                                AND a.PO_NO = b.PO_NO
                                             )
                                             GROUP BY extract(YEAR from labelss)
                                             ORDER BY extract(YEAR from labelss) ASC";
@@ -444,10 +444,10 @@ session_start();
                                         <div id="chartContainer2" style="height: 400px;"></div>
                                         <?php 
                                             $sql2 = "SELECT sum(UNIT_PRICE) as y, extract(YEAR from labelss) as x FROM (
-                                                SELECT a.UNIT_PRICE, to_date(b.PO_DOCUMENT_DATE, 'DD/MM/YY') as labelss 
-                                                FROM IT_ASSET_DETAILS1 a, IT_ASSET_HEADER1 b
+                                                SELECT a.UNIT_PRICE, to_date(b.PO_DOC_DATE, 'DD/MM/YY') as labelss 
+                                                FROM IT_ASSET_DETAILS a, IT_ASSET_HEADER b
                                                 WHERE a.unit_price < 5000
-                                                AND a.PO_NUMBER = b.PO_NUMBER
+                                                AND a.PO_NO = b.PO_NO
                                             )
                                             GROUP BY extract(YEAR from labelss)
                                             ORDER BY extract(YEAR from labelss) ASC";

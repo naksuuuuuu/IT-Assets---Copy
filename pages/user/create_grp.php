@@ -22,8 +22,6 @@ session_start();
 
     <title>ITAMS - Req_Group</title>
 
-    <!-- Custom fonts for this template -->
-    <link rel="stylesheet" href="../../assets//fontawesome_1/css/all.min.css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -32,10 +30,12 @@ session_start();
     <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <!-- <script src="../../vendor/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../../assets//fontawesome_1/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
     <link rel="stylesheet" href="../../datatable/datatables.css">
-    <script src="../../datatable/datatables.js"></script> -->
+    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
+    <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
 
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
@@ -256,16 +256,19 @@ session_start();
                         <h2 class="m-0 font-weight-bold text-primary">Groups</h2>
                     </div>
                     <div class="card-body">
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add_req" style="margin-bottom: 10px;"> 
-                            <i class="fa fa-plus-circle"></i> Add
-                        </button> 
+                        <div class="col-md-4">
+                            <div class="" style='justify-content: start; display: flex; height:40px; margin-top: 10px'>
+                                <button class="btn btn-success" id="add_grp" type="button"><i class="fa-solid fa-plus"></i> Add</button>
+                            </div>
+                        </div>  
+                        <br>
                         <div class="table-responsive">
-                            <table class="table table-bordered nowrap" id="dataTable" width="100%" cellspacing="0">
+                            <table class="display nowrap" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th hidden>Request Group ID</th>
+                                        <th>Request Group ID</th>
                                         <th>Request Group Name</th>
-                                        <th>Status</th>
+                                        <th hidden>Req ID hidden</th>
                                         <th>Modify</th>
                                     </tr>
                                 </thead>
@@ -280,26 +283,18 @@ session_start();
                                 </tfoot> -->
                                 <tbody>
                                     <?php
-                                        $sql = "SELECT * FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GROUP_ID asc";
+                                        $sql = "SELECT * FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GRP_ID asc";
                                         $query = oci_parse(connection(), $sql);
                                         oci_execute($query);
                                             while ($row = oci_fetch_assoc($query)) {
                                                 echo 
-                                                "<tr id='".$row["REQ_GROUP_ID"]."'>
-                                                    <td hidden>".$row["REQ_GROUP_ID"]."</td>
-                                                    <td>".$row["REQ_GROUP_NAME"]."</td>
-                                                    <td>".$row["STATUS"]."</td>
-                                                    <td>
-                                                        <a type='button' class='btn btn-success' data-toggle='modal' data-target='#mod_req'>
-                                                            <i class='fa-solid fa-pen-to-square'
-                                                                data-req_group_name='<?php echo ".$row["REQ_GROUP_NAME"]."; ?>'
-                                                                data-status='<?php echo ".$row["STATUS"]."; ?>'
-                                                            ></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>";
+                                                    "<tr>
+                                                        <td>".$row["REQ_GRP_ID"]."</td>
+                                                        <td class='req_name'>".$row["REQ_GRP_NAME"]."</td>
+                                                        <td hidden><input class='grp_id' value='".$row["REQ_GRP_ID"]."'></td>
+                                                        <td><button class='btn btn-primary edit_btn' id='edit_btn'><i class='fa-solid fa-pen-to-square'></i> Edit</button></td>
+                                                    </tr>";
                                             }
-                                        oci_close(connection());
                                     ?>
                                 </tbody>
                             </table>
@@ -334,7 +329,7 @@ session_start();
     </a>
 
     <!-- Add Modal -->
-    <div class="modal fade" id="add_req" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
+    <div class="modal fade" id="add_req" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form id="user-form">
@@ -350,38 +345,43 @@ session_start();
                             <input type="text" id="req_grp" name="req_grp" class="form-control" required>
                         </div>          
                     </div>
-                    <div class="modal-footer">
-                        <input type="hidden" value="1" name="type">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <button type="button" class="btn btn-success" id="btn-add">Add</button>
+
+                    <div class="col-md-12">
+                        <button id="close_btn" class="btn btn-warning" type="button"><i class="fa-solid fa-xmark"></i> Close</button>
+                        <button id="btn_add" type="button" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                     </div>
+                    <br>
                 </form>
             </div>
         </div>
     </div>
 
     <!-- Modify Modal -->
-    <div class="modal fade" id="mod_req" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
+    <div class="modal fade" id="edit_req" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form id="update_form">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="grpmodal">Update Group</h5>
+                        <h5 class="modal-title" id="grpmodal">Edit Group</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">                 
                         <div class="form-group">
-                            <label>Request Group</label>
-                            <input type="text" id="req_grp" name="req_grp" class="form-control" required>
-                        </div>          
+                            <label>Request Group Name</label>
+                            <input type="text" id="edit_grp" name="edit_grp" class="form-control edit_grp" required>
+                        </div>     
+                        <div class="form-group" hidden>
+                            <label>Request Group ID</label>
+                            <input type="text" id="edit_id" name="edit_id" class="form-control edit_id" required>
+                        </div>       
                     </div>
-                    <div class="modal-footer">
-                        <input type="hidden" value="1" name="type">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <button type="button" class="btn btn-success" id="update">Update</button>
+                    <div class="col-md-12">
+                        <button id="close_btn1" class="btn btn-warning" type="button"><i class="fa-solid fa-xmark"></i> Close</button>
+                        <button id="btn_add1" type="button" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                     </div>
+                    <br>
                 </form>
             </div>
         </div>
@@ -418,67 +418,177 @@ session_start();
     <script src="../../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
+    <!-- <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
+    <script src="../../datatable/datatables.js"></script>
+    <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
+    <script src="../../assets/file_input/js/fileinput.js"></script>
     <!-- Page level custom scripts -->
-    <script src="../../js/demo/datatables-demo.js"></script>
+    <!-- <script src="../../js/demo/datatables-demo.js"></script> -->
+    <script src="../../assets/selectize/dist/js/selectize.js"></script>
+    <script src="../../assets/lodash.js"></script>
 
     <script>
-        // $(document).ready(function() {
-        //     $('#dataTable').DataTable({
-        //         scrollX:true, 
-        //     });
-        // });
-        $(document).on('click','#btn-add',function() {
-            var name = '<?php echo $username ?>';
-            var req_grp = $("#req_grp").val();
-            $.ajax({
-                url: "../../logic/insert_set_up.php",
-                method: "POST",
-                data: {req_grp: req_grp, name:name},
-                success: function(dataResult){
-                    if(dataResult.statusCode==200){
-                        $('#add_req').modal('hide');
-                        alert('Data added successfully !'); 
-                        location.reload();						
-                    }
-                    else if(dataResult.statusCode==201){
-                        alert("Error");
-                    }
-                },
-                error: function(){
-                    alert("Error while processing request, please try again.");
-                }
+        $(document).ready(function() {
+            const name = '<?php echo $username ?>';
+
+            $('#dataTable').DataTable({
+                searching: false, 
+                paging: true,
+                scrollX: false, 
+                info: false,
+                ordering: false,
+                fixedColumns: {leftColumns: 1}
             });
+
+            $("#add_grp").click(function(){
+                $('#add_req').modal('show');
+            })
+
+            $("#btn_add").click(function(){
+                var req_grp = $("#req_grp").val();
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This will be saved in database',
+                    icon: 'question',
+                    showCancelButton: true,
+                    reverseButtons: true,
+                    cancelButtonText: 'No',
+                    confirmButtonText: 'Yes',
+                    confirmButtonColor: 'green',
+                    cancelButtonColor: 'red'
+                }).then(confirm =>{
+                    if(confirm.isConfirmed){
+                        $.ajax({
+                            type: "POST",
+                            url: "../../logic/set_up/insert_group.php",
+                            data: {req_grp:req_grp, name:name},
+                            success: function(res){
+                                if(res.success == 1){
+                                    notify(res.icon, res.message)
+                                    window.setInterval(function(){
+                                        location.reload();	
+                                    },2000)
+                                }
+                                else{
+                                    notify(res.icon, res.message)
+                                }        
+                            },
+                            failure: function(response){
+                                alert("ERROR");
+                            },
+                            error: function(req, textStatus, errorThrown){
+                                console.log("ERROR ",textStatus);
+                                console.log("ERROR ",errorThrown);
+                                console.log("ERROR", req)
+                            } 
+                        });
+                    }
+                })
+            })
+            
+            $(".edit_btn").click(function(){
+                var grp_name = $(this).closest('tr').find("td.req_name").text()
+                var grp_id = $(this).closest('tr').find("input.grp_id").val()
+                $("#edit_grp").val(grp_name)
+                $(".edit_id").val(grp_id)
+                $('#edit_req').modal('show')
+
+                $("#btn_add1").click(function(){
+                   var edit_name = $("#edit_grp").val()
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'This will be saved in database',
+                        icon: 'question',
+                        showCancelButton: true,
+                        reverseButtons: true,
+                        cancelButtonText: 'No',
+                        confirmButtonText: 'Yes',
+                        confirmButtonColor: 'green',
+                        cancelButtonColor: 'red'
+                    }).then(confirm =>{
+                        if(confirm.isConfirmed){
+                            $.ajax({
+                                type: "POST",
+                                url: "../../logic/set_up/update_group.php",
+                                data: {edit_name:edit_name, grp_id:grp_id, name:name},
+                                success: function(res){
+                                    if(res.success == 1){
+                                        notify(res.icon, res.message)
+                                        window.setInterval(function(){
+                                            location.reload();	
+                                        },2000)
+                                    }
+                                    else{
+                                        notify(res.icon, res.message)
+                                    }        
+                                },
+                                failure: function(response){
+                                    alert("ERROR");
+                                },
+                                error: function(req, textStatus, errorThrown){
+                                    console.log("ERROR ",textStatus);
+                                    console.log("ERROR ",errorThrown);
+                                    console.log("ERROR", req)
+                                } 
+                            })
+                        }
+                    })
+                })
+            })
+
+            // add_req close btn
+            $("#close_btn").click(function(){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This will be closed',
+                    icon: 'question',
+                    showCancelButton: true,
+                    reverseButtons: true,
+                    cancelButtonText: 'No',
+                    confirmButtonText: 'Yes',
+                    confirmButtonColor: 'green',
+                    cancelButtonColor: 'red'
+                }).then(confirm => {
+                    if(confirm.isConfirmed){
+                        $("#add_req").modal('hide')
+                    }
+                })
+            })
+
+            // edit_req close btn
+            $("#close_btn1").click(function(){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This will be closed',
+                    icon: 'question',
+                    showCancelButton: true,
+                    reverseButtons: true,
+                    cancelButtonText: 'No',
+                    confirmButtonText: 'Yes',
+                    confirmButtonColor: 'green',
+                    cancelButtonColor: 'red'
+                }).then(confirm => {
+                    if(confirm.isConfirmed){
+                        $("#edit_req").modal('hide')
+                    }
+                })
+            })
+
         });
 
-        $(document).on('click','.update',function() {
-            var req_grp=$(this).attr("data_req_group_name");
-            $("#req_grp").val(req_grp);
-        });
-
-        $(document).on('click','#update',function() {
-            var data = $("#update_form").serialize();
-            $.ajax({
-                data: data,
-                type: "post",
-                url: "save.php",
-                success: function(dataResult){
-                        var dataResult = JSON.parse(dataResult);
-                        if(dataResult.statusCode==200){
-                            $('#mod_req').modal('hide');
-                            alert('Data updated successfully !'); 
-                            location.reload();						
-                        }
-                        else if(dataResult.statusCode==201){
-                        alert(dataResult);
-                        }
-                }
-            });
-        });
+        function notify(icon, message){
+            Swal.fire({
+                icon: icon,
+                title: message,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top',
+                timer: 2000,
+                timerProgressBar: true
+            })
+        }
+        
     </script>
-
 </body>
-
 </html>

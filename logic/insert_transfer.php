@@ -29,7 +29,7 @@
         $remarks_1 = $_POST['remarks_1'];
 
         // header
-        $maxDoc = "SELECT max(DOCUMENT_NO) from IT_ASSET_TRANSFER_TRN_HDR";
+        $maxDoc = "SELECT max(DOC_NO) from IT_ASSET_TRANSFER_TRN_HDR";
             $stmt = oci_parse(connection(), $maxDoc);
             oci_execute($stmt);
             $row = oci_fetch_row($stmt);
@@ -42,8 +42,8 @@
             }
 
             $sql= "INSERT INTO IT_ASSET_TRANSFER_TRN_HDR 
-                (DOCUMENT_NO, PO_NUMBER, PO_ITEM, REF_DOC_NO, TRANSFER_FROM, TRANSFER_TO, TRANSFER_DATE, 
-                USER_CREATE, CREATE_DATE)
+                (DOC_NO, PO_NO, PO_ITEM, REF_DOC_NO, TRANSFER_FROM, TRANSFER_TO, TRANSFER_DATE, 
+                USER_CREATE, USER_CREATED_DATE)
                 VALUES 
                 (:doc_no, :po_number, :po_item, :ref_doc_no, :emp_id, :emp_id2, to_date(:trans_date, 'DD/MM/YY HH:MI:SS am'), 
                 :user_name, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'))";
@@ -68,11 +68,11 @@
                 // $row1 = oci_fetch_row($res_doc_num);
 
                 $dtl_sql = "INSERT INTO IT_ASSET_TRANSFER_TRN_DTL 
-                    (DOCUMENT_NO, ASSET_ID, ASSET_SUB_GROUP, BRAND_CODE, MODEL_CODE, SERIAL_1, SERIAL_2, SERIAL_3, SERIAL_4,
-                    REMARKS, USER_CREATE, CREATE_DATE, TRANSFER_REMARKS)
+                    (DOC_NO, ASSET_ID, ASSET_SUB_GRP_CODE, BRAND_CODE, MODEL_CODE, SERIAL_NO1, SERIAL_NO2, SERIAL_NO3, 
+                    SERIAL_NO4, REMARKS, TRANSFER_REMARKS, USER_CREATE, USER_CREATED_DATE)
                     VALUES
                     (:doc_no, :ass_id, :ass_sub_grp, :brand, :model, :ser_no1, :ser_no2, :ser_no3, :ser_no4,
-                    :remarks, :user_name, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :transfer_remarks)";
+                    :remarks, :transfer_remarks, :user_name, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'))";
                 $res_dtl = oci_parse(connection(), $dtl_sql);
                 oci_bind_by_name($res_dtl, ':doc_no', $doc_no);
                 oci_bind_by_name($res_dtl, ':ass_id', $ass_id);
@@ -84,15 +84,15 @@
                 oci_bind_by_name($res_dtl, ':ser_no3', $ser_no3);
                 oci_bind_by_name($res_dtl, ':ser_no4', $ser_no4);
                 oci_bind_by_name($res_dtl, ':remarks', $remarks);
+                oci_bind_by_name($res_dtl, ':transfer_remarks', $remarks_1);
                 oci_bind_by_name($res_dtl, ':user_name', $name);
                 oci_bind_by_name($res_dtl, ':user_date', $date);
-                oci_bind_by_name($res_dtl, ':transfer_remarks', $remarks_1);
 
                 if(oci_execute($res_dtl, OCI_NO_AUTO_COMMIT)){
 
-                    $update = "UPDATE IT_ASSET_DETAILS1 SET EMPL_ID = :emp_id2, LAST_USER_UPDATE = :user_name, 
+                    $update = "UPDATE IT_ASSET_DETAILS SET EMPL_ID = :emp_id2, LAST_USER_UPDATE = :user_name, 
                         LAST_USER_UPDATE_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am')
-                        WHERE PO_NUMBER = :po_no AND PO_ITEM = :po_item";
+                        WHERE PO_NO = :po_no AND PO_ITEM = :po_item";
                     $stmt = oci_parse(connection(), $update);
                     oci_bind_by_name($stmt, ':emp_id2', $emp_id2);
                     oci_bind_by_name($stmt, ':user_name', $name);
@@ -117,5 +117,4 @@
         oci_rollback(connection());
         echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));
     }
-
 ?>

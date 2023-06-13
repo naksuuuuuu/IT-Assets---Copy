@@ -362,8 +362,8 @@ session_start();
                                                 <select type="text" name="po_num" id='po_num' class='form-select' required style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                 <?php  
-                                                    $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
-                                                        WHERE A.PO_NUMBER = B.PO_NUMBER
+                                                    $sql = "SELECT DISTINCT A.PO_NO FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B 
+                                                        WHERE A.PO_NO = B.PO_NO
                                                         AND B.CANCEL_ASSET_FLAG is null
                                                         AND B.LAST_USER_UPDATE is not null";
                                                     $res = oci_parse(connection(), $sql);
@@ -390,8 +390,8 @@ session_start();
                                                 <select type="text" name="emp_name" id='emp_name' class='form-select' required style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                     <?php
-                                                        $sql = "SELECT DISTINCT A.DOCUMENT_NO, B.EMPL_ID FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B
-                                                                WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                        $sql = "SELECT DISTINCT A.DOC_NO, B.EMPL_ID FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B
+                                                                WHERE A.DOC_NO = B.DOC_NO
                                                                 AND B.CANCEL_ASSET_FLAG is null
                                                                 AND B.LAST_USER_UPDATE is not null";
 
@@ -420,7 +420,7 @@ session_start();
                                                 <select class="form-select" name="ser_no1" id="ser_no1" style="margin-bottom: 8px;">
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS1 
+                                                        $sql = "SELECT DISTINCT SERIAL_NO1 FROM IT_ASSET_DETAILS
                                                         WHERE CANCEL_ASSET_FLAG is null
                                                         AND LAST_USER_UPDATE is not null";
                                                         $res = oci_parse(connection(), $sql);
@@ -438,7 +438,7 @@ session_start();
                                                 <select class="form-select" name="rem" id="rem" style="margin-bottom: 8px;">
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT DISTINCT REMARKS FROM IT_ASSET_DETAILS1 
+                                                        $sql = "SELECT DISTINCT REMARKS FROM IT_ASSET_DETAILS 
                                                         WHERE CANCEL_ASSET_FLAG is null 
                                                         AND LAST_USER_UPDATE is not null";
                                                         $res = oci_parse(connection(), $sql);
@@ -456,9 +456,9 @@ session_start();
                                                 <select type="text" name="vendor" id='vendor' class='form-select' required style="margin-bottom: 8px;"> 
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER1 A, IT_ASSET_VENDORS B, IT_ASSET_DETAILS1 C
+                                                        $sql = "SELECT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER A, IT_ASSET_VENDORS B, IT_ASSET_DETAILS C
                                                             WHERE A.VENDOR_CODE = B.VENDOR_CODE
-                                                            AND A.DOCUMENT_NO = C.DOCUMENT_NO
+                                                            AND A.DOC_NO = C.DOC_NO
                                                             AND C.CANCEL_ASSET_FLAG is null
                                                             AND C.LAST_USER_UPDATE is not null";
 
@@ -476,8 +476,8 @@ session_start();
                                                 <select type="text" name="dept" id='dept' class='form-select' required style="margin-bottom: 8px;"> 
                                                     <option value=""></option>
                                                     <?php
-                                                        $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_HEADER1 B
-                                                        WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                        $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS A, IT_ASSET_HEADER B
+                                                        WHERE A.DOC_NO = B.DOC_NO
                                                         AND A.CANCEL_ASSET_FLAG is null
                                                         AND A.LAST_USER_UPDATE is not null";
 
@@ -508,11 +508,10 @@ session_start();
                                                 <select type="text" name="brand" id='brand' class='form-select' required style="margin-bottom: 8px;"> 
                                                     <option value=""></option>
                                                     <?php 
-                                                        $sql = "SELECT A.BRAND, B.BRAND_NAME FROM IT_ASSET_DETAILS1 A, IT_ASSET_BRAND B, IT_ASSET_DETAILS1 C
-                                                            WHERE A.BRAND = B.BRAND_CODE
-                                                            AND A.DOCUMENT_NO = C.DOCUMENT_NO
-                                                            AND C.CANCEL_ASSET_FLAG is null
-                                                            AND C.LAST_USER_UPDATE is not NULL";
+                                                        $sql = "SELECT A.BRAND_CODE, B.BRAND_NAME FROM IT_ASSET_DETAILS A, IT_ASSET_BRAND B
+                                                            WHERE A.BRAND_CODE = B.BRAND_CODE
+                                                            AND A.CANCEL_ASSET_FLAG is null
+                                                            AND A.LAST_USER_UPDATE is not NULL";
                                                         
                                                         $res = oci_parse(connection(), $sql);
                                                         oci_execute($res);
@@ -636,8 +635,20 @@ session_start();
                                                         <th>Item</th>
                                                         <th>Supplier</th>
                                                         <th>User (Email)</th>
+                                                        <th hidden>Req Group Code</th>
+                                                        <th hidden>Req Group Name</th>
+                                                        <th hidden>Req Type Code</th>
+                                                        <th hidden>Req Type Name</th>
+                                                        <th hidden>Asset Group Code</th>
+                                                        <th hidden>Asset Group Name</th>
+                                                        <th hidden>Asset Sub Group Code</th>
+                                                        <th hidden>Asset Sub Group Name</th>
+                                                        <th hidden>Brand Code</th>
+                                                        <th hidden>Brand Name</th>
+                                                        <th hidden>Model Code</th>
+                                                        <th hidden>Model Name</th>
                                                         <th hidden>PO Item</th>
-                                                        <th hidden>po number</th>
+                                                        <th hidden>DOC NO</th>
                                                         <!-- <th>Status</th> -->
                                                     </tr>
                                                 </thead>
@@ -670,15 +681,25 @@ session_start();
                                                 </tbody> -->
                                                 <tbody id="doc_tbody">
                                                     <?php
-                                                        $sql = "SELECT DISTINCT A.DOCUMENT_NO, A.PO_NUMBER, C.VENDOR_NAME, 
-                                                            B.EMPL_ID, B.MTRL_SHORT, B.PO_ITEM
-                                                            FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B, IT_ASSET_VENDORS C
-                                                            WHERE A.PO_NUMBER = B.PO_NUMBER
-                                                            AND A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                        $sql = "SELECT DISTINCT A.DOC_NO, A.PO_NO, C.VENDOR_NAME, 
+                                                            B.EMPL_ID, B.MTRL_SHORT, B.PO_ITEM, B.REQ_GRP_ID, E.REQ_GRP_NAME, B.REQ_TYPE_ID, D.REQ_TYPE_NAME, 
+                                                            B.ASSET_GRP_CODE, F.ASSET_GRP_NAME, B.ASSET_SUB_GRP_CODE, G.ASSET_SUB_GRP_NAME, B.BRAND_CODE, H.BRAND_NAME, 
+                                                            B.MODEL_CODE, I.MODEL_NAME
+                                                            FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B, IT_ASSET_VENDORS C, IT_ASSET_REQ_TYPE D, IT_ASSET_REQ_GROUP E,
+                                                            IT_ASSET_GROUP F, IT_ASSET_SUB_GROUP G, IT_ASSET_BRAND H, IT_ASSET_MODEL I
+                                                            WHERE A.DOC_DATE >= TRUNC(SYSDATE, 'MM')
+                                                            AND A.DOC_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                                            AND A.DOC_NO = B.DOC_NO
+                                                            AND B.REQ_TYPE_ID = D.REQ_TYPE_ID
+                                                            AND B.REQ_GRP_ID = E.REQ_GRP_ID
+                                                            AND B.ASSET_SUB_GRP_CODE = G.ASSET_SUB_GRP_CODE
+                                                            AND B.ASSET_GRP_CODE = F.ASSET_GRP_CODE
+                                                            AND B.BRAND_CODE = H.BRAND_CODE
+                                                            AND B.MODEL_CODE = I.MODEL_CODE
                                                             AND A.VENDOR_CODE = C.VENDOR_CODE
                                                             AND B.CANCEL_ASSET_FLAG is null
-                                                            AND B.LAST_USER_UPDATE is not NULL
-                                                            ORDER BY A.DOCUMENT_NO DESC";
+                                                            AND B.LAST_USER_UPDATE is not null
+                                                            ORDER BY A.DOC_NO DESC";
                                                 
                                                         $result = oci_parse(connection(), $sql);
                                                         oci_execute($result);                                                    
@@ -698,16 +719,28 @@ session_start();
                                                         
                                                             echo"<tr>
                                                                     <td><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></td>
-                                                                    <td>".$row["DOCUMENT_NO"]."</td>
+                                                                    <td>".$row["DOC_NO"]."</td>
                                                                     <td>".$row["PO_ITEM"]."</td>
-                                                                    <td>".$row["PO_NUMBER"]."</td>
+                                                                    <td>".$row["PO_NO"]."</td>
                                                                     <td>".$row1["NAMEENG"]."</td>
                                                                     <td>".$row1["DESCR"]."</td>
                                                                     <td>".$row["MTRL_SHORT"]."</td>
                                                                     <td>".$row["VENDOR_NAME"]."</td>
                                                                     <td>".$row1["BUSINESSMAIL"]."</td>
+                                                                    <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                                                                    <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                                                                    <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                                                                    <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                                                                    <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                                                                    <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                                                                    <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                                                                    <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                                                                    <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                                                                    <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                                                                    <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                                                                    <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
                                                                     <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                                                                    <td hidden><input class='doc_no1' value='".$row["DOCUMENT_NO"]."' hidden></td>
+                                                                    <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                                                                 </tr>";
                                                         }
                                                     ?>
@@ -1012,7 +1045,7 @@ session_start();
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label">Offcie Phone</label>
+                                                        <label class="form-label">Office Phone</label>
                                                         <input type="text" class="form-control" id="off_phone" placeholder=" " readonly style="background-color: #e6e6e6;">
                                                     </div>
 
@@ -1216,6 +1249,21 @@ session_start();
                                                         <label class="form-label">Material Short</label>
                                                         <input id="malt_shrt" name='malt_shrt[]' type="text" autocomplete="off" class="form-control" required placeholder=" " readonly style="background-color: #e6e6e6;">
                                                     </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">License Month Start</label>
+                                                        <input id="license_start" name='license_start[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">License Month</label>
+                                                        <input id="license_month" name='license_month[]' type="text" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">License Expiry Date</label>
+                                                        <input id="license_exp" name='license_exp[]' type="date" autocomplete="off" class="form-control" placeholder=" " style="border: 2px solid #b3c6ff; background-color: #ccd9ff;">
+                                                    </div>
                                                     
                                                     <div class="col-md-4">
                                                         <label class="form-label">Warranty Month Start*</label>
@@ -1352,10 +1400,25 @@ session_start();
     $("#dataTable1").on("click", '.view_dtl', function(){
         var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
         var po_item = $(this).closest('tr').find('.po_item').val()
+        var req_grp_code = $(this).closest('tr').find('.req_grp_code').val()
+        var req_grp_name = $(this).closest('tr').find('.req_grp_name').val()
+        var req_type_code = $(this).closest('tr').find('.req_type_code').val()
+        var req_type_name = $(this).closest('tr').find('.req_type_name').val()
+        var ass_grp_code = $(this).closest('tr').find('.ass_grp_code').val()
+        var ass_grp_name = $(this).closest('tr').find('.ass_grp_name').val()
+        var ass_sub_grp_code = $(this).closest('tr').find('.ass_sub_grp_code').val()
+        var ass_sub_grp_name = $(this).closest('tr').find('.ass_sub_grp_name').val()
+        var brand_code = $(this).closest('tr').find('.brand_code').val()
+        var brand_name = $(this).closest('tr').find('.brand_name').val()
+        var model_code = $(this).closest('tr').find('.model_code').val()
+        var model_name = $(this).closest('tr').find('.model_name').val()
         $.ajax({
             type: "POST",
             url: "../../logic/mod_json.php",
-            data: {doc_no1: doc_no1, po_item:po_item},
+            data: {doc_no1: doc_no1, po_item:po_item, req_grp_code:req_grp_code, req_grp_name:req_grp_name, req_type_code:req_type_code, 
+                req_type_name:req_type_name, ass_grp_code:ass_grp_code, ass_grp_name:ass_grp_name, ass_sub_grp_code:ass_sub_grp_code,
+                ass_sub_grp_name:ass_sub_grp_name, brand_name:brand_name, 
+                brand_code:brand_code, model_code:model_code, model_name:model_name},
             success: function(res1){
                 $('#po_dtls').modal('show');
                 $('#po_dtls').modal({
@@ -1377,13 +1440,12 @@ session_start();
                 $("#per_email").val(res1.PER_EMAIL)
                 $("#bus_email").val(res1.BUS_EMAIL)
                 // $("#ref_person").val(res1.REF_PERSON)
-                $("#supplier").val(res1.SUPPLIER)
-                $("#req_grp").append("<option value="+ res1.REQ_GRP +">"+ res1.REQ_GRP_NAME +"</option>")
-                $("#type").append("<option value="+ res1.REQ_TYPE +">"+ res1.REQ_TYPE_NAME +"</option>")
-                $("#asset_group").append("<option value="+ res1.ASS_GRP +">"+ res1.ASS_GRP_NAME +"</option>")
-                $("#asset_sub_group").append("<option value="+ res1.ASS_SUB_GRP +">"+ res1.ASS_SUB_GRP_NAME +"</option>")
-                $("#brand1").append("<option value="+ res1.BRAND +">"+ res1.BRAND_NAME +"</option>")
-                $("#model").append("<option value="+ res1.MODEL_CODE +">"+ res1.MODEL_NAME +"</option>")
+                $("#req_grp").append(res1.REQ_GRP)
+                $("#type").append(res1.REQ_TYPE)
+                $("#asset_group").append(res1.ASS_GRP)
+                $("#asset_sub_group").append(res1.ASS_SUB_GRP)
+                $("#brand1").append(res1.BRAND)
+                $("#model").append(res1.MODEL_CODE)
                 $("#series").val(res1.SERIES)
                 $("#price").val(res1.PRICE)
                 $("#ser_no11").val(res1.SER_NO1)

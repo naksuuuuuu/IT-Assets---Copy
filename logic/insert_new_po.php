@@ -57,7 +57,7 @@
             $unit = $_POST['unit'][$key];
             $po_item = $_POST['po_item1'][$key];
 
-            $maxDoc = "SELECT max(DOCUMENT_NO) from IT_ASSET_HEADER1";
+            $maxDoc = "SELECT max(DOC_NO) from IT_ASSET_HEADER";
             $stmt = oci_parse(connection(), $maxDoc);
             oci_execute($stmt);
             $row = oci_fetch_row($stmt);
@@ -68,8 +68,8 @@
                 $doc_no = $row[0];
                 $doc_no++;
             }
-            $sql = "INSERT INTO IT_ASSET_HEADER1 
-            (DOCUMENT_NO, DOCUMENT_DATE, PO_DOCUMENT_DATE, PO_NUMBER, VENDOR_CODE, PLANT_CODE, 
+            $sql = "INSERT INTO IT_ASSET_HEADER
+            (DOC_NO, DOC_DATE, PO_DOC_DATE, PO_NO, VENDOR_CODE, PLANT_CODE, 
             TOTAL_AMOUNT, STATUS,  USER_CREATE, USER_CREATED_DATE) 
             VALUES 
             (:doc_no, to_date(:doc_date, 'DD/MM/YY'), to_date(:po_doc_date, 'DD/MM/YY'), :po_no, :supplier, :plant, 
@@ -90,7 +90,7 @@
             
             // DETAILS
             if(oci_execute($res, OCI_NO_AUTO_COMMIT)){
-                $ass_id_sql = "SELECT max(ASSET_ID) from IT_ASSET_DETAILS1";
+                $ass_id_sql = "SELECT max(ASSET_ID) from IT_ASSET_DETAILS";
                 $stmt = oci_parse(connection(), $ass_id_sql);
                 oci_execute($stmt);
                 $ass_row = oci_fetch_row($stmt);
@@ -108,24 +108,25 @@
                     $ass_id++;
                 }
                 
-                $det_sql = "INSERT INTO IT_ASSET_DETAILS1 
-                (DOCUMENT_NO, DOCUMENT_DATE, PO_NUMBER, DEL_DATE, REQ_GRP, REQ_TYPE, ASSET_GROUP, 
-                SUB_ASSET_GROUP, BRAND, MODEL, SERIAL_NO1, SERIAL_NO2, SERIAL_NO3, SERIAL_NO4, ASS_CODE, UNIT,
-                QTY, PO_ITEM, UNIT_PRICE, LICENSE_START_DATE, LICENSE_MONTH, LICENSE_EXPIRE_DATE, 
+                $det_sql = "INSERT INTO IT_ASSET_DETAILS
+                (DOC_NO, DOC_DATE, PO_NO, PO_ITEM, DEL_DATE, REQ_GRP_ID, REQ_TYPE_ID, ASSET_GRP_CODE, 
+                ASSET_SUB_GRP_CODE, BRAND_CODE, MODEL_CODE, SERIES, SERIAL_NO1, SERIAL_NO2, SERIAL_NO3, SERIAL_NO4, ASS_CODE, UNIT,
+                QTY, UNIT_PRICE, ASSET_ID, ASSET_FLAG, LICENSE_START_DATE, LICENSE_MONTH, LICENSE_EXPIRE_DATE, 
                 WARRANTY_START_DATE, WARRANTY_MONTH, WARRANTY_EXPIRE_DATE, DEL_NOTE, MTRL_SHORT, REMARKS,
-                REF_PERSON, EMPL_ID, USER_CREATE, USER_CREATED_DATE, ASSET_ID, SERIES, ASSET_FLAG)
+                EMPL_ID, USER_CREATE, USER_CREATED_DATE)
                 VALUES 
-                (:doc_num, to_date(:doc_date, 'DD/MM/YY'), :po_no, to_date(:del_date, 'DD/MM/YY'), :req_grp1, :req_type1, :ass_grp1, 
-                :ass_sub_grp1, :brand1, :model1, :serial_no1, :serial_no2, :serial_no3, :serial_no4, :ass_code, :unit, 
-                :qty, :po_item, :unit_price, to_date(:lic_start, 'DD/MM/YY'), :lic_month, to_date(:lic_exp, 'DD/MM/YY'), 
+                (:doc_num, to_date(:doc_date, 'DD/MM/YY'), :po_no, :po_item, to_date(:del_date, 'DD/MM/YY'), :req_grp1, :req_type1, :ass_grp1, 
+                :ass_sub_grp1, :brand1, :model1, :series, :serial_no1, :serial_no2, :serial_no3, :serial_no4, :ass_code, :unit, 
+                :qty, :unit_price, :ass_id, :ass_flag, to_date(:lic_start, 'DD/MM/YY'), :lic_month, to_date(:lic_exp, 'DD/MM/YY'), 
                 to_date(:war_start, 'DD/MM/YY'), :war_month, to_date(:war_exp, 'DD/MM/YY'), :del_note, :mtrl_short, :rem,
-                :ref_person,  :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'), :ass_id, :series, :ass_flag)";
+                :emp_id, :username, to_date(:user_date, 'DD/MM/YY HH:MI:SS am'))";
 
                 $result= oci_parse(connection(), $det_sql);
 
                 oci_bind_by_name($result, ':doc_num', $doc_no);
                 oci_bind_by_name($result, ':doc_date', $doc_date);
                 oci_bind_by_name($result, ':po_no', $po_no);
+                oci_bind_by_name($result, ':po_item', $po_item);
                 oci_bind_by_name($result, ':del_date', $del_date);
                 oci_bind_by_name($result, ':req_grp1', $req_grp1);
                 oci_bind_by_name($result, ':req_type1', $req_type1);
@@ -141,8 +142,9 @@
                 oci_bind_by_name($result, ':ass_code', $ass_code);
                 oci_bind_by_name($result, ':unit', $malt_shrt);
                 oci_bind_by_name($result, ':qty', $remarks);
-                oci_bind_by_name($result, ':po_item', $po_item);
                 oci_bind_by_name($result, ':unit_price', $unit_price);
+                oci_bind_by_name($result, ':ass_id', $ass_id);
+                oci_bind_by_name($result, ':ass_flag', $ass_flagT);
                 oci_bind_by_name($result, ':lic_start', $lic_start);
                 oci_bind_by_name($result, ':lic_month', $lic_month);
                 oci_bind_by_name($result, ':lic_exp', $lic_exp);
@@ -151,15 +153,13 @@
                 oci_bind_by_name($result, ':war_exp', $war_exp);
                 oci_bind_by_name($result, ':del_note', $del_note);
                 oci_bind_by_name($result, ':mtrl_short', $mtrl_short);
-                oci_bind_by_name($result, ':ass_flag', $ass_flagT);
                 oci_bind_by_name($result, ':rem', $rem);
                 // oci_bind_by_name($result, ':attch', $file_name);
-                oci_bind_by_name($result, ':ref_person', $ref_per);
+                // oci_bind_by_name($result, ':ref_person', $ref_per);
                 oci_bind_by_name($result, ':emp_id', $emp_id);
                 oci_bind_by_name($result, ':username', $name);
                 oci_bind_by_name($result, ':user_date', $date);
-                oci_bind_by_name($result, ':ass_id', $ass_id);
-
+                
                 if(oci_execute($result, OCI_NO_AUTO_COMMIT)){
                     oci_commit(connection());
                     $count++;

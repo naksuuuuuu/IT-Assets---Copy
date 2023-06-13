@@ -82,13 +82,13 @@ else if(isset($_POST['po_no'])){
     oci_execute($result);
 
     $details = oci_fetch_assoc($result);
-    $po_date = date_format(date_create($details['PO_DEL_DATE']), "Y-m-d");
+    $po_date = date_format(date_create($details['PO_DELIVERY_DATE']), "Y-m-d");
     $po_doc_date = date_format(date_create($details['PO_DOC_DATE']), "Y-m-d");
     
     echo json_encode(array('PO_NO' => $details['PO_NO'], 'ITEM' => $details['PO_ITEM'], 'PO_DOC_DATE' => $po_doc_date, 'PLANT' => $details['PLANT'], 
-    'PO_STATUS' => $details['PO_STATUS'], 'VENDOR_CODE' => $details['VENDOR_CODE'], 'PO_UNT_PRICE' => $details['PO_UNT_PRICE'], 
-    'PO_DEL_DATE' => $po_date, 'MATERIAL_SHORT' => $details['SHORT_TEXT'],
-    'QUANTITY' => $details['PO_QTY'], 'UNIT' => $details['ORDER_UNT']));
+    'PO_STATUS' => $details['PO_STATUS'], 'VENDOR_CODE' => $details['VENDOR_CODE'], 'PO_UNIT_PRICE' => $details['PO_UNIT_PRICE'], 
+    'PO_DELIVERY_DATE' => $po_date, 'MATERIAL_SHORT' => $details['SHORT_TEXT'],
+    'QUANTITY' => $details['PO_QUANTITY'], 'UNIT' => $details['ORDER_UNIT']));
 }
 
 // PO

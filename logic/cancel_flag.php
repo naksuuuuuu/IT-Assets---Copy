@@ -21,8 +21,8 @@ if(isset($_POST['po_no'])){
     //     oci_bind_by_name($update_result, ':po_no', $po_no);
 
     // if (oci_execute($update_result, OCI_NO_AUTO_COMMIT)) {
-        $sql = "UPDATE IT_ASSET_DETAILS1 SET CANCEL_ASSET_FLAG = 'Y', CANCEL_REASON = :reason, USER_CANCEL = :username, 
-        CANCEL_DATE = to_date(:cancel_date, 'DD/MM/YY HH:MI:SS am') WHERE PO_NUMBER = :po_no AND PO_ITEM = : po_item";
+        $sql = "UPDATE IT_ASSET_DETAILS SET CANCEL_ASSET_FLAG = 'Y', CANCEL_REASON = :reason, USER_CANCEL = :username, 
+        CANCEL_DATE = to_date(:cancel_date, 'DD/MM/YY HH:MI:SS am') WHERE PO_NO = :po_no AND PO_ITEM = : po_item";
         $res = oci_parse(connection(), $sql);
         oci_bind_by_name($res, ':reason', $reason);
         oci_bind_by_name($res, ':username', $name);
