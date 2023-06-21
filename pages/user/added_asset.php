@@ -18,7 +18,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ITAMS - History</title>
+    <title>ITAMS - Added Asset</title>
 
     <!-- Custom fonts for this template -->
     <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,6 +38,8 @@ session_start();
     <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
     <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
     <link rel="stylesheet" href="../../datatable/datatables.css">
+    <link rel="stylesheet" href="../../assets/dist/imageuploadify.min.css">
+
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
 
@@ -116,7 +118,6 @@ session_start();
                         <a class="collapse-item" href="../user/create_sub_ass_grp.php">Create Sub Asset Type</a>
                         <a class="collapse-item" href="../user/create_brand.php">Create Brand</a>
                         <a class="collapse-item" href="../user/create_model.php">Create Model</a>
-                        <a class="collapse-item" href="../user/master.php">Brand & Model</a>
                     </div>
                 </div>
             </li>
@@ -357,7 +358,7 @@ session_start();
                                         <div class="row g-2">
                                             <div class="col-md-3">
                                                 <div class="label" style="color: #000000">PO Number:</div>
-                                                <select type="text" name="po_num" id='po_num' class='form-select' required style="margin-bottom: 8px;"> 
+                                                <select type="text" name="po_num" id='po_num' class='form-select' style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                 <?php  
                                                     $sql = "SELECT DISTINCT A.PO_NO FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B 
@@ -385,7 +386,7 @@ session_start();
 
                                             <div class="col-md-3">
                                                 <div class="label" style="color: #000000">Employee Name:</div>
-                                                <select type="text" name="emp_name" id='emp_name' class='form-select' required style="margin-bottom: 8px;"> 
+                                                <select type="text" name="emp_name" id='emp_name' class='form-select' style="margin-bottom: 8px;"> 
                                                 <option value=""></option>
                                                     <?php
                                                         $sql = "SELECT DISTINCT A.DOC_NO, B.EMPL_ID FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B
@@ -451,7 +452,7 @@ session_start();
 
                                             <div class="col-md-3">
                                                 <div class="label" style="color: #000000">Vendor:</div>
-                                                <select type="text" name="vendor" id='vendor' class='form-select' required style="margin-bottom: 8px;"> 
+                                                <select type="text" name="vendor" id='vendor' class='form-select' style="margin-bottom: 8px;"> 
                                                     <option value=""></option>
                                                     <?php 
                                                         $sql = "SELECT A.VENDOR_CODE, B.VENDOR_NAME FROM IT_ASSET_HEADER A, IT_ASSET_VENDORS B, IT_ASSET_DETAILS C
@@ -471,7 +472,7 @@ session_start();
 
                                             <div class="col-md-3">
                                                 <div class="label" style="color: #000000">Department:</div>
-                                                <select type="text" name="dept" id='dept' class='form-select' required style="margin-bottom: 8px;"> 
+                                                <select type="text" name="dept" id='dept' class='form-select' style="margin-bottom: 8px;"> 
                                                     <option value=""></option>
                                                     <?php
                                                         $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS A, IT_ASSET_HEADER B
@@ -501,8 +502,8 @@ session_start();
                                             </div>
 
                                             <div class="col-md-3">
-                                                <div class="label" style="color: #000000">BRAND:</div>
-                                                <select type="text" name="brand" id='brand' class='form-select' required style="margin-bottom: 8px;"> 
+                                                <div class="label" style="color: #000000">Brand:</div>
+                                                <select type="text" name="brand" id='brand' class='form-select' style="margin-bottom: 8px;"> 
                                                     <option value=""></option>
                                                     <?php 
                                                         $sql = "SELECT A.BRAND_CODE, B.BRAND_NAME FROM IT_ASSET_DETAILS A, IT_ASSET_BRAND B
@@ -632,6 +633,8 @@ session_start();
                                                         <th>Item</th>
                                                         <th>Supplier</th>
                                                         <th>User (Email)</th>
+                                                        <th>Attachment</th>
+                                                        <th></th>
                                                         <th hidden>Req Group Code</th>
                                                         <th hidden>Req Group Name</th>
                                                         <th hidden>Req Type Code</th>
@@ -678,7 +681,27 @@ session_start();
                                                 </tbody> -->
                                                 <tbody id="doc_tbody">
                                                     <?php
-                                                        $sql = "SELECT DISTINCT A.DOC_NO, A.PO_NO, C.VENDOR_NAME, 
+                                                        // $sql = "SELECT DISTINCT A.DOC_NO, A.PO_NO, C.VENDOR_NAME, 
+                                                        // B.EMPL_ID, B.MTRL_SHORT, B.PO_ITEM, B.REQ_GRP_ID, E.REQ_GRP_NAME, B.REQ_TYPE_ID, D.REQ_TYPE_NAME, 
+                                                        // B.ASSET_GRP_CODE, F.ASSET_GRP_NAME, B.ASSET_SUB_GRP_CODE, G.ASSET_SUB_GRP_NAME, B.BRAND_CODE, H.BRAND_NAME, 
+                                                        // B.MODEL_CODE, I.MODEL_NAME
+                                                        // FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B, IT_ASSET_VENDORS C, IT_ASSET_REQ_TYPE D, IT_ASSET_REQ_GROUP E,
+                                                        // IT_ASSET_GROUP F, IT_ASSET_SUB_GROUP G, IT_ASSET_BRAND H, IT_ASSET_MODEL I
+                                                        // WHERE A.DOC_DATE >= TRUNC(SYSDATE, 'MM')
+                                                        // AND A.DOC_DATE < ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 1)
+                                                        // AND A.DOC_NO = B.DOC_NO
+                                                        // AND B.REQ_TYPE_ID = D.REQ_TYPE_ID
+                                                        // AND B.REQ_GRP_ID = E.REQ_GRP_ID
+                                                        // AND B.ASSET_SUB_GRP_CODE = G.ASSET_SUB_GRP_CODE
+                                                        // AND B.ASSET_GRP_CODE = F.ASSET_GRP_CODE
+                                                        // AND B.BRAND_CODE = H.BRAND_CODE
+                                                        // AND B.MODEL_CODE = I.MODEL_CODE
+                                                        // AND A.VENDOR_CODE = C.VENDOR_CODE
+                                                        // AND B.CANCEL_ASSET_FLAG is null
+                                                        // AND B.LAST_USER_UPDATE is null
+                                                        // ORDER BY A.DOC_NO DESC";
+
+                                                        $sql = "SELECT A.DOC_NO, A.PO_NO, C.VENDOR_NAME, 
                                                         B.EMPL_ID, B.MTRL_SHORT, B.PO_ITEM, B.REQ_GRP_ID, E.REQ_GRP_NAME, B.REQ_TYPE_ID, D.REQ_TYPE_NAME, 
                                                         B.ASSET_GRP_CODE, F.ASSET_GRP_NAME, B.ASSET_SUB_GRP_CODE, G.ASSET_SUB_GRP_NAME, B.BRAND_CODE, H.BRAND_NAME, 
                                                         B.MODEL_CODE, I.MODEL_NAME
@@ -701,6 +724,7 @@ session_start();
                                                         $result = oci_parse(connection(), $sql);
                                                         oci_execute($result);                                                    
                                                         
+                                                        $res = "";
                                                         while($row = oci_fetch_assoc($result)){
                                                             $empId = $row["EMPL_ID"];
                                                         
@@ -714,7 +738,7 @@ session_start();
                                                         
                                                             $row1 = oci_fetch_assoc($stmt);
                                                         
-                                                            echo"<tr>
+                                                            $res.="<tr>
                                                                     <td><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></td>
                                                                     <td>".$row["DOC_NO"]."</td>
                                                                     <td>".$row["PO_ITEM"]."</td>
@@ -724,6 +748,34 @@ session_start();
                                                                     <td>".$row["MTRL_SHORT"]."</td>
                                                                     <td>".$row["VENDOR_NAME"]."</td>
                                                                     <td>".$row1["BUSINESSMAIL"]."</td>
+                                                                    <td>";
+                                                                        
+                                                                        $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
+                                                                        WHERE DOC_NO = :doc_no
+                                                                        AND PO_NO = :po_no
+                                                                        AND PO_ITEM = :po_item"; 
+                                                                        $res1 = oci_parse(connection(), $attch_sql);
+                                                                        oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
+                                                                        oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
+                                                                        oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
+
+                                                                        oci_execute($res1);
+                                                                        while($attach_row = oci_fetch_row($res1)){
+                                                                            $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
+                                                                            if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                                                                                $res.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
+                                                                            } 
+                                                                            
+                                                                            else if ($fileExtension === 'pdf') {
+                                                                                $res.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
+                                                                            } 
+                                                                            
+                                                                            else {
+                                                                                $res.="Unsupported file format";
+                                                                            }
+                                                                        }
+                                                                    $res.="</td>
+                                                                    <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
                                                                     <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                                                                     <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                                                                     <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
@@ -740,6 +792,7 @@ session_start();
                                                                     <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                                                                 </tr>";
                                                         }
+                                                        echo $res;
                                                     ?>
                                                 </tbody>
                                             </table>
@@ -1317,6 +1370,75 @@ session_start();
         </div>
     </div>
 
+    <!-- upload attachment -->
+
+    <div class="modal fade" id="upload_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form method="POST" target="_blank" class="needs-validation" novalidate method='POST' enctype='multipart/form-data' id='user_form'>
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <br>
+
+                    <div class="container-fluid">
+                        <div class="body-message">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div class="card" style="border: 2px solid #e6e6e6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingOne">
+                                            <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Upload Attachment
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingOne">
+                                            <div class="panel-body">
+                                                <div class="row g-3" style="margin: auto">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Doc No</label>
+                                                        <input type="text" class="form-control" id="doc_noM" readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">PO No</label>
+                                                        <input type="text" class="form-control" id="po_noM" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">PO Item</label>
+                                                        <input type="text" class="form-control" id="po_itemM" placeholder=" " readonly style="background-color: #e6e6e6;">
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Attachment</label>
+                                                        <input type="file" class="form-control" accept="image/jpeg,image/png,application/pdf" name="attchM" id="attchM" multiple placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-md-12">
+                                    <button class="btn btn-success" id="upload_btn" type="button">
+                                    <i class="fa-solid fa-upload"></i> Upload</button>
+                                    <button id="close_upload" class="btn btn-warning" type="button">
+                                    <i class="fa-solid fa-xmark"></i> Close</button>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModal"
         aria-hidden="true">
@@ -1358,15 +1480,20 @@ session_start();
     <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
     <script src="../../assets/selectize/dist/js/selectize.js"></script>
     <script src="../../assets/file_input/js/fileinput.js"></script>
+    <script src="../../assets/dist/imageuploadify.min.js"></script>
     <script src='../../assets/canvasjs/canvasjs.min.js'></script>
     
 </body>
 <script>
     $(document).ready(function(){
+        const username = '<?php echo $username ?>';
         const myModalEl = document.getElementById("po_dtls")
         myModalEl.addEventListener('shown.bs.modal', e=>{
             table.columns.adjust().draw()
         })
+
+        // $('input[type="file"]').imageuploadify();
+        
        $('#dataTable1').DataTable({
         searching: false, 
         paging: true, 
@@ -1409,6 +1536,15 @@ session_start();
         var brand_name = $(this).closest('tr').find('.brand_name').val()
         var model_code = $(this).closest('tr').find('.model_code').val()
         var model_name = $(this).closest('tr').find('.model_name').val()
+        Swal.fire({
+            title: 'Loading.....',
+            text: 'Please wait while the data is being loaded...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        })
         $.ajax({
             type: "POST",
             url: "../../logic/mod_json.php",
@@ -1417,6 +1553,8 @@ session_start();
                 ass_sub_grp_name:ass_sub_grp_name, brand_name:brand_name, 
                 brand_code:brand_code, model_code:model_code, model_name:model_name},
             success: function(res1){
+                Swal.hideLoading()
+                notify("success", "Data Loaded Successfully!")
                 $('#po_dtls').modal('show');
                 $('#po_dtls').modal({
                     backdrop: 'static',
@@ -1464,6 +1602,57 @@ session_start();
                 $("#po_number").val(res1.PO_NUMBER)
                 $("#po_item").val(res1.PO_ITEM)
                 // $("#attch").val(res1.ATTCH)
+            }, 
+            error: function(){
+                Swal.hideLoading()
+                notify("error", "Error while Data Loading!")
+            }
+        })
+    })
+
+    $("#dataTable1").on("click", '.upload_attch', function(){
+        var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
+        var po_item = $(this).closest('tr').find('.po_item').val()
+        var req_grp_code = $(this).closest('tr').find('.req_grp_code').val()
+        var req_grp_name = $(this).closest('tr').find('.req_grp_name').val()
+        var req_type_code = $(this).closest('tr').find('.req_type_code').val()
+        var req_type_name = $(this).closest('tr').find('.req_type_name').val()
+        var ass_grp_code = $(this).closest('tr').find('.ass_grp_code').val()
+        var ass_grp_name = $(this).closest('tr').find('.ass_grp_name').val()
+        var ass_sub_grp_code = $(this).closest('tr').find('.ass_sub_grp_code').val()
+        var ass_sub_grp_name = $(this).closest('tr').find('.ass_sub_grp_name').val()
+        var brand_code = $(this).closest('tr').find('.brand_code').val()
+        var brand_name = $(this).closest('tr').find('.brand_name').val()
+        var model_code = $(this).closest('tr').find('.model_code').val()
+        var model_name = $(this).closest('tr').find('.model_name').val()
+        Swal.fire({
+            title: 'Loading.....',
+            text: 'Please wait while the data is being loaded...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        })
+        $.ajax({
+            type: "POST",
+            url: "../../logic/mod_json.php",
+            data: {doc_no1: doc_no1, po_item:po_item, req_grp_code:req_grp_code, req_grp_name:req_grp_name, req_type_code:req_type_code, 
+                req_type_name:req_type_name, ass_grp_code:ass_grp_code, ass_grp_name:ass_grp_name, ass_sub_grp_code:ass_sub_grp_code,
+                ass_sub_grp_name:ass_sub_grp_name, brand_name:brand_name, 
+                brand_code:brand_code, model_code:model_code, model_name:model_name},
+            success: function(res1){
+                Swal.hideLoading()
+                notify("success", "Data Loaded Successfully!")
+                    $("#upload_modal").modal('show')
+
+                    $("#doc_noM").val(res1.DOC_NO)
+                    $("#po_noM").val(res1.PO_NUMBER)
+                    $("#po_itemM").val(res1.PO_ITEM)
+            }, 
+            error: function(){
+                Swal.hideLoading()
+                notify("error", "Error while Data Loading!")
             }
         })
     })
@@ -1501,25 +1690,12 @@ session_start();
                 data: {data:data, po_num:po_num},
                 success: function(res){
                     Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
+                    notify("success", "Data Loaded Successfully!")
                     $('#doc_tbody').html(res)
                 },
                 error: function(){
                     Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
+                    notify("error", "Error while Data Loading!")
                 }
             })
         }
@@ -1542,25 +1718,12 @@ session_start();
                 data: {data:data, emp_name:emp_name},
                 success: function(res){
                     Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
+                    notify("success", "Data Loaded Successfully!")
                     $('#doc_tbody').html(res)
                 },
                 error: function(){
                     Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
+                    notify("error", "Error while Data Loading!")
                 }
             })
         }
@@ -1583,25 +1746,12 @@ session_start();
                 data: {data:data, brand:brand},
                 success: function(res){
                     Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
+                    notify("success", "Data Loaded Successfully!")
                     $('#doc_tbody').html(res)
                 },
                 error: function(){
                     Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
+                    notify("error", "Error while Data Loading!")
                 }
             })
         }
@@ -1624,25 +1774,12 @@ session_start();
                 data: {data:data, dept:dept},
                 success: function(res){
                     Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
+                    notify("success", "Data Loaded Successfully!")
                     $('#doc_tbody').html(res)
                 },
                 error: function(){
                     Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
+                    notify("error", "Error while Data Loading!")
                 },
             })
         }
@@ -1665,25 +1802,12 @@ session_start();
                 data: {data:data, vendor:vendor},
                 success: function(res){
                     Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
+                    notify("success", "Data Loaded Successfully!")
                     $('#doc_tbody').html(res)
                 },
                 error: function(){
                     Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
+                    notify("error", "Error while Data Loading!")
                 }
             })
         }
@@ -1706,25 +1830,12 @@ session_start();
                 data: {data:data, from_date:from_date, to_date:to_date},
                 success: function(res){
                     Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
+                    notify("success", "Data Loaded Successfully!")
                     $('#doc_tbody').html(res)
                 },
                 error: function(){
                     Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
+                    notify("error", "Error while Data Loading!")
                 }
             })
         }
@@ -1747,25 +1858,12 @@ session_start();
                 data: {data:data, ser_no1:ser_no1},
                 success: function(res){
                     Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
+                    notify("success", "Data Loaded Successfully!")
                     $('#doc_tbody').html(res)
                 },
                 error: function(){
                     Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
+                    notify("error", "Error while Data Loading!")
                 }
             })
         }
@@ -1788,25 +1886,12 @@ session_start();
                 data: {data:data, rem:rem},
                 success: function(res){
                     Swal.hideLoading()
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data loaded successfully!',
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-right',
-                        timer: 2000,
-                        timerProgressBar: true
-                    })
+                    notify("success", "Data Loaded Successfully!")
                     $('#doc_tbody').html(res)
                 },
                 error: function(){
                     Swal.hideLoading()
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while loading data',
-                        icon: 'error'
-                    })
+                    notify("error", "Error while Data Loading!")
                 }
             })
         }
@@ -1935,13 +2020,18 @@ session_start();
         // }
         
         else {
-            Swal.fire({
-                title: "Error",
-                text: "Please Select in the input field",
-                icon: "error",
-            });
+            notify("error", "Error while Data Loading!")
         }
     })
+
+    $('.view_attch').on('click', function() {
+        var imagePath = $(this).attr('src');
+        var modalHtml = '<div class="image-modal"><img src="' + imagePath + '"></div>';
+        $('body').append(modalHtml);
+        $('.image-modal').on('click', function() {
+            $(this).remove();
+        });
+    });
 
     // reset button
     $("#clr").click(function(){
@@ -1963,6 +2053,98 @@ session_start();
         }).then(confirm => {
             if(confirm.isConfirmed){
                 $("#po_dtls").modal('hide')
+            }
+        })
+    })
+
+    $("#close_upload").click(function(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will be closed',
+            icon: 'question',
+            showCancelButton: true,
+            reverseButtons: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            confirmButtonColor: 'green',
+            cancelButtonColor: 'red'
+        }).then(confirm => {
+            if(confirm.isConfirmed){
+                $("#upload_modal").modal('hide')
+            }
+        })
+    })
+
+    $("#upload_btn").click(function(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will be saved in database',
+            icon: 'question',
+            showCancelButton: true,
+            reverseButtons: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            confirmButtonColor: 'green',
+            cancelButtonColor: 'red'
+        }).then(confirm => {
+            if(confirm.isConfirmed){
+                var data = new FormData();
+
+                data.append('username', username)
+
+                var doc_noM = $('input#doc_noM').val();
+                data.append('doc_noM', doc_noM);
+
+                var po_noM = $('input#po_noM').val();
+                data.append('po_noM', po_noM);
+
+                var po_itemM = $('input#po_itemM').val();
+                data.append('po_itemM', po_itemM);
+
+
+                var length = $("input[name='attchM']").get(0).files.length;
+                if(length > 0){
+                    if(length > 1){
+                        for(var i = 0; i < length; i++){
+                            data.append('image[]', $("input[name='attchM']").prop('files')[i]);
+                        }
+                    }else{
+                        data.append('image[]', $("input[name='attchM']").prop('files')[0]);
+                    }
+                }
+
+                // console.log(doc_noM)
+                // console.log(po_noM)
+                // console.log(po_itemM)
+                // console.log(length)
+
+                $.ajax({
+                    method:"POST",
+                    url: "../../logic/upload_attch.php",
+                    data: data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(res){
+                        if(res.success == 1){
+                            notify(res.icon, res.message)
+                            window.setInterval(function(){
+                                location.reload();	
+                            },2000)
+                        }
+                        else{
+                            notify(res.icon, res.message)
+                        }
+                    },
+                    failure: function(response){
+                    alert("ERROR");
+                    },
+                    error: function(req, textStatus, errorThrown){
+                        console.log("ERROR ",textStatus);
+                        console.log("ERROR ",errorThrown);
+                        console.log("ERROR", req)
+                    }
+                })
             }
         })
     })
@@ -2106,5 +2288,18 @@ session_start();
     }
 
 })
+
+    function notify(icon, message){
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            title: message,
+            icon: icon,
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            showCancelButton: false
+        })
+    }
 </script>
 </html>

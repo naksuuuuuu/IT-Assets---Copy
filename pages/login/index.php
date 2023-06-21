@@ -114,7 +114,7 @@
             $("#btn").click(function(){
                 var login = $("#user_name").val()
                 var pass = $("#password").val()
-                console.log(login + " " + pass) 
+                // console.log(login + " " + pass) SS
 
                 if (login == ""){
                     alert("LogIn Error")

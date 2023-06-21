@@ -20,7 +20,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ITAMS - Req_Group</title>
+    <title>ITAMS - Request Group</title>
 
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -116,7 +116,6 @@ session_start();
                         <a class="collapse-item" href="../user/create_sub_ass_grp.php">Create Sub Asset Type</a>
                         <a class="collapse-item" href="../user/create_brand.php">Create Brand</a>
                         <a class="collapse-item" href="../user/create_model.php">Create Model</a>
-                        <a class="collapse-item" href="../user/master.php">Brand & Model</a>
                     </div>
                 </div>
             </li>
@@ -283,7 +282,7 @@ session_start();
                                 </tfoot> -->
                                 <tbody>
                                     <?php
-                                        $sql = "SELECT * FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GRP_ID asc";
+                                        $sql = "SELECT * FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GRP_ID ASC";
                                         $query = oci_parse(connection(), $sql);
                                         oci_execute($query);
                                             while ($row = oci_fetch_assoc($query)) {

@@ -19,7 +19,7 @@ $username = $_SESSION['username'];
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ITAMS - Dashboard</title>
+    <title>ITAMS - Transferred Asset</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="../../assets/fontawesome_1/css/all.css">
@@ -110,7 +110,6 @@ $username = $_SESSION['username'];
                         <a class="collapse-item" href="../user/create_sub_ass_grp.php">Create Sub Asset Type</a>
                         <a class="collapse-item" href="../user/create_brand.php">Create Brand</a>
                         <a class="collapse-item" href="../user/create_model.php">Create Model</a>
-                        <a class="collapse-item" href="../user/master.php">Brand & Model</a>
                     </div>
                 </div>
             </li>
@@ -444,6 +443,7 @@ $username = $_SESSION['username'];
                                             <th hidden>Sub Asset Group Code</th>
                                             <th hidden>Employee Id</th>
                                             <th hidden>Doc No1</th>
+                                            <th hidden>Po Item1</th>
                                         </tr>
                                     </thead>
                                     <tbody id="doc_tbody">
@@ -483,6 +483,7 @@ $username = $_SESSION['username'];
                                                         <td hidden>" . $row['ASSET_SUB_GRP_CODE'] . " hidden</td>
                                                         <td hidden>" . $row['EMPL_ID'] . " hidden</td>
                                                         <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
+                                                        <td hidden><input class='po_item1' value=".$row["PO_ITEM"]." hidden></td>
                                                     </tr>";
                                             }
                                         ?>
@@ -946,10 +947,11 @@ $username = $_SESSION['username'];
             })
             $("#myTable").on("click", ".view_dtl", function(){
                 var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
+                var po_item1 = $(this).closest('tr').find('.po_item1').val()
                 $.ajax({
                     type: "POST",
                     url: "../../logic/transfer_print.php",
-                    data: {doc_no1:doc_no1},
+                    data: {doc_no1:doc_no1, po_item1:po_item1},
                     success: function(res1){
 
                         $('#container1_modal').modal('show');

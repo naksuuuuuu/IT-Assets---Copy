@@ -20,7 +20,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ITAMS - History</title>
+    <title>ITAMS - Modified Asset</title>
 
     <!-- Custom fonts for this template -->
     <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -40,6 +40,8 @@ session_start();
     <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
     <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
     <link rel="stylesheet" href="../../datatable/datatables.css">
+    <link rel="stylesheet" href="../../assets/dist/imageuploadify.min.css">
+
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
 
@@ -118,7 +120,6 @@ session_start();
                         <a class="collapse-item" href="../user/create_sub_ass_grp.php">Create Sub Asset Type</a>
                         <a class="collapse-item" href="../user/create_brand.php">Create Brand</a>
                         <a class="collapse-item" href="../user/create_model.php">Create Model</a>
-                        <a class="collapse-item" href="../user/master.php">Brand & Model</a>
                     </div>
                 </div>
             </li>
@@ -522,62 +523,6 @@ session_start();
                                                     ?>
                                                 </select> 
                                             </div>
-
-                                            <!-- <div class="col-md-3">
-                                                <div class="label" style="color: #000000">New Item</div>
-                                                <select type="text" name="new_item" id='new_item' class='form-select' required style="margin-bottom: 8px;"> 
-                                                <option value=""></option>
-                                                <?php  
-                                                    // $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
-                                                    //     WHERE A.PO_NUMBER = B.PO_NUMBER
-                                                    //     AND B.CANCEL_ASSET_FLAG is null
-                                                    //     AND B.LAST_USER_UPDATE is null";
-                                                    // $res = oci_parse(connection(), $sql);
-                                                    // oci_execute($res);
-
-                                                    // while($row = oci_fetch_row($res)){
-                                                    //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
-                                                    // }
-                                                ?>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <div class="label" style="color: #000000">Modified Item</div>
-                                                <select type="text" name="modified_item" id='modified_item' class='form-select' required style="margin-bottom: 8px;"> 
-                                                <option value=""></option>
-                                                <?php  
-                                                    // $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
-                                                    //     WHERE A.PO_NUMBER = B.PO_NUMBER
-                                                    //     AND B.CANCEL_ASSET_FLAG is null
-                                                    //     AND B.LAST_USER_UPDATE is not null";
-                                                    // $res = oci_parse(connection(), $sql);
-                                                    // oci_execute($res);
-
-                                                    // while($row = oci_fetch_row($res)){
-                                                    //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
-                                                    // }
-                                                ?>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <div class="label" style="color: #000000">Cancelled Item</div>
-                                                <select type="text" name="cancelled_item" id='cancelled_item' class='form-select' required style="margin-bottom: 8px;"> 
-                                                <option value=""></option>
-                                                <?php  
-                                                    // $sql = "SELECT DISTINCT A.PO_NUMBER FROM IT_ASSET_HEADER1 A, IT_ASSET_DETAILS1 B 
-                                                    //     WHERE A.PO_NUMBER = B.PO_NUMBER
-                                                    //     AND B.CANCEL_ASSET_FLAG is not null";
-                                                    // $res = oci_parse(connection(), $sql);
-                                                    // oci_execute($res);
-
-                                                    // while($row = oci_fetch_row($res)){
-                                                    //     echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
-                                                    // }
-                                                ?>
-                                                </select>
-                                            </div> -->
                                         </div>
                                 
                                         <div class="col-md-12">
@@ -586,38 +531,6 @@ session_start();
                                                 <button class="btn btn-success" id="srch" type="button"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
                                             </div>
                                         </div>
-                                        <!-- </form> -->
-                                            
-                                        <!-- <div class="row mb-3">
-                                            <label class="col-sm-2" style="margin-right: -20px; margin-right: -110px; color: #fff; font-weight: bold">Search</label>
-                                            <div class="col-sm-3">
-                                                <input id="search" name='search ' type="text" class="form-control" required 
-                                                    style="border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: white;">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="label" style="color: #fff">Document No.</div>
-                                            <select class="form-select" name="doc_no" id="doc_no">
-                                                <option value=""></option>
-                                            </select>
-                                        
-                                            <div class="label" style="color: #fff">
-                                                Department:
-                                            </div>
-                                            <select type="text" name="dept" id='dept' class='form-select' required> 
-                                                <option value=""></option>
-                                                <?php 
-                                                    // $sql= "SELECT DEPTID, DESCR FROM DEPARTMENT_TBL WHERE DEPTID LIKE 'PHL%'";
-                                                    // $result = oci_parse(connection1(), $sql);
-                                                    // oci_execute($result);
-                                                    // while ($row = oci_fetch_row($result)){
-                                                    // echo "<option value='$row[0]'>".htmlspecialchars($row[1], ENT_IGNORE)."</option>";
-                                                    // }
-                                                ?>
-                                            </select> 
-                                        </div> -->                                    
-                                        <!-- </div> -->
                                     </div>
 
                                     <div class="card-body">
@@ -652,33 +565,6 @@ session_start();
                                                         <!-- <th>Status</th> -->
                                                     </tr>
                                                 </thead>
-                                                <!-- <tfoot>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Position</th>
-                                                        <th>Office</th>
-                                                        <th>Age</th>
-                                                        <th>Start date</th>
-                                                        <th>Salary</th>
-                                                    </tr>
-                                                </tfoot> -->
-                                                <!-- <tbody id="tbody">
-                                                    <tr>
-                                                        <td>
-                                                            <img data-toggle="modal" data-target="#plusImgbtn" id='plusImg' 
-                                                            src='../../assets/add-free-icon-font.png'>
-                                                        </td>
-                                                        <td></td>
-                                                        <td>4500270648</td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        
-                                                    </tr>
-                                                </tbody> -->
                                                 <tbody id="doc_tbody">
                                                     <?php
                                                         $sql = "SELECT DISTINCT A.DOC_NO, A.PO_NO, C.VENDOR_NAME, 
@@ -1305,6 +1191,28 @@ session_start();
                                     </div>
                                 </div>
                                 <br>
+                                <!-- <div class="card" style="border: 2px solid #e6e6e6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingThree">
+                                            <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                    Attachment
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                            <div class="panel-body">   
+                                                <div class="container">
+                                                    <form>
+                                                        <input id="attch" type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
+                                                    </form>  
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br> -->
                                 <div class="col-md-12">
                                     <button class="btn btn-success" id="print_btn" type="submit">
                                         <i class="fa-solid fa-print"></i> Print</button>
@@ -1361,6 +1269,7 @@ session_start();
     <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
     <script src="../../assets/selectize/dist/js/selectize.js"></script>
     <script src="../../assets/file_input/js/fileinput.js"></script>
+    <script src="../../assets/dist/imageuploadify.min.js"></script>
     <script src='../../assets/canvasjs/canvasjs.min.js'></script>
     
 </body>
@@ -1370,13 +1279,16 @@ session_start();
         myModalEl.addEventListener('shown.bs.modal', e=>{
             table.columns.adjust().draw()
         })
-       $('#dataTable1').DataTable({
-        searching: false, 
-        paging: true, 
-        info: false,
-        ordering: false,
-        fixedColumns: {leftColumns: 1}
-      });
+
+        // $('input[type="file"]').imageuploadify();
+
+        $('#dataTable1').DataTable({
+            searching: false, 
+            paging: true, 
+            info: false,
+            ordering: false,
+            fixedColumns: {leftColumns: 1}
+        });
 
     //   $('#dataTable').DataTable({
     //     searching: false, 

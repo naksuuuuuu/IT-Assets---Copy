@@ -5,6 +5,10 @@
 // define('password','CENTERPHL');
 
 function connection(){
+    // $db = "SBCPRD";
+    // $schema = "CENTERSTOCK";
+    // $password = "CENTERPHL";
+
     $db = "SBCETE";
     $schema = "FEED";
     $password = "FEEDPHL";
@@ -21,6 +25,10 @@ function connection(){
 }
 
 function connection1(){
+    // $db1 = "SBCPRD";
+    // $schema1 = "HRPHL";
+    // $password1 = "prd#hphlr14";
+
     $db1 = "SBCETE";
     $schema1 = "HRPHL";
     $password1 = "prd#hphlr14";

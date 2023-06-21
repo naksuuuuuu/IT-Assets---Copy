@@ -116,7 +116,6 @@ session_start();
                         <a class="collapse-item" href="../user/create_sub_ass_grp.php">Create Sub Asset Type</a>
                         <a class="collapse-item" href="../user/create_brand.php">Create Brand</a>
                         <a class="collapse-item" href="../user/create_model.php">Create Model</a>
-                        <a class="collapse-item" href="../user/master.php">Brand & Model</a>
                     </div>
                 </div>
             </li>
@@ -276,7 +275,7 @@ session_start();
                                 </tfoot> -->
                             <tbody>
                                 <?php
-                                    $sql = "SELECT * FROM IT_ASSET_REQ_TYPE";
+                                    $sql = "SELECT * FROM IT_ASSET_REQ_TYPE ORDER BY REQ_TYPE_ID ASC";
                                     $query = oci_parse(connection(), $sql);
                                     oci_execute($query);
                                         while ($row = oci_fetch_assoc($query)) {

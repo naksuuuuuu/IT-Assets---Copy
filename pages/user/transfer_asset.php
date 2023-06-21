@@ -19,7 +19,7 @@ $username = $_SESSION['username'];
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ITAMS - Dashboard</title>
+    <title>ITAMS - Transfer Asset</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="../../assets/fontawesome_1/css/all.css">
@@ -34,6 +34,8 @@ $username = $_SESSION['username'];
     <link rel="stylesheet" href="../../datatable/datatables.css">
     <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
     <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
+    <link rel="stylesheet" href="../../assets/dist/imageuploadify.min.css">
+
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
 
@@ -110,7 +112,6 @@ $username = $_SESSION['username'];
                         <a class="collapse-item" href="../user/create_sub_ass_grp.php">Create Sub Asset Type</a>
                         <a class="collapse-item" href="../user/create_brand.php">Create Brand</a>
                         <a class="collapse-item" href="../user/create_model.php">Create Model</a>
-                        <a class="collapse-item" href="../user/master.php">Brand & Model</a>
                     </div>
                 </div>
             </li>
@@ -240,6 +241,62 @@ $username = $_SESSION['username'];
                     .form-select, .form-label, .form-control{
                         color: #666666;
                     }
+
+                    .panel-default>.panel-heading {
+                        color: #333;
+                        text-decoration: none;
+                        background-color: #e6e6e6;
+                        border-color: #e4e5e7;
+                        padding: 0;
+                        -webkit-user-select: none;
+                        -moz-user-select: none;
+                        -ms-user-select: none;
+                        user-select: none;
+                    }
+
+                    .panel-default>.panel-heading a {
+                        color: black;
+                        display: block;
+                        padding: 10px 15px;
+                        text-decoration: none;
+                    }
+
+                    .panel-default>.panel-heading a:after {
+                        content: "";
+                        background-color: #e6e6e6;
+                        position: relative;
+                        top: 1px;
+                        display: inline-block;
+                        font-family: 'Arial';
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 1;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        float: right;
+                        transition: transform .25s linear;
+                        -webkit-transition: -webkit-transform .25s linear;
+                    }
+
+                    .panel-default>.panel-heading a[aria-expanded="true"] {
+                        background-color: #e6e6e6;
+                    }
+
+                    .panel-default>.panel-heading a[aria-expanded="true"]:after {
+                        content: "\2212";
+                        -webkit-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                        font-weight: 900;
+                    }
+
+                    .panel-default>.panel-heading a[aria-expanded="false"]:after {
+                        content: "\002b";
+                        -webkit-transform: rotate(90deg);
+                        transform: rotate(90deg);
+                        font-weight: 900;
+                    }
+                    h1 { font-size: 28px; }
+                    h4, modal-title { font-size: 18px; font-weight: bold; }
                 </style>
                 
                 <div class="container-fluid">
@@ -258,7 +315,9 @@ $username = $_SESSION['username'];
                                     <select class="form-select" name="po_no" id="po_no" style="margin-bottom: 8px;">
                                         <option value=""></option>
                                         <?php 
-                                            $sql = "SELECT PO_NO FROM IT_ASSET_HEADER WHERE CANCEL_ASSET_FLAG is null";
+                                            $sql = "SELECT A.PO_NO FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B
+                                                WHERE B.CANCEL_ASSET_FLAG is null
+                                                AND A.DOC_NO = B.DOC_NO";
                                             $res = oci_parse(connection(), $sql);
                                             oci_execute($res);
 
@@ -285,7 +344,7 @@ $username = $_SESSION['username'];
                                         <?php
                                             $sql = "SELECT DISTINCT A.DOC_NO, B.EMPL_ID FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B
                                                     WHERE A.DOC_NO = B.DOC_NO
-                                                    AND A.CANCEL_ASSET_FLAG is null";
+                                                    AND B.CANCEL_ASSET_FLAG is null";
 
                                             $result = oci_parse(connection(), $sql);
                                             oci_execute($result);                                                    
@@ -452,64 +511,6 @@ $username = $_SESSION['username'];
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <style>
-        .panel-default>.panel-heading {
-            color: #333;
-            text-decoration: none;
-            background-color: #e6e6e6;
-            border-color: #e4e5e7;
-            padding: 0;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        .panel-default>.panel-heading a {
-            color: black;
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-        }
-
-        .panel-default>.panel-heading a:after {
-            content: "";
-            background-color: #e6e6e6;
-            position: relative;
-            top: 1px;
-            display: inline-block;
-            font-family: 'Arial';
-            font-style: normal;
-            font-weight: 400;
-            line-height: 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            float: right;
-            transition: transform .25s linear;
-            -webkit-transition: -webkit-transform .25s linear;
-        }
-
-        .panel-default>.panel-heading a[aria-expanded="true"] {
-            background-color: #e6e6e6;
-        }
-
-        .panel-default>.panel-heading a[aria-expanded="true"]:after {
-            content: "\2212";
-            -webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
-            font-weight: 900;
-        }
-
-        .panel-default>.panel-heading a[aria-expanded="false"]:after {
-            content: "\002b";
-            -webkit-transform: rotate(90deg);
-            transform: rotate(90deg);
-            font-weight: 900;
-        }
-        h1 { font-size: 28px; }
-        h4, modal-title { font-size: 18px; font-weight: bold; }
-    </style>
 
     <div class="modal fade" id="container1_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
         <div class="modal-dialog modal-lg" role="document">

@@ -18,7 +18,7 @@ $username = $_SESSION['username'];
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ITAMS - Assets</title>
+    <title>ITAMS - Add Asset</title>
 
     <!-- Custom fonts for this template -->
     <!-- <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> -->
@@ -26,18 +26,19 @@ $username = $_SESSION['username'];
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
+    <!-- <script src="../../vendor/jquery/jquery.min.js"></script> -->
     <!-- Custom styles for this template -->
     <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this page -->
-    <!-- <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
-
     <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="../../assets//fontawesome_1/css/all.min.css">
+    <!-- <link rel="stylesheet" href="../../assets//fontawesome_1/css/all.min.css"> -->
+    <link rel="stylesheet" href="../../assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
     <link rel="stylesheet" href="../../datatable/datatables.css">
-    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
+    <link rel="stylesheet" href="../../assets/file_input/css/fileinput.min.css">
     <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
+    <link rel="stylesheet" href="../../assets/dist/imageuploadify.min.css">
+
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
 
@@ -117,7 +118,6 @@ $username = $_SESSION['username'];
                         <a class="collapse-item" href="../user/create_sub_ass_grp.php">Create Sub Asset Type</a>
                         <a class="collapse-item" href="../user/create_brand.php">Create Brand</a>
                         <a class="collapse-item" href="../user/create_model.php">Create Model</a>
-                        <a class="collapse-item" href="../user/master.php">Brand & Model</a>
                     </div>
                 </div>
             </li>
@@ -251,20 +251,6 @@ $username = $_SESSION['username'];
                     }
                     .form-select, .form-label, .form-control{
                         color: #666666;
-                    }
-
-                    .main-section{
-                        margin:0 auto;
-                        padding: 20px;
-                        margin-top: 20px;
-                        height: auto;
-                        width: auto;
-                        background-color: #fff;
-                        box-shadow: 0px 0px 10px #c1c1c1;
-                    }
-                    .fileinput-remove,
-                    .fileinput-upload{
-                        display: none;
                     }
 
                     .panel-default>.panel-heading {
@@ -425,7 +411,7 @@ $username = $_SESSION['username'];
                                                                     <th style="width: 200px;">Warranty Expiry Date</th>
                                                                     <th style="width: 200px;">Asset Flag</th>
                                                                     <th style="width: 200px;">Remarks</th>
-                                                                    <th style="width: 200px;">Attachment</th>
+                                                                    <th style="min-width: 200px !important; max-width: 200px !important;">Attachment</th>
                                                                     <th style="width: 200px;">PO Doc Date</th>
                                                                     <th style="width: 200px;">Plant</th>
                                                                     <th style="width: 200px;">Status</th>
@@ -439,6 +425,7 @@ $username = $_SESSION['username'];
                                                                     <th style="width: 200px;" hidden>Sub Asset</th>
                                                                     <th style="width: 200px;" hidden>Brand</th>
                                                                     <th style="width: 200px;" hidden>Model</th>
+                                                                    <!-- <th style="width: 200px;">Image Data</th> -->
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="dtl_body">
@@ -906,7 +893,7 @@ $username = $_SESSION['username'];
                     <div class="modal fade" id="info" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="infomodal">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
-                                <form id="info-form">
+                                <!-- <form method='POST' enctype='multipart/form-data' id="info_formR" class="needs-validation" novalidate> -->
                                     <div class="modal-header">
                                         <!-- <h5 class="modal-title" id="infomodal">Information</h5> -->
                                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
@@ -914,8 +901,7 @@ $username = $_SESSION['username'];
                                         </button>
                                     </div>
                                     <br>
-
-                                    <form class="needs-validation" novalidate method='POST' enctype='multipart/form-data' id='info_Form1'>
+                                    <!-- <form class="needs-validation" novalidate method='POST' enctype='multipart/form-data' id='info_Form1'> -->
                                         <div class="container-fluid">
                                             <div class="body-message">
                                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -1234,8 +1220,8 @@ $username = $_SESSION['username'];
                                                                     <div class="row g-3" style="margin: auto">
                                                                         <div class="col-md-4">
                                                                             <label class="form-label">Supplier</label>
-                                                                            <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" placeholder=" " required>
-                                                                                <!-- <option selected=" ">Select Suppliers...</option> -->
+                                                                            <select list="supp_list" id="supplier" name='supplier[]' type="text" class="form-select" placeholder=" " required readonly>
+                                                                                <!-- <option selected=" "></option> -->
                                                                                     <?php 
                                                                                         $sql = "SELECT DISTINCT VENDOR_CODE, VENDOR_NAME FROM IT_ASSET_VENDORS";
                                                                                         $res = oci_parse(connection(), $sql);
@@ -1251,7 +1237,7 @@ $username = $_SESSION['username'];
                                                                         <div class="col-md-4">
                                                                             <label class="form-label">Request Group <small style="color: red">*</small></label>
                                                                             <select class="form-select" id="req_grp" name='req_grp[]' type="text" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                                                <option selected=" ">Select Request Group...</option>
+                                                                                <option selected=" "></option>
                                                                                 <?php 
                                                                                     $sql = "SELECT REQ_GRP_ID, REQ_GRP_NAME FROM IT_ASSET_REQ_GROUP ORDER BY REQ_GRP_ID";
                                                                                     $res = oci_parse(connection(), $sql);
@@ -1267,35 +1253,35 @@ $username = $_SESSION['username'];
                                                                         <div class="col-md-4">
                                                                             <label class="form-label">Request Type <small style="color: red">*</small></label>
                                                                             <select id="type" name='type[]' type="text" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                                                    <option selected=" ">Select Request Type...</option>
+                                                                                    <!-- <option selected=" ">Select Request Type...</option> -->
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
                                                                             <label class="form-label">Asset Group <small style="color: red">*</small></label>
                                                                             <select id="asset_group" name='asset_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                                                <option selected=" ">Select Asset...</option>
+                                                                                <!-- <option selected=" ">Select Asset...</option> -->
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
                                                                             <label class="form-label">Asset Sub Group <small style="color: red">*</small></label>
                                                                             <select id="asset_sub_group" name='asset_sub_group' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                                                <option selected=" ">Select Asset Sub Group...</option>
+                                                                                <!-- <option selected=" ">Select Asset Sub Group...</option> -->
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
                                                                             <label class="form-label">Brand <small style="color: red">*</small></label>
                                                                             <select id="brand" name='brand[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                                                    <option selected=" ">Select Brand...</option>
+                                                                                    <!-- <option selected=" ">Select Brand...</option> -->
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-4">
                                                                             <label class="form-label">Model <small style="color: red">*</small></label>
                                                                             <select id="model" name='model[]' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                                                <option selected=" ">Select Model...</option>
+                                                                                <!-- <option selected=" ">Select Model...</option> -->
                                                                             </select>
                                                                         </div>
 
@@ -1376,22 +1362,31 @@ $username = $_SESSION['username'];
 
                                                                         <div class="col-md-4">
                                                                             <label class="form-label">Warranty Expiry Date</label>
-                                                                            <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control" required placeholder=" " style="background-color: #e6e6e6;">
+                                                                            <input id="war_exp" name='war_exp[]' type="date" autocomplete="off" class="form-control" required readonly placeholder=" " style="background-color: #e6e6e6;">
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Flag <small style="color: red">*</small></label>
-                                                                            <select id="ass_flagR" name='ass_flagR' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                                                <option selected=" ">Select Asset Flag...</option>
-                                                                                <option value="asset">Asset</option>
-                                                                                <option value="expense">Expense</option>
+                                                                            <label class="form-label">Asset Flag</label>
+                                                                            <select id="ass_flagR" name='ass_flagR' type="text" autocomplete="off" class="form-select" required readonly placeholder=" " style="background-color: #e6e6e6;">
+                                                                                <!-- <option selected=" ">Select Asset Flag...</option> -->
+                                                                                <!-- <option value="asset">Asset</option>
+                                                                                <option value="expense">Expense</option> -->
+
+                                                                                <?php 
+                                                                                    $sql = "SELECT DISTINCT ACCT_CAT FROM IT_ASSET_PO";
+                                                                                    $res = oci_parse(connection(), $sql);
+                                                                                    oci_execute($res);
+
+                                                                                    while($row = oci_fetch_row($res)){
+                                                                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                                                    }
+                                                                                ?>
                                                                             </select>
                                                                         </div>
 
                                                                         <div class="col-md-12">
                                                                             <label class="form-label">Remarks <small style="color: red">*</small></label>
-                                                                            <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
-                                                                            </textarea>
+                                                                            <textarea id="remarks" name='remarks[]' type="text" autocomplete="off" class="form-control" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;"></textarea>
                                                                         </div>
 
                                                                         <!-- <div class="col-md-4">
@@ -1405,40 +1400,32 @@ $username = $_SESSION['username'];
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <br>
-                                                    <div class="card" style="border: 2px solid #e6e6e6">
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading" role="tab" id="headingThree">
-                                                                <h3 class="panel-title font-weight-bold" style="color: #000">
-                                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_Three" aria-expanded="false" aria-controls="collapse_Three">
-                                                                        Attachment
-                                                                    </a>
-                                                                </h3>
-                                                            </div>
-                                                            <div id="collapse_Three" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                                                <div class="panel-body">   
-                                                                    <div class="container">
-                                                                        <div class="row">
-                                                                            <div class="col-lg-8 col-sm-12 col-11 main-section">
-                                                                                <form enctype="multipart/form-data">
-                                                                                    <div class="form-group">
-                                                                                        <div class="file-loading">
-                                                                                            <input id="attch" type="file" multiple class="file">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </form>                       
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <br>
+                                                </div>
+                                                <br>
+                                                <!-- <div class="card" style="border: 2px solid #e6e6e6">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading" role="tab" id="headingThree">
+                                                            <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_Three" aria-expanded="false" aria-controls="collapse_Three">
+                                                                    Attachment
+                                                                </a>
+                                                            </h3>
+                                                        </div>
+                                                        <div id="collapse_Three" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                                            <div class="panel-body">   
+                                                                <div class="container">
+                                                                    <form>
+                                                                        <input id="attch" type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
+                                                                    </form>  
                                                                 </div>
+                                                                <br>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <br>
+                                                <br> -->
                                                 <div class="col-md-12">
-                                                    <button id="add_btn1" class="btn btn-success" type="submit">
+                                                    <button id="add_btn1" class="btn btn-success" type="button">
                                                         <i class="fa-solid fa-plus"></i> Add</button>
                                                     <button id="close_btn" class="btn btn-warning" type="button">
                                                         <i class="fa-solid fa-xmark"></i> Close</button>
@@ -1447,8 +1434,8 @@ $username = $_SESSION['username'];
                                             </div>
                                         </div>
                                         <br>
-                                    </form>
-                                </form>
+                                    <!-- </form> -->
+                                <!-- </form> -->
                             </div>
                         </div>
                     </div>
@@ -1889,11 +1876,20 @@ $username = $_SESSION['username'];
                                                                         </div>
 
                                                                         <div class="col-md-4">
-                                                                            <label class="form-label">Asset Flag <small style="color: red">*</small></label>
-                                                                            <select id="ass_flagE" name='ass_flagE' type="text" autocomplete="off" class="form-select" required placeholder=" " style="border: 2px solid #ccf2ff; background-color: #e6f9ff;">
+                                                                            <label class="form-label">Asset Flag</label>
+                                                                            <select id="ass_flagE" name='ass_flagE' type="text" autocomplete="off" class="form-select" placeholder=" " style="background-color: #e6e6e6;">
                                                                                 <option selected=" ">Select Asset Flag...</option>
-                                                                                <option value="asset">Asset</option>
-                                                                                <option value="expense">Expense</option>
+                                                                                <!-- <option value="asset">Asset</option>
+                                                                                <option value="expense">Expense</option> -->
+                                                                                <?php 
+                                                                                    $sql = "SELECT DISTINCT ACCT_CAT FROM IT_ASSET_PO";
+                                                                                    $res = oci_parse(connection(), $sql);
+                                                                                    oci_execute($res);
+
+                                                                                    while($row = oci_fetch_row($res)){
+                                                                                        echo "<option value='".htmlspecialchars($row[0],ENT_IGNORE)."'>".htmlspecialchars($row[0],ENT_IGNORE)."</option>";
+                                                                                    }
+                                                                                ?>
                                                                             </select>
                                                                         </div>
 
@@ -2307,7 +2303,7 @@ $username = $_SESSION['username'];
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="card" style="border: 2px solid #e6e6e6">
+                                                    <!-- <div class="card" style="border: 2px solid #e6e6e6">
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading" role="tab" id="headingThree">
                                                                 <h3 class="panel-title font-weight-bold" style="color: #000">
@@ -2319,24 +2315,16 @@ $username = $_SESSION['username'];
                                                             <div id="collapse_Three" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                                                 <div class="panel-body">   
                                                                     <div class="container">
-                                                                        <div class="row">
-                                                                            <div class="col-lg-8 col-sm-12 col-11 main-section">
-                                                                                <form enctype="multipart/form-data">
-                                                                                    <div class="form-group">
-                                                                                        <div class="file-loading">
-                                                                                            <input id="attch1" type="file" multiple class="file">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </form>            
-                                                                            </div>
-                                                                        </div>
+                                                                        <form>
+                                                                            <input id="attch1" type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
+                                                                        </form>  
                                                                     </div>
                                                                     <br>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <br>
+                                                    <br> -->
                                                     <div class="col-md-12">
                                                         <button id="update_btn" class="btn btn-primary" type="button">
                                                             <i class="fa-solid fa-pen-to-square"></i> Update</button>
@@ -2365,7 +2353,6 @@ $username = $_SESSION['username'];
                                             <span aria-hidden="true">×</span>
                                         </button>
                                     </div>
-                                                    
                                         <div class="table-responsive">
                                             <table class="display nowrap" id="dataTable">
                                                 <thead>
@@ -2382,6 +2369,7 @@ $username = $_SESSION['username'];
                                                         <th>Po Item Price</th>
                                                         <th>Po Doc Date</th>
                                                         <th>Po Status</th>
+                                                        <th>Acct. Cat.</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="td_body">
@@ -2475,11 +2463,18 @@ $username = $_SESSION['username'];
                                                                 document.getElementById('po_stat').value = "<?php echo ($_POST['po_stat']);?>";
                                                             </script>
                                                         </td>
+                                                        <td style='text-align: start; background-color: #FFFFFF	'>
+                                                            <input id="acct_cat" name='acct_cat[]' type="text" autocomplete="off" 
+                                                            style=" background-color: transparent">                                           
+                                                            
+                                                            <script>
+                                                                document.getElementById('acct_cat').value = "<?php echo ($_POST['acct_cat']);?>";
+                                                            </script>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                        </div>
-                                    
+                                        </div>                                    
                                     <!-- <div class="modal-footer">
                                         <input type="hidden" value="1" name="type">
                                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -2558,6 +2553,8 @@ $username = $_SESSION['username'];
     <script src="../../vendor/jquery/jquery.min.js"></script>
     <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+    <!-- <source src="../../assets/bootstrap/js/bootstrap.bundle.js"> -->
+
     <!-- Core plugin JavaScript-->
     <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
 
@@ -2565,25 +2562,44 @@ $username = $_SESSION['username'];
     <script src="../../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <!-- <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
     <script src="../../datatable/datatables.js"></script>
     <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
     <script src="../../assets/file_input/js/fileinput.js"></script>
+    <script src="../../assets/dist/imageuploadify.min.js"></script>
     <!-- Page level custom scripts -->
     <!-- <script src="../../js/demo/datatables-demo.js"></script> -->
     <script src="../../assets/selectize/dist/js/selectize.js"></script>
     <script src="../../assets/lodash.js"></script>
 
 </body>
+
+<!-- <script>
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script> -->
 <script>
     $(document).ready(function(){
-        const name = '<?php echo $username ?>';
+        const username = '<?php echo $username ?>';
         // datatable 
         const myModalEl = document.getElementById("srch_po")
         myModalEl.addEventListener('shown.bs.modal', function(){
             table.columns.adjust().draw()
         })
+
+        // $('input[type="file"]').imageuploadify();
 
         var dtl_table = $("#dtl_dataTable").DataTable({
             searching: false, 
@@ -2646,7 +2662,11 @@ $username = $_SESSION['username'];
                $(row).find('td:nth-child(51)').addClass('brand1').attr('hidden', true);
                $(row).find('td:nth-child(52)').addClass('model1').attr('hidden', true);
 
-            //    $(row).find('td:nth-child(50)').attr('class', 'model1' hidden)
+            //    var inputField = document.createElement('input');
+            //     inputField.setAttribute('type', 'text');
+            //     inputField.setAttribute('name', 'toUpload');
+            //     inputField.setAttribute('class', 'img_data');
+            //     $(row).find('td:nth-child(53)').html(inputField);
             }
         })
 
@@ -2810,41 +2830,6 @@ $username = $_SESSION['username'];
                     }
                 })
             })    
-
-            // var po_num = $('#po_no').val()
-            // var po_item1 = []
-            // if(po_num > 0){
-            //     var get = 1
-            //     // var po_dtls = 1
-            //     // console.log (po_num)
-            //     // $("#po_num").val(po_num)
-            //     $(".po_item1").each(function(){
-            //         po_item1.push(this.innerText)
-            //     })
-
-            //     $.ajax({
-            //         type: "POST",
-            //         url: "../../logic/po_search.php",
-            //         data: {po_num: po_num, po_item1: po_item1},
-            //         success: function(res){ 
-                        
-            //             $('#dataTable').DataTable().clear().draw()               
-            //             $('#td_body').html(res) 
-            //         }
-            //     })
-            // }
-            // else{
-            //     Swal.fire({
-            //         icon: 'error',
-            //         title: 'Error',
-            //         text: 'Please SELECT PO NUMBER!',
-            //         showConfirmButton: false,
-            //         toast: true,
-            //         position: 'top-right',
-            //         timer: 2000,
-            //         timerProgressBar: true
-            //     });
-            // }
             
             $(document).on("click", ".add_po", function(){
                 var po_no = $(this).closest("tr").find(".po_num").val()
@@ -2867,6 +2852,7 @@ $username = $_SESSION['username'];
                         $("#qty"). val(res1.QUANTITY)
                         $("#unit").val(res1.UNIT)
                         $("#item").val(res1.ITEM)
+                        $("#ass_flagR").val(res1.ACCT_CAT)
                     }
                 })
             })  
@@ -3091,113 +3077,216 @@ $username = $_SESSION['username'];
 
         // add button in modal receiver and information
         var count_item = 0
-        var imagebase64 = []
-        var uploadedFilename = [];
+        // var imagebase64 = []
         $("#add_btn1").click(function(){
-            // imagebase64.length = 0
-            // uploadedFilename.length = 0
-            // var filesname= $('#attch').prop('files');
-
-            // var file = $('#attch').prop('files')[0];
-            // var reader = new FileReader();
-            // reader.onload = function(event) {
-            //     var base64String = event.target.result.split(',')[1];
-            //     imagebase64.push('data:image/jpeg;base64,' + base64String);
-            // };
-            // $.each(filesname, function(index, file) {
-            //     uploadedFilename.push(file.name);
-            // });
-            // reader.readAsDataURL(file);
-
-            imagebase64.length = 0;
-            uploadedFilename.length = 0;
-            var filesname = $('#attch').prop('files');
-
-            if (filesname.length > 0) {
-                var file = filesname[0];
-                var reader = new FileReader();
-                reader.onload = function(event) {
-                    var base64String = event.target.result.split(',')[1];
-                    imagebase64.push('data:image/jpeg;base64,' + base64String);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Handle case where no file is selected
-                imagebase64.push('');  // Push an empty string or any other default value
+            if($("#empl_name").val() == ""){
+                notify("error", "Please input name")
             }
 
-            $.each(filesname, function(index, file) {
-                uploadedFilename.push(file.name);
-            });
+            else if($("#req_grp").val() == ""){
+                notify("error", "Please Select Request Group")
+            }
 
-            var table = $("#dtl_dataTable").DataTable();
-            count_item ++
-            var empl_name = $("#empl_name").find(":selected").text()
-            var dept = $("#dept").val()
-            var emp_id = $("#emp_id").val()
-            var emp_add = $("#emp_add").val()
-            var work_loc = $("#work_loc").val()
-            var off_phone = $("#off_phone").val()
-            var mob_phone = $("#mob_phone").val()
-            var hired_date = $("#hired_date").val()
-            var per_email = $("#per_email").val()
-            var bus_email = $("#bus_email").val()
-            var ref_person = $("#ref_person").val()
-            var po_no = $("#po_name").val()
-            var plant = $("#plant").val()
-            var po_doc_date = $("#po_doc_date").val()
-            var status = $("#status").val()
-            var supplier = $("#supplier").find(":selected").text()
-            var req_grp = $("#req_grp").find(":selected").text()
-            var type = $("#type").find(":selected").text()
-            var asset_group = $("#asset_group").find(":selected").text()
-            var asset_sub_group = $("#asset_sub_group").find(":selected").text()
-            var brand = $("#brand").find(":selected").text()
-            var model = $("#model").find(":selected").text()
-            var series = $("#series").val()
-            var price = $("#price").val()
-            var ser_no = $("#ser_no").val()
-            var ser_no2 = $("#ser_no2").val()
-            var ser_no3 = $("#ser_no3").val()
-            var ser_no4 = $("#ser_no4").val()
-            var ass_code = $("#ass_code").val()
-            var del_note = $("#del_note").val()
-            var del_date = $("#del_date").val()
-            var malt_shrt = $("#malt_shrt").val()
-            var license_start = $("#license_start").val()
-            var license_month = $("#license_month").val()
-            var license_exp = $("#license_exp").val()
-            var war_start = $("#war_start").val()
-            var war_month = $("#war_month").val()
-            var war_exp = $("#war_exp").val()
-            var ass_flagR = $("#ass_flagR").val()
-            var remarks = $("#remarks").val()
-            var qty = $("#qty").val()
-            var unit = $("#unit").val()
-            var item = $("#item").val()
-            var supp1 = $("#supplier").val()
-            var req_grp1 = $("#req_grp").val()
-            var type1 = $("#type").val()
-            var asset_group1 = $("#asset_group").val()
-            var asset_sub_group1 = $("#asset_sub_group").val()
-            var brand1 = $("#brand").val()
-            var model1 = $("#model").val()
-            // var attch = $("#attch").val()
+            else if($("#type").val() == ""){
+                notify("error", "Please Select Request Type")
+            }
 
-           var rowdata = [count_item, empl_name, dept, emp_id, emp_add, work_loc, off_phone, mob_phone, hired_date,
-           per_email, bus_email, ref_person, po_no, supplier, req_grp, type, asset_group, asset_sub_group, brand, model, series,
-           price, ser_no, ser_no2, ser_no3, ser_no4, ass_code, del_note, del_date, malt_shrt, license_start, license_month,
-           license_exp, war_start, war_month, war_exp, ass_flagR, remarks, uploadedFilename[0], po_doc_date, plant, status, qty, unit, item,
-           supp1, req_grp1, type1, asset_group1, asset_sub_group1, brand1, model1]
+            else if($("#asset_group").val() == ""){
+                notify("error", "Please Select Asset Group")
+            }
 
-           table.row.add(rowdata).draw();
-           $("#info").modal("hide")
-           $("#empl_name")[0].selectize.clear();
-           $("#info-form")[0].reset()
+            else if($("#asset_sub_group").val() == ""){
+                notify("error", "Please Select Asset Sub Group")
+            }
 
-        //    $("Form").each(function() {
-        //     this.reset();
-        //     });
+            else if($("#brand").val() == ""){
+                notify("error", "Please Select Brand")
+            }
+
+            else if($("#model").val() == ""){
+                notify("error", "Please Select Model")
+            }
+
+            else if($("#ser_no").val() == ""){
+                notify("error", "Please Input Serial Number")
+            }
+
+            else if($("#ass_code").val() == ""){
+                notify("error", "Please Input Asset Code")
+            }
+
+            else if($("#del_note").val() == ""){
+                notify("error", "Please Input Delivery NOte")
+            }
+
+            else if($("#war_start").val() == ""){
+                notify("error", "Please Select Warranty Date")
+            }
+
+            else if($("#war_month").val() == ""){
+                notify("error", "Please Input Warranty Month")
+            }
+
+            else if($("#remarks").val() == ""){
+                notify("error", "Please Remarks")
+            }
+
+            else{
+                var uploadedFilename = "<input type='file' name='toUpload[]' class='form-control upload' multiple>";
+
+                // imagebase64.length = 0
+                // uploadedFilename.length = 0
+                // var filesname= $('#attch').prop('files');
+
+                // var file = $('#attch').prop('files')[0];
+                // var reader = new FileReader();
+                // reader.onload = function(event) {
+                //     var base64String = event.target.result.split(',')[1];
+                //     imagebase64.push('data:image/jpeg;base64,' + base64String);
+                // };
+                // $.each(filesname, function(index, file) {
+                //     uploadedFilename.push(file.name);
+                // });
+                // reader.readAsDataURL(file);
+
+                // imagebase64.length = 0;
+                // uploadedFilename.length = 0;
+                // var filesname = $('#attch').prop('files');
+                // if (filesname.length > 0) {
+                //     var file = filesname[0];
+                //     var reader = new FileReader();
+                //     reader.onload = function(event) {
+                //         var base64String = event.target.result.split(',')[1];
+                //         // imagebase64.push('data:image/jpeg;base64,' + base64String);
+                //         if (file.type.startsWith('image/')) {
+                //             imagebase64.push('data:' + file.type + ';base64,' + base64String);
+                //         } else if (file.type === 'application/pdf') {
+                //             imagebase64.push('data:application/pdf;base64,' + base64String);
+                //         }
+                //     };
+                //     reader.readAsDataURL(file);
+                //     uploadedFilename.push(file.name);
+
+                // }
+
+                var table = $("#dtl_dataTable").DataTable();
+                count_item ++
+                var empl_name = $("#empl_name").find(":selected").text()
+                var dept = $("#dept").val()
+                var emp_id = $("#emp_id").val()
+                var emp_add = $("#emp_add").val()
+                var work_loc = $("#work_loc").val()
+                var off_phone = $("#off_phone").val()
+                var mob_phone = $("#mob_phone").val()
+                var hired_date = $("#hired_date").val()
+                var per_email = $("#per_email").val()
+                var bus_email = $("#bus_email").val()
+                var ref_person = $("#ref_person").val()
+                var po_no = $("#po_name").val()
+                var plant = $("#plant").val()
+                var po_doc_date = $("#po_doc_date").val()
+                var status = $("#status").val()
+                var supplier = $("#supplier").find(":selected").text()
+                var req_grp = $("#req_grp").find(":selected").text()
+                var type = $("#type").find(":selected").text()
+                var asset_group = $("#asset_group").find(":selected").text()
+                var asset_sub_group = $("#asset_sub_group").find(":selected").text()
+                var brand = $("#brand").find(":selected").text()
+                var model = $("#model").find(":selected").text()
+                var series = $("#series").val()
+                var price = $("#price").val()
+                var ser_no = $("#ser_no").val()
+                var ser_no2 = $("#ser_no2").val()
+                var ser_no3 = $("#ser_no3").val()
+                var ser_no4 = $("#ser_no4").val()
+                var ass_code = $("#ass_code").val()
+                var del_note = $("#del_note").val()
+                var del_date = $("#del_date").val()
+                var malt_shrt = $("#malt_shrt").val()
+                var license_start = $("#license_start").val()
+                var license_month = $("#license_month").val()
+                var license_exp = $("#license_exp").val()
+                var war_start = $("#war_start").val()
+                var war_month = $("#war_month").val()
+                var war_exp = $("#war_exp").val()
+                var ass_flagR = $("#ass_flagR").val()
+                var remarks = $("#remarks").val()
+                var qty = $("#qty").val()
+                var unit = $("#unit").val()
+                var item = $("#item").val()
+                var supp1 = $("#supplier").val()
+                var req_grp1 = $("#req_grp").val()
+                var type1 = $("#type").val()
+                var asset_group1 = $("#asset_group").val()
+                var asset_sub_group1 = $("#asset_sub_group").val()
+                var brand1 = $("#brand").val()
+                var model1 = $("#model").val()
+
+            var rowdata = [count_item, empl_name, dept, emp_id, emp_add, work_loc, off_phone, mob_phone, hired_date,
+            per_email, bus_email, ref_person, po_no, supplier, req_grp, type, asset_group, asset_sub_group, brand, model, series,
+            price, ser_no, ser_no2, ser_no3, ser_no4, ass_code, del_note, del_date, malt_shrt, license_start, license_month,
+            license_exp, war_start, war_month, war_exp, ass_flagR, remarks, uploadedFilename, po_doc_date, plant, status, qty, unit, item,
+            supp1, req_grp1, type1, asset_group1, asset_sub_group1, brand1, model1]
+
+            table.row.add(rowdata).draw();
+            $("#info").modal("hide")
+            $("#empl_name")[0].selectize.clear();
+            // $("#info")[0].reset()
+            }
+            // $("#info").trigger("reset");
+        })
+
+        $("#info").on("hidden.bs.modal", function(){
+            $("#empl_name").find(":selected").text("")
+            $("#dept").val("")
+            $("#emp_id").val("")
+            $("#emp_add").val("")
+            $("#work_loc").val("")
+            $("#off_phone").val("")
+            $("#mob_phone").val("")
+            $("#hired_date").val("")
+            $("#per_email").val("")
+            $("#bus_email").val("")
+            $("#ref_person").val("")
+            $("#po_name").val("")
+            $("#plant").val("")
+            $("#po_doc_date").val("")
+            $("#status").val("")
+            $("#supplier").find(":selected").text()
+            $("#req_grp").find(":selected").text()
+            $("#type").find(":selected").text()
+            $("#asset_group").find(":selected").text()
+            $("#asset_sub_group").find(":selected").text()
+            $("#brand").find(":selected").text()
+            $("#model").find(":selected").text()
+            $("#series").val("")
+            $("#price").val("")
+            $("#ser_no").val("")
+            $("#ser_no2").val("")
+            $("#ser_no3").val("")
+            $("#ser_no4").val("")
+            $("#ass_code").val("")
+            $("#del_note").val("")
+            $("#del_date").val("")
+            $("#malt_shrt").val("")
+            $("#license_start").val("")
+            $("#license_month").val("")
+            $("#license_exp").val("")
+            $("#war_start").val("")
+            $("#war_month").val("")
+            $("#war_exp").val("")
+            $("#ass_flagR").val("")
+            $("#remarks").val("")
+            $("#qty").val("")
+            $("#unit").val("")
+            $("#item").val("")
+            $("#supplier").val("")
+            $("#req_grp").val("")
+            $("#type").val("")
+            $("#asset_group").val("")
+            $("#asset_sub_group").val("")
+            $("#brand").val("")
+            $("#model").val("")
         })
 
         // edit btn in the UI
@@ -3249,8 +3338,7 @@ $username = $_SESSION['username'];
                 var quantity = $(tr_parent).find("td").eq(41).text()
                 var unit = $(tr_parent).find("td").eq(42).text()
                 var po_item = $(tr_parent).find("td").eq(43).text()
-
-                // $("#empl_name1").val(emp_id);
+                
                 var selectize = $('#empl_name1').selectize()
                 var select = selectize[0].selectize
                 select.setValue(emp_id, false);
@@ -3299,14 +3387,39 @@ $username = $_SESSION['username'];
                 $("#unit1").val(unit);
                 $("#item1").val(po_item);
 
-                var attch_input = $("#attch1");
-                attch_input.val(null); 
-                if (attch) {
-                    var blob = dataURItoBlob(attch);
-                    var jpegFile = new File([blob], 'image.jpg', { type: 'image/jpeg' });
-                    var pngFile = new File([blob], 'image.png', { type: 'image/png' });
-                    attch_input[0].files[0] = jpegFile; // or pngFile, depending on the file type
-                }
+                // var attch_input = $("#attch1");
+                // attch_input.val(null); 
+                // if (attch) {
+                //     var blob = dataURItoBlob(attch);
+                //     var jpegFile = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+                //     var pngFile = new File([blob], 'image.png', { type: 'image/png' });
+                //     attch_input[0].files[0] = jpegFile;
+                // }
+
+                // -------------------
+                // var attch_input = $("#attch1");
+                // attch_input.val(null);
+                // if (typeof attch === "string" && attch) {
+                //     // Convert the data URI to a Blob object
+                //     var byteString = atob(attch.split(',')[1]);
+                //     var mimeString = attch.split(',')[0].split(':')[1].split(';')[0];
+                //     var arrayBuffer = new ArrayBuffer(byteString.length);
+                //     var uintArray = new Uint8Array(arrayBuffer);
+                //     for (var i = 0; i < byteString.length; i++) {
+                //         uintArray[i] = byteString.charCodeAt(i);
+                //     }
+                //     var blob = new Blob([arrayBuffer], { type: mimeString });
+
+                //     // Create file objects from the Blob
+                //     var jpegFile = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+                //     var pngFile = new File([blob], 'image.png', { type: 'image/png' });
+
+                //     // Set the file input field with the desired file
+                //     var filesList = new DataTransfer();
+                //     filesList.items.add(jpegFile);
+                //     attch_input[0].files = filesList.files;
+                // }
+
                 
                 $("#edit_info").modal("show");  
             }
@@ -3412,17 +3525,17 @@ $username = $_SESSION['username'];
             tr_parent.find("td").eq(37).text(remarks)
             // attchtr_parent).find('td:eq(36) input[type=file]').prop('files')[0];
             // attchtr_parent).find('td:eq(36) img').attr('src');
-            tr_parent.find("td").eq(38).text(po_doc_date)
-            tr_parent.find("td").eq(39).text(plant)
-            tr_parent.find("td").eq(40).text(status)
-            tr_parent.find("td").eq(41).text(qty)
-            tr_parent.find("td").eq(42).text(unit)
-            tr_parent.find("td").eq(43).text(item)
+            tr_parent.find("td").eq(39).text(po_doc_date)
+            tr_parent.find("td").eq(40).text(plant)
+            tr_parent.find("td").eq(41).text(status)
+            tr_parent.find("td").eq(42).text(qty)
+            tr_parent.find("td").eq(43).text(unit)
+            tr_parent.find("td").eq(44).text(item)
 
             // if (attch) {
             //     var reader = new FileReader();
             //     reader.onload = function(event){
-            //         tr_parent.find('td:eq(37) img').attr('src', event.target.result);
+            //         tr_parent.find('td:eq(38) img').attr('src', event.target.result);
             //     }
             //     reader.onerror = function(event) {
             //         console.error("FileReader error:", event.target.error);
@@ -3470,290 +3583,412 @@ $username = $_SESSION['username'];
         // });
 
         // save btn in UI
+        // $("#save_btn1").click(function(){
+        //     var data = 1
+        //     var po_no = $("#po_no").val()
+        //     var emp_id = []
+        //     var supp1 = []
+        //     var req_grp1 = []
+        //     var req_type1 = []
+        //     var ass_grp1 = []
+        //     var ass_sub_grp1 = []
+        //     var brand1 = []
+        //     var model1 = []
+        //     var series = []
+        //     var unit_price = []
+        //     var ser_no1 = []
+        //     var ser_no2 = []
+        //     var ser_no2 = []
+        //     var ser_no3 = []
+        //     var ser_no4 = []
+        //     var ass_code = []
+        //     var del_note = []
+        //     var del_date = []
+        //     var mtrl_short = []
+        //     var lic_start = []
+        //     var lic_month = []
+        //     var lic_exp = []
+        //     var war_start = []
+        //     var war_month = []
+        //     var war_exp = []
+        //     var ass_flagT = []
+        //     var rem = []
+        //     var attch1 = []
+        //     var po_doc_date1 = []
+        //     var plant1 = []
+        //     var status = []
+        //     var qty = []
+        //     var unit = []
+        //     var po_item1 = []
+        //         Swal.fire({
+        //             title: 'Are you sure?',
+        //             text: 'This will be saved in database',
+        //             icon: 'question',
+        //             showCancelButton: true,
+        //             reverseButtons: true,
+        //             cancelButtonText: 'No',
+        //             confirmButtonText: 'Yes',
+        //             confirmButtonColor: 'green',
+        //             cancelButtonColor: 'red'
+        //         }).then(confirm =>{
+        //             if(confirm.isConfirmed){
+        //                 $(".emp_id").each(function(){
+        //                     emp_id.push(this.innerText)
+        //                 })
+
+        //                 $(".supp1").each(function(){
+        //                     supp1.push(this.innerText)
+        //                 })
+
+        //                 $(".req_grp1").each(function(){
+        //                     req_grp1.push(this.innerText)
+        //                 })
+
+        //                 $(".req_type1").each(function(){
+        //                     req_type1.push(this.innerText)
+        //                 })
+
+        //                 $(".ass_grp1").each(function(){
+        //                     ass_grp1.push(this.innerText)
+        //                 })
+
+        //                 $(".ass_sub_grp1").each(function(){
+        //                     ass_sub_grp1.push(this.innerText)
+        //                 })
+
+        //                 $(".brand1").each(function(){
+        //                     brand1.push(this.innerText)
+        //                 })
+
+        //                 $(".model1").each(function(){
+        //                     model1.push(this.innerText)
+        //                 })
+        //                 // ajaxData.append("model1", model1)
+
+        //                 $(".series").each(function(){
+        //                     series.push(this.innerText)
+        //                 })
+
+        //                 $(".unit_price").each(function(){
+        //                     unit_price.push(this.innerText)
+        //                 })
+
+        //                 $(".ser_no1").each(function(){
+        //                     ser_no1.push(this.innerText)
+        //                 })
+
+        //                 $(".ser_no2").each(function(){
+        //                     ser_no2.push(this.innerText)
+        //                 })
+
+        //                 $(".ser_no3").each(function(){
+        //                     ser_no3.push(this.innerText)
+        //                 })
+
+        //                 $(".ser_no4").each(function(){
+        //                     ser_no4.push(this.innerText)
+        //                 })
+
+        //                 $(".ass_code").each(function(){
+        //                     ass_code.push(this.innerText)
+        //                 })
+
+        //                 $(".del_note").each(function(){
+        //                     del_note.push(this.innerText)
+        //                 })
+
+        //                 $(".del_date").each(function(){
+        //                     del_date.push(this.innerText)
+        //                 })
+
+        //                 $(".mtrl_short").each(function(){
+        //                     mtrl_short.push(this.innerText)
+        //                 })
+
+        //                 $(".lic_start").each(function(){
+        //                     lic_start.push(this.innerText)
+        //                 })
+
+        //                 $(".lic_month").each(function(){
+        //                     lic_month.push(this.innerText)
+        //                 })
+
+        //                 $(".lic_exp").each(function(){
+        //                     lic_exp.push(this.innerText)
+        //                 })
+
+        //                 $(".war_start").each(function(){
+        //                     war_start.push(this.innerText)
+        //                 })
+
+        //                 $(".war_month").each(function(){
+        //                     war_month.push(this.innerText)
+        //                 })
+
+        //                 $(".war_exp").each(function(){
+        //                     war_exp.push(this.innerText)
+        //                 })
+
+        //                 $(".ass_flagT").each(function(){
+        //                     ass_flagT.push(this.innerText)
+        //                 })
+
+        //                 $(".rem").each(function(){
+        //                     rem.push(this.innerText)
+        //                 })
+
+        //                 $(".po_doc_date1").each(function(){
+        //                     po_doc_date1.push(this.innerText)
+        //                 })
+
+        //                 $(".plant1").each(function(){
+        //                     plant1.push(this.innerText)
+        //                 })
+
+        //                 $(".status").each(function(){
+        //                     status.push(this.innerText)
+        //                 })
+
+        //                 $(".qty").each(function(){
+        //                     qty.push(this.innerText)
+        //                 })
+
+        //                 $(".unit").each(function(){
+        //                     unit.push(this.innerText)
+        //                 })
+
+        //                 $(".po_item1").each(function(){
+        //                     po_item1.push(this.innerText)
+        //                 })
+        //                 $.ajax({
+        //                     type: 'POST',
+        //                     url: "../../logic/insert_new_po.php",
+        //                     data: {name:name, po_no:po_no, data:data, emp_id:emp_id, supp1:supp1, req_grp1:req_grp1,
+        //                         req_type1:req_type1, ass_grp1:ass_grp1, ass_sub_grp1:ass_sub_grp1, brand1:brand1, model1:model1, series:series, 
+        //                         unit_price:unit_price, ser_no1:ser_no1, ser_no2:ser_no2, ser_no3:ser_no3, ser_no4:ser_no4, ass_code:ass_code, 
+        //                         del_note:del_note, del_date:del_date, mtrl_short:mtrl_short, lic_start:lic_start, lic_month:lic_month, lic_exp:lic_exp, 
+        //                         war_start:war_start, war_month:war_month, war_exp, ass_flagT:ass_flagT, rem:rem, po_doc_date1:po_doc_date1, plant1:plant1, status:status, 
+        //                         qty:qty, unit:unit, po_item1:po_item1},
+        //                     success: function(res){
+        //                         // console.log(res)
+        //                         if(res.success == 1){
+        //                             notify(res.icon, res.message)
+        //                             window.setInterval(function(){
+        //                                 location.reload();	
+        //                             },2000)
+        //                         }
+        //                         else{
+        //                             // alert("Error ");
+        //                             notify(res.icon, res.message)
+        //                         }                    
+        //                     },
+        //                     failure: function(response){
+        //                         alert("ERROR");
+        //                     },
+        //                     error: function(req, textStatus, errorThrown){
+        //                         console.log("ERROR ",textStatus);
+        //                         console.log("ERROR ",errorThrown);
+        //                         console.log("ERROR", req)
+        //                     }
+        //                 })
+        //             }
+        //         })
+        // })
+
         $("#save_btn1").click(function(){
-            // var table_parent = $(this).closest('.card').find(".dataTable").attr("id")
-            // var count =  $('#dtl_dataTable').DataTable().data().rows().count()
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will be saved in database',
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+                cancelButtonText: 'No',
+                confirmButtonText: 'Yes',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then(confirm => {
+                if(confirm.isConfirmed){
+                    $('input[name="toUpload[]"]').each(function(){
+                        var data = new FormData();
+                        var trParent = $(this).closest('tr')
 
-            // table.rows().eq(0).each( function ( index ) {
-            //     var row = table.row( index );
-            // })
-            
-            // var file = $("#attch")[0].files[0];            
-            // if (file){
-            //     var reader = new FileReader();
-            //     reader.onload = function(e) {
-            //         var base64 = e.target.result;
-                    var data = 1
-                    var po_no = $("#po_no").val()
-                    var emp_id = []
-                    var ref_per = []
-                    var supp1 = []
-                    var req_grp1 = []
-                    var req_type1 = []
-                    var ass_grp1 = []
-                    var ass_sub_grp1 = []
-                    var brand1 = []
-                    var model1 = []
-                    var series = []
-                    var unit_price = []
-                    var ser_no1 = []
-                    var ser_no2 = []
-                    var ser_no2 = []
-                    var ser_no3 = []
-                    var ser_no4 = []
-                    var ass_code = []
-                    var del_note = []
-                    var del_date = []
-                    var mtrl_short = []
-                    var lic_start = []
-                    var lic_month = []
-                    var lic_exp = []
-                    var war_start = []
-                    var war_month = []
-                    var war_exp = []
-                    var ass_flagT = []
-                    var rem = []
-                    var attch = []
-                    var po_doc_date1 = []
-                    var plant1 = []
-                    var status = []
-                    var qty = []
-                    var unit = []
-                    var po_item1 = []
-                    // var control = document.getElementById("attch")
-                    // var file = control.files[0];
-                    // var filetype = file.type;
-                    // let validfiles = ["image/jpeg", "image/jpg", "image/png"];
-                    // if(validfiles.includes(filetype)){
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'This will be saved in database',
-                            icon: 'question',
-                            showCancelButton: true,
-                            reverseButtons: true,
-                            cancelButtonText: 'No',
-                            confirmButtonText: 'Yes',
-                            confirmButtonColor: 'green',
-                            cancelButtonColor: 'red'
-                        }).then(confirm =>{
-                            if(confirm.isConfirmed){
-                                // var ajaxData = new FormData();
-                                // ajaxData.append("name", name)
-                                // ajaxData.append("po_no", po_no)
-                                // ajaxData.append("data", data)
+                        data.append('username', username)
 
-                                $(".emp_id").each(function(){
-                                    emp_id.push(this.innerText)
-                                })
-                                // ajaxData.append("emp_id", emp_id)
+                        var emp_id = $(trParent).find('td.emp_id').text()
+                        data.append('emp_id', emp_id)
 
-                                $(".ref_per").each(function(){
-                                    ref_per.push(this.innerText)
-                                })
-                                // ajaxData.append("ref_per", ref_per)
+                        var po_num = $(trParent).find('td.po_num').text()
+                        data.append('po_num', po_num)
 
-                                $(".supp1").each(function(){
-                                    supp1.push(this.innerText)
-                                })
-                                // ajaxData.append("supp1", supp1)
+                        var supp1 = $(trParent).find('td.supp1').text()
+                        data.append('supp1', supp1)
 
-                                $(".req_grp1").each(function(){
-                                    req_grp1.push(this.innerText)
-                                })
-                                // ajaxData.append("req_grp1", req_grp1)
+                        var req_grp1 = $(trParent).find('td.req_grp1').text()
+                        data.append('req_grp1', req_grp1)
 
-                                $(".req_type1").each(function(){
-                                    req_type1.push(this.innerText)
-                                })
-                                // ajaxData.append("req_type1", req_type1)
+                        var req_type1 = $(trParent).find('td.req_type1').text()
+                        data.append('req_type1', req_type1)
 
-                                $(".ass_grp1").each(function(){
-                                    ass_grp1.push(this.innerText)
-                                })
-                                // ajaxData.append("ass_grp1", ass_grp1)
+                        var ass_grp1 = $(trParent).find('td.ass_grp1').text()
+                        data.append('ass_grp1', ass_grp1)
 
-                                $(".ass_sub_grp1").each(function(){
-                                    ass_sub_grp1.push(this.innerText)
-                                })
-                                // ajaxData.append("ass_sub_grp1", ass_sub_grp1)
+                        var ass_sub_grp1 = $(trParent).find('td.ass_sub_grp1').text()
+                        data.append('ass_sub_grp1', ass_sub_grp1)
 
-                                $(".brand1").each(function(){
-                                    brand1.push(this.innerText)
-                                })
-                                // ajaxData.append("brand1", brand1)
+                        var brand1 = $(trParent).find('td.brand1').text()
+                        data.append('brand1', brand1)
 
-                                $(".model1").each(function(){
-                                    model1.push(this.innerText)
-                                })
-                                // ajaxData.append("model1", model1)
+                        var model1 = $(trParent).find('td.model1').text()
+                        data.append('model1', model1)
 
-                                $(".series").each(function(){
-                                    series.push(this.innerText)
-                                })
-                                // ajaxData.append("series", series)
+                        var series = $(trParent).find('td.series').text()
+                        data.append('series', series)
 
-                                $(".unit_price").each(function(){
-                                    unit_price.push(this.innerText)
-                                })
-                                // ajaxData.append("unit_price", unit_price)
+                        var unit_price = $(trParent).find('td.unit_price').text()
+                        data.append('unit_price', unit_price)
 
-                                $(".ser_no1").each(function(){
-                                    ser_no1.push(this.innerText)
-                                })
-                                // ajaxData.append("ser_no1", ser_no1)
+                        var ser_no1 = $(trParent).find('td.ser_no1').text()
+                        data.append('ser_no1', ser_no1)
 
-                                $(".ser_no2").each(function(){
-                                    ser_no2.push(this.innerText)
-                                })
-                                // ajaxData.append("ser_no2", ser_no2)
+                        var ser_no2 = $(trParent).find('td.ser_no2').text()
+                        data.append('ser_no2', ser_no2)
 
-                                $(".ser_no3").each(function(){
-                                    ser_no3.push(this.innerText)
-                                })
-                                // ajaxData.append("ser_no3", ser_no3)
+                        var ser_no3 = $(trParent).find('td.ser_no3').text()
+                        data.append('ser_no3', ser_no3)
 
-                                $(".ser_no4").each(function(){
-                                    ser_no4.push(this.innerText)
-                                })
-                                // ajaxData.append("ser_no4", ser_no4)
+                        var ser_no4 = $(trParent).find('td.ser_no4').text()
+                        data.append('ser_no4', ser_no4)
 
-                                $(".ass_code").each(function(){
-                                    ass_code.push(this.innerText)
-                                })
-                                // ajaxData.append("ass_code", ass_code)
+                        var ass_code = $(trParent).find('td.ass_code').text()
+                        data.append('ass_code', ass_code)
 
-                                $(".del_note").each(function(){
-                                    del_note.push(this.innerText)
-                                })
-                                // ajaxData.append("del_note", del_note)
+                        var del_note = $(trParent).find('td.del_note').text()
+                        data.append('del_note', del_note)
 
-                                $(".del_date").each(function(){
-                                    del_date.push(this.innerText)
-                                })
-                                // ajaxData.append("del_date", del_date)
+                        var del_date = $(trParent).find('td.del_date').text()
+                        data.append('del_date', del_date)
 
-                                $(".mtrl_short").each(function(){
-                                    mtrl_short.push(this.innerText)
-                                })
-                                // ajaxData.append("mtrl_short", mtrl_short)
+                        var mtrl_short = $(trParent).find('td.mtrl_short').text()
+                        data.append('mtrl_short', mtrl_short)
 
-                                $(".lic_start").each(function(){
-                                    lic_start.push(this.innerText)
-                                })
-                                // ajaxData.append("lic_start", lic_start)
+                        var lic_start = $(trParent).find('td.lic_start').text()
+                        data.append('lic_start', lic_start)
 
-                                $(".lic_month").each(function(){
-                                    lic_month.push(this.innerText)
-                                })
-                                // ajaxData.append("lic_month", lic_month)
+                        var lic_month = $(trParent).find('td.lic_month').text()
+                        data.append('lic_month', lic_month)
 
-                                $(".lic_exp").each(function(){
-                                    lic_exp.push(this.innerText)
-                                })
-                                // ajaxData.append("lic_exp", lic_exp)
+                        var lic_exp = $(trParent).find('td.lic_exp').text()
+                        data.append('lic_exp', lic_exp)
 
-                                $(".war_start").each(function(){
-                                    war_start.push(this.innerText)
-                                })
-                                // ajaxData.append("war_start", war_start)
+                        var war_start = $(trParent).find('td.war_start').text()
+                        data.append('war_start', war_start)
 
-                                $(".war_month").each(function(){
-                                    war_month.push(this.innerText)
-                                })
-                                // ajaxData.append("war_month", war_month)
+                        var war_month = $(trParent).find('td.war_month').text()
+                        data.append('war_month', war_month)
 
-                                $(".war_exp").each(function(){
-                                    war_exp.push(this.innerText)
-                                })
-                                // ajaxData.append("war_exp", war_exp)
+                        var war_exp = $(trParent).find('td.war_exp').text()
+                        data.append('war_exp', war_exp)
 
-                                $(".ass_flagT").each(function(){
-                                    ass_flagT.push(this.innerText)
-                                })
+                        var ass_flagT = $(trParent).find('td.ass_flagT').text()
+                        data.append('ass_flagT', ass_flagT)
 
-                                $(".rem").each(function(){
-                                    rem.push(this.innerText)
-                                })
-                                // ajaxData.append("rem", rem)
+                        var rem = $(trParent).find('td.rem').text()
+                        data.append('rem', rem)
 
-                                // $(".attch").each(function(){
-                                //     attch.push(this.innerText)
-                                // })
-                                $(".po_doc_date1").each(function(){
-                                    po_doc_date1.push(this.innerText)
-                                })
-                                // ajaxData.append("po_doc_date1", po_doc_date1)
+                        var po_doc_date1 = $(trParent).find('td.po_doc_date1').text()
+                        data.append('po_doc_date1', po_doc_date1)
 
-                                $(".plant1").each(function(){
-                                    plant1.push(this.innerText)
-                                })
-                                // ajaxData.append("plant1", plant1)
+                        var plant1 = $(trParent).find('td.plant1').text()
+                        data.append('plant1', plant1)
 
-                                $(".status").each(function(){
-                                    status.push(this.innerText)
-                                })
-                                // ajaxData.append("status", status)
+                        var status = $(trParent).find('td.status').text()
+                        data.append('status', status)
 
-                                $(".qty").each(function(){
-                                    qty.push(this.innerText)
-                                })
-                                // ajaxData.append("qty", qty)
+                        var qty = $(trParent).find('td.qty').text()
+                        data.append('qty', qty)
 
-                                $(".unit").each(function(){
-                                    unit.push(this.innerText)
-                                })
-                                // ajaxData.append("unit", unit)
+                        var unit = $(trParent).find('td.unit').text()
+                        data.append('unit', unit)
 
-                                $(".po_item1").each(function(){
-                                    po_item1.push(this.innerText)
-                                })
-                                // ajaxData.append("po_item1", po_item1)
+                        var po_item1 = $(trParent).find('td.po_item1').text()
+                        data.append('po_item1', po_item1)
 
-                                // console.log(emp_id + ' ' + ref_per + ' ' + supp1 + ' ' + req_grp1 + ' ' + req_type1 + ' ' + ass_grp1 + ' ' +
-                                //  ass_sub_grp1 + ' ' + brand1 + ' ' + model1  + ' ' + unit_price + ' ' + ser_no1 + ' ' + ser_no2 + ' ' +
-                                //  ser_no3 + ' ' + ser_no4 + ' ' + ass_code + ' ' + del_note + ' ' + del_date + ' ' + mtrl_short 
-                                //  + ' ' + lic_start + ' ' + lic_month + ' ' + lic_exp + ' ' + war_start + ' ' + war_month + ' ' + war_exp + ' ' + 
-                                //  rem + ' ' + attch + ' ' + po_doc_date + ' ' + plant + ' ' + status + ' ' + qty + ' ' + unit )
-                                $.ajax({
-                                    type: 'POST',
-                                    url: "../../logic/insert_new_po.php",
-                                    data: {name:name, po_no:po_no, data:data, emp_id:emp_id, ref_per:ref_per, supp1:supp1, req_grp1:req_grp1,
-                                        req_type1:req_type1, ass_grp1:ass_grp1, ass_sub_grp1:ass_sub_grp1, brand1:brand1, model1:model1, series:series, 
-                                        unit_price:unit_price, ser_no1:ser_no1, ser_no2:ser_no2, ser_no3:ser_no3, ser_no4:ser_no4, ass_code:ass_code, 
-                                        del_note:del_note, del_date:del_date, mtrl_short:mtrl_short, lic_start:lic_start, lic_month:lic_month, lic_exp:lic_exp, 
-                                        war_start:war_start, war_month:war_month, war_exp, ass_flagT:ass_flagT, rem:rem, po_doc_date1:po_doc_date1, plant1:plant1, status:status, 
-                                        qty:qty, unit:unit, po_item1:po_item1},
-                                    success: function(res){
-                                        // console.log(res)
-                                        if(res.success == 1){
-                                            notify(res.icon, res.message)
-                                            window.setInterval(function(){
-                                                location.reload();	
-                                            },2000)
-                                        }
-                                        else{
-                                            // alert("Error ");
-                                            notify(res.icon, res.message)
-                                        }                    
-                                    },
-                                    failure: function(response){
-                                        alert("ERROR");
-                                    },
-                                    error: function(req, textStatus, errorThrown){
-                                        console.log("ERROR ",textStatus);
-                                        console.log("ERROR ",errorThrown);
-                                        console.log("ERROR", req)
-                                    }
-                                })
+                        var length = $(this).get(0).files.length
+                        if(length < 1){
+
+                        }else{
+                            if(length > 1){
+                                for(var i = 0; i < length; i++){
+                                    data.append('image[]', $(this).prop('files')[i])
+                                }
+                            }else{
+                                data.append('image[]', $(this).prop('files')[0])
+                                
                             }
-                        })
-            //         }
-            //         else{
-            //             alert("Invalid IMAGE Type")
-            //         }  
-            //     };
-            //     reader.readAsDataURL(file); 
-            // }    
+                        }
+
+                        if(length < 1){
+                            $.ajax({
+                                method:"POST",
+                                url: "../../logic/insert_new_item1.php",
+                                data: data,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                success: function(res){
+                                    if(res.success == 1){
+                                        notify(res.icon, res.message)
+                                        window.setInterval(function(){
+                                            location.reload();	
+                                        },2000)
+                                    }
+                                    else{
+                                        notify(res.icon, res.message)
+                                    }
+                                },
+                                failure: function(response){
+                                alert("ERROR");
+                                },
+                                error: function(req, textStatus, errorThrown){
+                                    console.log("ERROR ",textStatus);
+                                    console.log("ERROR ",errorThrown);
+                                    console.log("ERROR", req)
+                                }
+                            })
+                        }
+
+                        else if (length >= 1){
+                            $.ajax({
+                                method:"POST",
+                                url: "../../logic/insert_new_item.php",
+                                data: data,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                success: function(res){
+                                    if(res.success == 1){
+                                        notify(res.icon, res.message)
+                                        window.setInterval(function(){
+                                            location.reload();	
+                                        },2000)
+                                    }
+                                    else{
+                                        notify(res.icon, res.message)
+                                    }
+                                },
+                                failure: function(response){
+                                alert("ERROR");
+                                },
+                                error: function(req, textStatus, errorThrown){
+                                    console.log("ERROR ",textStatus);
+                                    console.log("ERROR ",errorThrown);
+                                    console.log("ERROR", req)
+                                }
+                            })
+                        }
+                    })
+                }
+            })
         })
         
         // $("#save_btn").click(function(){

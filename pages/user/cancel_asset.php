@@ -18,7 +18,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ITAMS - Cancel Assets</title>
+    <title>ITAMS - Cancel Asset</title>
 
     <!-- Custom fonts for this template -->
     <!-- <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> -->
@@ -38,6 +38,8 @@ session_start();
     <link rel="stylesheet" href="../../assets/sweetalert2/dist/sweetalert2.css">
     <link rel="stylesheet" href="../../assets/file_input/css/fileinput.css">
     <link rel="stylesheet" href="../../assets/selectize/dist/css/selectize.bootstrap5.css">
+    <link rel="stylesheet" href="../../assets/dist/imageuploadify.min.css">
+
     <link rel="stylesheet" href="../../assets/style.css">
     <link rel="icon" href="../../assets/itcenter.png">
 
@@ -116,7 +118,6 @@ session_start();
                         <a class="collapse-item" href="../user/create_sub_ass_grp.php">Create Sub Asset Type</a>
                         <a class="collapse-item" href="../user/create_brand.php">Create Brand</a>
                         <a class="collapse-item" href="../user/create_model.php">Create Model</a>
-                        <a class="collapse-item" href="../user/master.php">Brand & Model</a>
                     </div>
                 </div>
             </li>
@@ -251,19 +252,6 @@ session_start();
                         color: #666666;
                     }
 
-                    .main-section{
-                        margin:0 auto;
-                        padding: 20px;
-                        margin-top: 20px;
-                        height: auto;
-                        width: auto;
-                        background-color: #fff;
-                        box-shadow: 0px 0px 20px #c1c1c1;
-                    }
-                    .fileinput-remove, .fileinput-upload{
-                        display: none;
-                    }
-
                     .panel-default>.panel-heading {
                         color: #333;
                         text-decoration: none;
@@ -335,7 +323,9 @@ session_start();
                                         <select class="form-select po_no" name="po_no" id="po_no" style="margin-bottom: 8px;">
                                             <option value=""></option>
                                             <?php 
-                                                $sql = "SELECT PO_NO FROM IT_ASSET_HEADER WHERE CANCEL_ASSET_FLAG is null";
+                                                $sql = "SELECT A.PO_NO FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B
+                                                    WHERE B.CANCEL_ASSET_FLAG is null
+                                                    AND A.DOC_NO = B.DOC_NO";
                                                 $res = oci_parse(connection(), $sql);
                                                 oci_execute($res);
 
@@ -362,7 +352,7 @@ session_start();
                                             <?php
                                                 $sql = "SELECT DISTINCT A.DOC_NO, B.EMPL_ID FROM IT_ASSET_HEADER A, IT_ASSET_DETAILS B
                                                         WHERE A.DOC_NO = B.DOC_NO
-                                                        AND A.CANCEL_ASSET_FLAG is null";
+                                                        AND B.CANCEL_ASSET_FLAG is null";
 
                                                 $result = oci_parse(connection(), $sql);
                                                 oci_execute($result);                                                    
@@ -903,17 +893,9 @@ session_start();
                                         <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">   
                                                 <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-lg-8 col-sm-12 col-11 main-section">
-                                                            <form enctype="multipart/form-data">
-                                                                <div class="form-group">
-                                                                    <div class="file-loading">
-                                                                        <input id="attch1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2">
-                                                                    </div>
-                                                                </div>
-                                                            </form>            
-                                                        </div>
-                                                    </div>
+                                                    <form>
+                                                        <input id="attch1" type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
+                                                    </form>  
                                                 </div>
                                                 <br>
                                             </div>
@@ -972,6 +954,7 @@ session_start();
 
     <script src="../../assets/sweetalert2/dist/sweetalert2.all.js"></script>
     <script src="../../assets/selectize/dist/js/selectize.js"></script>
+    <script src="../../assets/dist/imageuploadify.min.js"></script>
     <!-- <script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
 
@@ -986,8 +969,10 @@ $(document).ready(function(){
     const myModalEl = document.getElementById("po_dtls")
     myModalEl.addEventListener('shown.bs.modal', e=>{
         table.columns.adjust().draw()
-       
     })
+
+    $('input[type="file"]').imageuploadify();
+
     $("#po_dtls").on('shown.bs.modal', function(){
         $(document).off('focusin.modal');
     })

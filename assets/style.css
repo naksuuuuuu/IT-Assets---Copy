@@ -348,6 +348,32 @@ body{
     height: 20px;
     cursor: pointer;
 }
+
+#view_attch{
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+  
+.image-modal img {
+    max-width: 1000% !important;
+    max-height: 1000% !important;
+}
+  
 input[id='qty1'],input[id='desc1'],input[id='amount1'],input[id='type1'],input[id='unitPrice1'], input[id='department']{
     pointer-events: none;
     border: none;

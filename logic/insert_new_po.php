@@ -1,5 +1,4 @@
 <?php 
-
 // echo var_dump($_POST)
 
     header('Content-Type: application/json');
@@ -23,7 +22,6 @@
             // file_put_contents($file_path, $decoded_image);
         foreach($_POST['po_item1'] as $key => $value){ 
             $emp_id = $_POST['emp_id'][$key];
-            $ref_per = $_POST['ref_per'][$key];
             $supp1 = $_POST['supp1'][$key];
             $req_grp1 = $_POST['req_grp1'][$key];
             $req_type1 = $_POST['req_type1'][$key];
@@ -79,7 +77,6 @@
             oci_bind_by_name($res, ':doc_no', $doc_no);
             oci_bind_by_name($res, ':doc_date', $doc_date);
             oci_bind_by_name($res, ':po_doc_date', $po_doc_date);
-            // oci_bind_by_name($res, ':po_no', $po_name);
             oci_bind_by_name($res, ':po_no', $po_no);
             oci_bind_by_name($res, ':supplier', $supp1);
             oci_bind_by_name($res, ':plant', $plant);
@@ -97,12 +94,6 @@
                 if ($ass_row[0] == '') {
                     $ass_id = date('y')."AID0001";
                 }
-                // else {
-                //     $lastfourdigits = substr($ass_row[0], -4);
-                //     $increment = intval($lastfourdigits) + 1;
-                //     $padded = str_pad($increment, 4, '0', STR_PAD_LEFT);
-                //     $ass_id = substr($ass_row[0], 0, -4) .$padded;
-                // }
                 else{
                     $ass_id = $ass_row[0];
                     $ass_id++;
@@ -155,7 +146,6 @@
                 oci_bind_by_name($result, ':mtrl_short', $mtrl_short);
                 oci_bind_by_name($result, ':rem', $rem);
                 // oci_bind_by_name($result, ':attch', $file_name);
-                // oci_bind_by_name($result, ':ref_person', $ref_per);
                 oci_bind_by_name($result, ':emp_id', $emp_id);
                 oci_bind_by_name($result, ':username', $name);
                 oci_bind_by_name($result, ':user_date', $date);
@@ -187,6 +177,4 @@
         oci_rollback(connection());
         echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));
     }
-
-
 ?>

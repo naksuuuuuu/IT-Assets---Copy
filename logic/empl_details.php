@@ -88,7 +88,7 @@ else if(isset($_POST['po_no'])){
     echo json_encode(array('PO_NO' => $details['PO_NO'], 'ITEM' => $details['PO_ITEM'], 'PO_DOC_DATE' => $po_doc_date, 'PLANT' => $details['PLANT'], 
     'PO_STATUS' => $details['PO_STATUS'], 'VENDOR_CODE' => $details['VENDOR_CODE'], 'PO_UNIT_PRICE' => $details['PO_UNIT_PRICE'], 
     'PO_DELIVERY_DATE' => $po_date, 'MATERIAL_SHORT' => $details['SHORT_TEXT'],
-    'QUANTITY' => $details['PO_QUANTITY'], 'UNIT' => $details['ORDER_UNIT']));
+    'QUANTITY' => $details['PO_QUANTITY'], 'UNIT' => $details['ORDER_UNIT'], 'ACCT_CAT' => $details['ACCT_CAT']));
 }
 
 // PO

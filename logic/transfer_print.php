@@ -6,9 +6,10 @@ require "../config/connection.php";
 
 if(isset($_POST['doc_no1'])){
     $doc_no1 = $_POST['doc_no1'];
+    $po_item1 = $_POST['po_item1'];
     // $po_item = $_POST['po_item'];
   
-    $sql = "SELECT A.VENDOR_CODE, B.DOC_NO, to_char(to_date(B.DOC_DATE, 'DD/MM/YY'), 'YYYY-MM-DD') as DOC_DATE, B.PO_NO, 
+    $sql = "SELECT DISTINCT J.DOC_NO, A.VENDOR_CODE, B.DOC_NO, to_char(to_date(B.DOC_DATE, 'DD/MM/YY'), 'YYYY-MM-DD') as DOC_DATE, B.PO_NO, 
     to_char(to_date(B.DEL_DATE, 'DD/MM/YY'), 'YYYY-MM-DD') as DEL_DATE, B.REQ_GRP_ID, B.REQ_TYPE_ID, B.ASSET_GRP_CODE, B.ASSET_SUB_GRP_CODE, B.BRAND_CODE, B.MODEL_CODE, B.SERIAL_NO1, 
     B.SERIAL_NO2, B.SERIAL_NO3,B.SERIAL_NO4, B.ASS_CODE, B.UNIT, B.QTY,
     B.PO_ITEM, B.UNIT_PRICE, to_char(to_date(B.LICENSE_START_DATE, 'DD/MM/YY'), 'YYYY-MM-DD') as LICENSE_START_DATE, 
@@ -29,9 +30,11 @@ if(isset($_POST['doc_no1'])){
     AND B.MODEL_CODE = H.MODEL_CODE
     AND B.DOC_NO = J.REF_DOC_NO
     AND J.DOC_NO = K.DOC_NO
-    AND J.DOC_NO = :doc_no1";
+    AND J.DOC_NO = :doc_no1
+    AND J.PO_ITEM = :po_item1";
     $res = oci_parse(connection(), $sql);
     oci_bind_by_name($res, ':doc_no1', $doc_no1);
+    oci_bind_by_name($res, ':po_item1', $po_item1);
     // oci_bind_by_name($res, ':po_item', $po_item);
     oci_execute($res);
   

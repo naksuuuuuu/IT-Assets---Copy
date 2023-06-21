@@ -58,6 +58,33 @@ if (isset($_POST['data'])){
                             <td>".$row["MTRL_SHORT"]."</td>
                             <td>".$row["VENDOR_NAME"]."</td>
                             <td>".$row1["BUSINESSMAIL"]."</td>
+                            <td>";
+                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
+                            WHERE DOC_NO = :doc_no
+                            AND PO_NO = :po_no
+                            AND PO_ITEM = :po_item"; 
+                            $res1 = oci_parse(connection(), $attch_sql);
+                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
+                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
+                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
+
+                            oci_execute($res1);
+                            while($attach_row = oci_fetch_row($res1)){
+                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
+                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
+                                } 
+                                
+                                else if ($fileExtension === 'pdf') {
+                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
+                                } 
+                                
+                                else {
+                                    $result.="Unsupported file format";
+                                }
+                            }
+                            $result.="</td>
+                            <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
                             <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                             <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                             <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
@@ -122,29 +149,56 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                       <td>".$row["DOC_NO"]."</td>
-                       <td>".$row["PO_ITEM"]."</td>
-                       <td>".$row["PO_NO"]."</td>
-                       <td>".$row1["NAMEENG"]."</td>
-                       <td>".$row1["DESCR"]."</td>
-                       <td>".$row["MTRL_SHORT"]."</td>
-                       <td>".$row["VENDOR_NAME"]."</td>
-                       <td>".$row1["BUSINESSMAIL"]."</td>
-                       <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
-                       <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
-                       <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
-                       <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
-                       <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
-                       <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
-                       <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
-                       <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
-                       <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
-                       <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
-                       <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                       <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
+                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                        <td>".$row["DOC_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
+                        <td>".$row["PO_NO"]."</td>
+                        <td>".$row1["NAMEENG"]."</td>
+                        <td>".$row1["DESCR"]."</td>
+                        <td>".$row["MTRL_SHORT"]."</td>
+                        <td>".$row["VENDOR_NAME"]."</td>
+                        <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td>";
+                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
+                            WHERE DOC_NO = :doc_no
+                            AND PO_NO = :po_no
+                            AND PO_ITEM = :po_item"; 
+                            $res1 = oci_parse(connection(), $attch_sql);
+                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
+                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
+                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
+
+                            oci_execute($res1);
+                            while($attach_row = oci_fetch_row($res1)){
+                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
+                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
+                                } 
+                                
+                                else if ($fileExtension === 'pdf') {
+                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
+                                } 
+                                
+                                else {
+                                    $result.="Unsupported file format";
+                                }
+                            }
+                        $result.="</td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -195,29 +249,56 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                       <td>".$row["DOC_NO"]."</td>
-                       <td>".$row["PO_ITEM"]."</td>
-                       <td>".$row["PO_NO"]."</td>
-                       <td>".$row1["NAMEENG"]."</td>
-                       <td>".$row1["DESCR"]."</td>
-                       <td>".$row["MTRL_SHORT"]."</td>
-                       <td>".$row["VENDOR_NAME"]."</td>
-                       <td>".$row1["BUSINESSMAIL"]."</td>
-                       <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
-                       <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
-                       <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
-                       <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
-                       <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
-                       <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
-                       <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
-                       <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
-                       <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
-                       <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
-                       <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                       <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
+                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                        <td>".$row["DOC_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
+                        <td>".$row["PO_NO"]."</td>
+                        <td>".$row1["NAMEENG"]."</td>
+                        <td>".$row1["DESCR"]."</td>
+                        <td>".$row["MTRL_SHORT"]."</td>
+                        <td>".$row["VENDOR_NAME"]."</td>
+                        <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td>";
+                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
+                            WHERE DOC_NO = :doc_no
+                            AND PO_NO = :po_no
+                            AND PO_ITEM = :po_item"; 
+                            $res1 = oci_parse(connection(), $attch_sql);
+                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
+                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
+                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
+
+                            oci_execute($res1);
+                            while($attach_row = oci_fetch_row($res1)){
+                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
+                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
+                                } 
+                                
+                                else if ($fileExtension === 'pdf') {
+                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
+                                } 
+                                
+                                else {
+                                    $result.="Unsupported file format";
+                                }
+                            }
+                        $result.="</td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -408,29 +489,56 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                       <td>".$row["DOC_NO"]."</td>
-                       <td>".$row["PO_ITEM"]."</td>
-                       <td>".$row["PO_NO"]."</td>
-                       <td>".$row1["NAMEENG"]."</td>
-                       <td>".$row1["DESCR"]."</td>
-                       <td>".$row["MTRL_SHORT"]."</td>
-                       <td>".$row["VENDOR_NAME"]."</td>
-                       <td>".$row1["BUSINESSMAIL"]."</td>
-                       <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
-                       <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
-                       <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
-                       <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
-                       <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
-                       <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
-                       <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
-                       <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
-                       <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
-                       <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
-                       <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                       <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
+                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                        <td>".$row["DOC_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
+                        <td>".$row["PO_NO"]."</td>
+                        <td>".$row1["NAMEENG"]."</td>
+                        <td>".$row1["DESCR"]."</td>
+                        <td>".$row["MTRL_SHORT"]."</td>
+                        <td>".$row["VENDOR_NAME"]."</td>
+                        <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td>";
+                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
+                            WHERE DOC_NO = :doc_no
+                            AND PO_NO = :po_no
+                            AND PO_ITEM = :po_item"; 
+                            $res1 = oci_parse(connection(), $attch_sql);
+                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
+                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
+                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
+
+                            oci_execute($res1);
+                            while($attach_row = oci_fetch_row($res1)){
+                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
+                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
+                                } 
+                                
+                                else if ($fileExtension === 'pdf') {
+                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
+                                } 
+                                
+                                else {
+                                    $result.="Unsupported file format";
+                                }
+                            }
+                        $result.="</td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -483,29 +591,56 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                       <td>".$row["DOC_NO"]."</td>
-                       <td>".$row["PO_ITEM"]."</td>
-                       <td>".$row["PO_NO"]."</td>
-                       <td>".$row1["NAMEENG"]."</td>
-                       <td>".$row1["DESCR"]."</td>
-                       <td>".$row["MTRL_SHORT"]."</td>
-                       <td>".$row["VENDOR_NAME"]."</td>
-                       <td>".$row1["BUSINESSMAIL"]."</td>
-                       <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
-                       <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
-                       <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
-                       <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
-                       <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
-                       <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
-                       <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
-                       <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
-                       <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
-                       <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
-                       <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                       <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
+                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                        <td>".$row["DOC_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
+                        <td>".$row["PO_NO"]."</td>
+                        <td>".$row1["NAMEENG"]."</td>
+                        <td>".$row1["DESCR"]."</td>
+                        <td>".$row["MTRL_SHORT"]."</td>
+                        <td>".$row["VENDOR_NAME"]."</td>
+                        <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td>";
+                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
+                            WHERE DOC_NO = :doc_no
+                            AND PO_NO = :po_no
+                            AND PO_ITEM = :po_item"; 
+                            $res1 = oci_parse(connection(), $attch_sql);
+                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
+                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
+                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
+
+                            oci_execute($res1);
+                            while($attach_row = oci_fetch_row($res1)){
+                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
+                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
+                                } 
+                                
+                                else if ($fileExtension === 'pdf') {
+                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
+                                } 
+                                
+                                else {
+                                    $result.="Unsupported file format";
+                                }
+                            }
+                        $result.="</td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -556,29 +691,56 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                       <td>".$row["DOC_NO"]."</td>
-                       <td>".$row["PO_ITEM"]."</td>
-                       <td>".$row["PO_NO"]."</td>
-                       <td>".$row1["NAMEENG"]."</td>
-                       <td>".$row1["DESCR"]."</td>
-                       <td>".$row["MTRL_SHORT"]."</td>
-                       <td>".$row["VENDOR_NAME"]."</td>
-                       <td>".$row1["BUSINESSMAIL"]."</td>
-                       <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
-                       <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
-                       <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
-                       <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
-                       <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
-                       <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
-                       <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
-                       <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
-                       <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
-                       <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
-                       <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                       <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
+                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                        <td>".$row["DOC_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
+                        <td>".$row["PO_NO"]."</td>
+                        <td>".$row1["NAMEENG"]."</td>
+                        <td>".$row1["DESCR"]."</td>
+                        <td>".$row["MTRL_SHORT"]."</td>
+                        <td>".$row["VENDOR_NAME"]."</td>
+                        <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td>";
+                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
+                            WHERE DOC_NO = :doc_no
+                            AND PO_NO = :po_no
+                            AND PO_ITEM = :po_item"; 
+                            $res1 = oci_parse(connection(), $attch_sql);
+                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
+                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
+                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
+
+                            oci_execute($res1);
+                            while($attach_row = oci_fetch_row($res1)){
+                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
+                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
+                                } 
+                                
+                                else if ($fileExtension === 'pdf') {
+                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
+                                } 
+                                
+                                else {
+                                    $result.="Unsupported file format";
+                                }
+                            }
+                        $result.="</td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
         echo $result;
@@ -629,32 +791,59 @@ if (isset($_POST['data'])){
                 $row1 = oci_fetch_assoc($stmt);
         
             $result.="<tr>
-                       <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
-                       <td>".$row["DOC_NO"]."</td>
-                       <td>".$row["PO_ITEM"]."</td>
-                       <td>".$row["PO_NO"]."</td>
-                       <td>".$row1["NAMEENG"]."</td>
-                       <td>".$row1["DESCR"]."</td>
-                       <td>".$row["MTRL_SHORT"]."</td>
-                       <td>".$row["VENDOR_NAME"]."</td>
-                       <td>".$row1["BUSINESSMAIL"]."</td>
-                       <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
-                       <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
-                       <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
-                       <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
-                       <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
-                       <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
-                       <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
-                       <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
-                       <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
-                       <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
-                       <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
-                       <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
-                       <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
+                        <td style='text-align: center'><img id='plusImg' class='view_dtl' src='../../assets/add-free-icon-font.png'></i></td>
+                        <td>".$row["DOC_NO"]."</td>
+                        <td>".$row["PO_ITEM"]."</td>
+                        <td>".$row["PO_NO"]."</td>
+                        <td>".$row1["NAMEENG"]."</td>
+                        <td>".$row1["DESCR"]."</td>
+                        <td>".$row["MTRL_SHORT"]."</td>
+                        <td>".$row["VENDOR_NAME"]."</td>
+                        <td>".$row1["BUSINESSMAIL"]."</td>
+                        <td>";
+                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
+                            WHERE DOC_NO = :doc_no
+                            AND PO_NO = :po_no
+                            AND PO_ITEM = :po_item"; 
+                            $res1 = oci_parse(connection(), $attch_sql);
+                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
+                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
+                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
+
+                            oci_execute($res1);
+                            while($attach_row = oci_fetch_row($res1)){
+                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
+                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
+                                } 
+                                
+                                else if ($fileExtension === 'pdf') {
+                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
+                                } 
+                                
+                                else {
+                                    $result.="Unsupported file format";
+                                }
+                            }
+                        $result.="</td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
+                        <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
+                        <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
+                        <td hidden><input class='req_type_name' value='".$row["REQ_TYPE_NAME"]."'></td>
+                        <td hidden><input class='ass_grp_code' value='".$row["ASSET_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_grp_name' value='".$row["ASSET_GRP_NAME"]."'></td>
+                        <td hidden><input class='ass_sub_grp_code' value='".$row["ASSET_SUB_GRP_CODE"]."'></td>
+                        <td hidden><input class='ass_sub_grp_name' value='".$row["ASSET_SUB_GRP_NAME"]."'></td>
+                        <td hidden><input class='brand_code' value='".$row["BRAND_CODE"]."'></td>
+                        <td hidden><input class='brand_name' value='".$row["BRAND_NAME"]."'></td>
+                        <td hidden><input class='model_code' value='".$row["MODEL_CODE"]."'></td>
+                        <td hidden><input class='model_name' value='".$row["MODEL_NAME"]."'></td>
+                        <td hidden><input class='po_item' value=".$row["PO_ITEM"]." hidden></td>
+                        <td hidden><input class='doc_no1' value=".$row["DOC_NO"]." hidden></td>
                     </tr>";
         }
-        echo $result;
+            echo $result;
     }
 
     // new_item

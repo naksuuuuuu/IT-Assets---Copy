@@ -23,18 +23,19 @@ if(isset($_POST['po_num']) and !isset($_POST['po_item1'])){
         // array_push($array, array('VENDOR_NAME' => htmlspecialchars($PO['VENDOR_NAME'],ENT_IGNORE)));
         $result.="<tr>
                     <td style='text-align: center'><img id='plusImg' class='add_po' src='../../assets/add-button.png'></i></td>
-                    <td><input class='po_num form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_NO']."'></td>
-                    <td><input class='po_item form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
-                    <td><input class='plant form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PLANT']."'></td>
-                    <td><input class='supp_name form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['VENDOR_NAME']."'></td>
-                    <td><input class='short_text form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['SHORT_TEXT']."'></td>
-                    <td><input class='po_itm_txt form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM_TEXT']."'></td>
-                    <td><input class='po_qty form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_QUANTITY']."'></td>
-                    <td><input class='order_unt form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['ORDER_UNIT']."'></td>
-                    <td><input class='po_itm_price form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_UNIT_PRICE']."'></td>
-                    <td><input class='po_doc_date form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_DOC_DATE']."'></td>
-                    <td><input class='po_stat form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_STATUS']."'></td>
-                  </tr>";
+                    <td><input class='po_num form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_NO']."'></td>
+                    <td><input class='po_item form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
+                    <td><input class='plant form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PLANT']."'></td>
+                    <td><input class='supp_name form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['VENDOR_NAME']."'></td>
+                    <td><input class='short_text form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['SHORT_TEXT']."'></td>
+                    <td><input class='po_itm_txt form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM_TEXT']."'></td>
+                    <td><input class='po_qty form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_QUANTITY']."'></td>
+                    <td><input class='order_unt form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['ORDER_UNIT']."'></td>
+                    <td><input class='po_itm_price form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_UNIT_PRICE']."'></td>
+                    <td><input class='po_doc_date form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_DOC_DATE']."'></td>
+                    <td><input class='po_stat form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_STATUS']."'></td>
+                    <td><input class='acct_cat form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['ACCT_CAT']."'></td>
+                    </tr>";
     }
 
     $in_sql = "SELECT a.* from it_asset_po a where a.PO_NO = :po_no
@@ -48,18 +49,19 @@ if(isset($_POST['po_num']) and !isset($_POST['po_item1'])){
         // array_push($array, array('VENDOR_NAME' => htmlspecialchars($PO['VENDOR_NAME'],ENT_IGNORE)));
         $result.="<tr>
                     <td style='text-align: center'><i class='fa-solid fa-check in_po' id='plusImg' style='color: #08F11B'></i></td>
-                    <td><input class='po_num form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_NO']."'></td>
-                    <td><input class='po_item form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
-                    <td><input class='plant form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PLANT']."'></td>
-                    <td><input class='supp_name form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['VENDOR_NAME']."'></td>
-                    <td><input class='short_text form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['SHORT_TEXT']."'></td>
-                    <td><input class='po_itm_txt form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM_TEXT']."'></td>
-                    <td><input class='po_qty form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_QUANTITY']."'></td>
-                    <td><input class='order_unt form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['ORDER_UNIT']."'></td>
-                    <td><input class='po_itm_price form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_UNIT_PRICE']."'></td>
-                    <td><input class='po_doc_date form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_DOC_DATE']."'></td>
-                    <td><input class='po_stat form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_STATUS']."'></td>
-                  </tr>";
+                    <td><input class='po_num form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_NO']."'></td>
+                    <td><input class='po_item form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
+                    <td><input class='plant form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PLANT']."'></td>
+                    <td><input class='supp_name form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['VENDOR_NAME']."'></td>
+                    <td><input class='short_text form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['SHORT_TEXT']."'></td>
+                    <td><input class='po_itm_txt form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM_TEXT']."'></td>
+                    <td><input class='po_qty form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_QUANTITY']."'></td>
+                    <td><input class='order_unt form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['ORDER_UNIT']."'></td>
+                    <td><input class='po_itm_price form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_UNIT_PRICE']."'></td>
+                    <td><input class='po_doc_date form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_DOC_DATE']."'></td>
+                    <td><input class='po_stat form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_STATUS']."'></td>
+                    <td><input class='acct_cat form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['ACCT_CAT']."'></td>
+                    </tr>";
     }
 
     $cancel_sql = "SELECT a.* from it_asset_po a where a.PO_NO = :po_no
@@ -73,18 +75,19 @@ if(isset($_POST['po_num']) and !isset($_POST['po_item1'])){
         // array_push($array, array('VENDOR_NAME' => htmlspecialchars($PO['VENDOR_NAME'],ENT_IGNORE)));
         $result.="<tr>
                     <td style='text-align: center'><img id='plusImg' class='add_po' src='../../assets/add-button.png'></i></td>
-                    <td><input class='po_num form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_NO']."'></td>
-                    <td><input class='po_item form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
-                    <td><input class='plant form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PLANT']."'></td>
-                    <td><input class='supp_name form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['VENDOR_NAME']."'></td>
-                    <td><input class='short_text form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['SHORT_TEXT']."'></td>
-                    <td><input class='po_itm_txt form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM_TEXT']."'></td>
-                    <td><input class='po_qty form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_QUANTITY']."'></td>
-                    <td><input class='order_unt form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['ORDER_UNIT']."'></td>
-                    <td><input class='po_itm_price form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_UNIT_PRICE']."'></td>
-                    <td><input class='po_doc_date form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_DOC_DATE']."'></td>
-                    <td><input class='po_stat form-control' style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_STATUS']."'></td>
-                  </tr>";
+                    <td><input class='po_num form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_NO']."'></td>
+                    <td><input class='po_item form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM']."'></td>
+                    <td><input class='plant form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PLANT']."'></td>
+                    <td><input class='supp_name form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['VENDOR_NAME']."'></td>
+                    <td><input class='short_text form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['SHORT_TEXT']."'></td>
+                    <td><input class='po_itm_txt form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_ITEM_TEXT']."'></td>
+                    <td><input class='po_qty form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_QUANTITY']."'></td>
+                    <td><input class='order_unt form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['ORDER_UNIT']."'></td>
+                    <td><input class='po_itm_price form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_UNIT_PRICE']."'></td>
+                    <td><input class='po_doc_date form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_DOC_DATE']."'></td>
+                    <td><input class='po_stat form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['PO_STATUS']."'></td>
+                    <td><input class='acct_cat form-control' readonly style='border: none; border-bottom: 1px solid blue; border-radius:0px; background-color: transparent; width: 200px;' value='".$PO['ACCT_CAT']."'></td>
+                    </tr>";
     }
 
     echo $result;
