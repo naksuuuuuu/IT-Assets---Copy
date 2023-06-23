@@ -634,7 +634,7 @@ session_start();
                                                         <th>Supplier</th>
                                                         <th>User (Email)</th>
                                                         <th>Attachment</th>
-                                                        <th></th>
+                                                        <th>Upload</th>
                                                         <th hidden>Req Group Code</th>
                                                         <th hidden>Req Group Name</th>
                                                         <th hidden>Req Type Code</th>
@@ -748,34 +748,8 @@ session_start();
                                                                     <td>".$row["MTRL_SHORT"]."</td>
                                                                     <td>".$row["VENDOR_NAME"]."</td>
                                                                     <td>".$row1["BUSINESSMAIL"]."</td>
-                                                                    <td>";
-                                                                        
-                                                                        $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
-                                                                        WHERE DOC_NO = :doc_no
-                                                                        AND PO_NO = :po_no
-                                                                        AND PO_ITEM = :po_item"; 
-                                                                        $res1 = oci_parse(connection(), $attch_sql);
-                                                                        oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
-                                                                        oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
-                                                                        oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
-
-                                                                        oci_execute($res1);
-                                                                        while($attach_row = oci_fetch_row($res1)){
-                                                                            $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
-                                                                            if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                                                                $res.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
-                                                                            } 
-                                                                            
-                                                                            else if ($fileExtension === 'pdf') {
-                                                                                $res.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
-                                                                            } 
-                                                                            
-                                                                            else {
-                                                                                $res.="Unsupported file format";
-                                                                            }
-                                                                        }
-                                                                    $res.="</td>
-                                                                    <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                                                                    <td><button class='btn btn-info view_files' id='view_files' type='button'><i class='fa-solid fa-paperclip'></i></button></td>
+                                                                    <td><button class='btn btn-primary upload_attch' id='upload_attch' type='button'><i class='fa-solid fa-upload'></i></button></td>
                                                                     <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                                                                     <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                                                                     <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
@@ -802,10 +776,10 @@ session_start();
                                 </div>
 
                                 <!-- tab 2 ASSET -->
-                                <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                                <!-- <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
                                     <div class="card shadow mb-4">
                                         <div class="card-header py-3" style="background: #87CEFA">
-                                            <!-- <div class="row g-2">
+                                           <div class="row g-2">
                                                 <div class="col-md-3">
                                                     <div class="label" style="color: #000">PO Number:</div>
                                                     <select type="text" name="po_num" id='po_num' class='form-select' required style="margin-bottom: 8px;"> 
@@ -884,7 +858,7 @@ session_start();
                                                         ?>
                                                     </select> 
                                                 </div>
-                                            </div> -->
+                                            </div> 
 
                                             <div class="row g-2">
                                                 <div class="col-md-4"  style="margin: auto">
@@ -892,40 +866,40 @@ session_start();
                                                     <select type="text" name="dept1" id='dept1' class='form-select' required style="margin-bottom: 8px;"> 
                                                         <option value=""></option>
                                                         <?php
-                                                            $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_HEADER1 B
-                                                            WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
-                                                            AND A.CANCEL_ASSET_FLAG is null";
+                                                            // $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_HEADER1 B
+                                                            // WHERE A.DOCUMENT_NO = B.DOCUMENT_NO
+                                                            // AND A.CANCEL_ASSET_FLAG is null";
 
-                                                            $result = oci_parse(connection(), $sql);
-                                                            oci_execute($result);                                                    
+                                                            // $result = oci_parse(connection(), $sql);
+                                                            // oci_execute($result);                                                    
 
-                                                            while($row = oci_fetch_assoc($result)){
-                                                                $empId = $row["EMPL_ID"];
+                                                            // while($row = oci_fetch_assoc($result)){
+                                                            //     $empId = $row["EMPL_ID"];
 
-                                                                $dept_code = "SELECT DISTINCT B.DEPTID, B.DESCR FROM PERSON_TBL A, DEPARTMENT_TBL B, 
-                                                                    JOBCUR_EE C WHERE B.DEPTID = C.DEPTID
-                                                                    AND A.EMPLID = C.EMPLID
-                                                                    AND A.EMPLID = :empl";
-                                                                $stmt = oci_parse(connection1(), $dept_code);
-                                                                oci_bind_by_name($stmt, ':empl', $empId);
-                                                                oci_execute($stmt);
+                                                            //     $dept_code = "SELECT DISTINCT B.DEPTID, B.DESCR FROM PERSON_TBL A, DEPARTMENT_TBL B, 
+                                                            //         JOBCUR_EE C WHERE B.DEPTID = C.DEPTID
+                                                            //         AND A.EMPLID = C.EMPLID
+                                                            //         AND A.EMPLID = :empl";
+                                                            //     $stmt = oci_parse(connection1(), $dept_code);
+                                                            //     oci_bind_by_name($stmt, ':empl', $empId);
+                                                            //     oci_execute($stmt);
 
-                                                                $row1 = oci_fetch_row($stmt);
+                                                            //     $row1 = oci_fetch_row($stmt);
 
-                                                                echo "<option value='".htmlspecialchars($row1[0], ENT_QUOTES)."'>".htmlspecialchars($row1[1], ENT_QUOTES)."</option>";
-                                                            }
+                                                            //     echo "<option value='".htmlspecialchars($row1[0], ENT_QUOTES)."'>".htmlspecialchars($row1[1], ENT_QUOTES)."</option>";
+                                                            // }
                                                         ?>
                                                     </select> 
                                                 </div>
 
-                                                <!-- <div class="col-md-6">
+                                                <div class="col-md-6">
                                                     <div class="label" style="color: #000">PO Document Date:</div>
                                                         <div class="input-group">
                                                             <input type="date" class="form-control" id="from" placeholder="From" aria-label="Username">
                                                             <span class="input-group-text">-</span>
                                                             <input type="date" class="form-control" id="to" placeholder="To" aria-label="Server">
                                                         </div>
-                                                </div> -->
+                                                </div> 
                                             </div>
 
                                                 <div class="col-md-12">
@@ -936,7 +910,6 @@ session_start();
                                                 </div>
                                         </div>
                                     </div>
-                                    <!-- Area Chart -->
                                     <div class="container-fluid">
                                         <div class="card" style="border: 1px solid red">
                                             <div id="chartContainer" style="height: 400px; width: 50%; margin:auto;"></div>
@@ -944,10 +917,10 @@ session_start();
                                     </div>
                                     <br>
                                     <br>
-                                </div>
+                                </div> -->
 
                                 <!-- tab 3 EXPENSE -->
-                                <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+                                <!-- <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
                                     <div class="card shadow mb-4">
                                         <div class="card-header py-3" style="background: #87CEFA">
                                             <div class="row g-2">
@@ -956,27 +929,27 @@ session_start();
                                                     <select type="text" name="dept2" id='dept2' class='form-select' required> 
                                                         <option value=""></option>
                                                         <?php
-                                                            $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_HEADER1 B
-                                                            WHERE A.DOCUMENT_NO = B.DOCUMENT_NO";
+                                                            // $sql = "SELECT DISTINCT A.EMPL_ID FROM IT_ASSET_DETAILS1 A, IT_ASSET_HEADER1 B
+                                                            // WHERE A.DOCUMENT_NO = B.DOCUMENT_NO";
 
-                                                            $result = oci_parse(connection(), $sql);
-                                                            oci_execute($result);                                                    
+                                                            // $result = oci_parse(connection(), $sql);
+                                                            // oci_execute($result);                                                    
 
-                                                            while($row = oci_fetch_assoc($result)){
-                                                                $empId = $row["EMPL_ID"];
+                                                            // while($row = oci_fetch_assoc($result)){
+                                                            //     $empId = $row["EMPL_ID"];
 
-                                                                $dept_code = "SELECT DISTINCT B.DEPTID, B.DESCR FROM PERSON_TBL A, DEPARTMENT_TBL B, 
-                                                                    JOBCUR_EE C WHERE B.DEPTID = C.DEPTID
-                                                                    AND A.EMPLID = C.EMPLID
-                                                                    AND A.EMPLID = :empl";
-                                                                $stmt = oci_parse(connection1(), $dept_code);
-                                                                oci_bind_by_name($stmt, ':empl', $empId);
-                                                                oci_execute($stmt);
+                                                            //     $dept_code = "SELECT DISTINCT B.DEPTID, B.DESCR FROM PERSON_TBL A, DEPARTMENT_TBL B, 
+                                                            //         JOBCUR_EE C WHERE B.DEPTID = C.DEPTID
+                                                            //         AND A.EMPLID = C.EMPLID
+                                                            //         AND A.EMPLID = :empl";
+                                                            //     $stmt = oci_parse(connection1(), $dept_code);
+                                                            //     oci_bind_by_name($stmt, ':empl', $empId);
+                                                            //     oci_execute($stmt);
 
-                                                                $row1 = oci_fetch_row($stmt);
+                                                            //     $row1 = oci_fetch_row($stmt);
 
-                                                                echo "<option value='".htmlspecialchars($empId, ENT_QUOTES)."'>".htmlspecialchars($row1[1], ENT_QUOTES)."</option>";
-                                                            }
+                                                            //     echo "<option value='".htmlspecialchars($empId, ENT_QUOTES)."'>".htmlspecialchars($row1[1], ENT_QUOTES)."</option>";
+                                                            // }
                                                         ?>
                                                     </select> 
                                                 </div>
@@ -990,11 +963,10 @@ session_start();
                                                 </div>
                                         </div>
                                     </div>
-                                    <!-- Area Chart -->
                                     <div class="card-body">
                                         <div id="chartContainer2" style="height: 400px; width: 50%; margin:auto;"></div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
 
@@ -1371,7 +1343,6 @@ session_start();
     </div>
 
     <!-- upload attachment -->
-
     <div class="modal fade" id="upload_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -1439,6 +1410,100 @@ session_start();
         </div>
     </div>
 
+    <!-- view attachments -->
+    <div class="modal fade" id="view_attch_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="grpmodal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form method="POST" target="_blank" class="needs-validation" novalidate method='POST' enctype='multipart/form-data' id='user_form'>
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <br>
+                    <div class="container-fluid">
+                        <div class="body-message">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div class="card" style="border: 2px solid #e6e6e6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingOne">
+                                            <h3 class="panel-title font-weight-bold" style="color: #000">
+                                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Attachments
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingOne">
+                                            <div class="panel-body">
+                                                <div class="card-body">
+                                                    <!-- <div class="table-responsive" style="background-color: white">
+                                                    <br>
+                                                        <table class="display nowrap" id="view_attch_table" width="100%" cellspacing="0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Attachment</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id='view_attch_tbody'>
+                                                                <td><img class="view_attch"></td>
+                                                            </tbody>
+                                                        </table>
+                                                        <br>
+                                                    </div> -->
+                                                    <div class="row g-3" id="attch_holder">
+                                                        <div class="col-6">
+                                                            <div class="card">
+                                                                <div class="card-body image-container">
+                                                                    <h5 class="card-title">Image</h5>
+                                                                    <!-- <img class="image " src="" alt=""> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title">PDF Files</h5>
+                                                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title">PDF Files</h5>
+                                                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title">PDF Files</h5>
+                                                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-md-12">
+                                    <button id="close_view" class="btn btn-warning" type="button">
+                                    <i class="fa-solid fa-xmark"></i> Close</button>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModal"
         aria-hidden="true">
@@ -1495,6 +1560,14 @@ session_start();
         // $('input[type="file"]').imageuploadify();
         
        $('#dataTable1').DataTable({
+        searching: false, 
+        paging: true, 
+        info: false,
+        ordering: false,
+        fixedColumns: {leftColumns: 1}
+      });
+
+      $('#view_attch_table').DataTable({
         searching: false, 
         paging: true, 
         info: false,
@@ -1610,6 +1683,7 @@ session_start();
         })
     })
 
+    // upload image
     $("#dataTable1").on("click", '.upload_attch', function(){
         var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
         var po_item = $(this).closest('tr').find('.po_item').val()
@@ -1656,6 +1730,40 @@ session_start();
             }
         })
     })
+
+    // view attachment modal
+    $("#dataTable1").on("click", '.view_files', function(){
+        var doc_no1 = $(this).closest('tr').find('.doc_no1').val()
+        Swal.fire({
+            title: 'Loading.....',
+            text: 'Please wait while the data is being loaded...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        })
+        $.ajax({
+            type: "POST",
+            url: "../../logic/view_attch.php",
+            data: {doc_no1: doc_no1},
+            success: function(res1){
+                Swal.hideLoading()
+                notify("success", "Data Loaded Successfully!")
+                    $("#view_attch_modal").modal('show')
+                    // $("#view_attch_tbody").html(res1)
+                       $("#attch_holder").html(res1)
+            }, 
+            error: function(){
+                Swal.hideLoading()
+                notify("error", "Error while Data Loading!")
+            }
+        })
+    })
+
+    // $("#dataTable1").on("click", '.view_files', function(){
+    //     $("#view_attch_modal").modal('show')
+    // })
 
     $("#srch").click(function(){
         var data = 1
@@ -2024,15 +2132,6 @@ session_start();
         }
     })
 
-    $('.view_attch').on('click', function() {
-        var imagePath = $(this).attr('src');
-        var modalHtml = '<div class="image-modal"><img src="' + imagePath + '"></div>';
-        $('body').append(modalHtml);
-        $('.image-modal').on('click', function() {
-            $(this).remove();
-        });
-    });
-
     // reset button
     $("#clr").click(function(){
         location.reload()
@@ -2053,6 +2152,24 @@ session_start();
         }).then(confirm => {
             if(confirm.isConfirmed){
                 $("#po_dtls").modal('hide')
+            }
+        })
+    })
+
+    $("#close_view").click(function(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will be closed',
+            icon: 'question',
+            showCancelButton: true,
+            reverseButtons: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            confirmButtonColor: 'green',
+            cancelButtonColor: 'red'
+        }).then(confirm => {
+            if(confirm.isConfirmed){
+                $("#view_attch_modal").modal('hide')
             }
         })
     })

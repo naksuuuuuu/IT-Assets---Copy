@@ -3927,7 +3927,7 @@ $username = $_SESSION['username'];
                             }
                         }
 
-                        if(length < 1){
+                        if(length == 0){
                             $.ajax({
                                 method:"POST",
                                 url: "../../logic/insert_new_item1.php",

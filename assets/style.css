@@ -356,6 +356,13 @@ body{
     margin-left: 15px;
 }
 
+#view_pdf{
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
 .image-modal {
     position: fixed;
     top: 0;

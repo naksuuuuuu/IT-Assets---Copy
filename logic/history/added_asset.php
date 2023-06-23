@@ -58,33 +58,8 @@ if (isset($_POST['data'])){
                             <td>".$row["MTRL_SHORT"]."</td>
                             <td>".$row["VENDOR_NAME"]."</td>
                             <td>".$row1["BUSINESSMAIL"]."</td>
-                            <td>";
-                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
-                            WHERE DOC_NO = :doc_no
-                            AND PO_NO = :po_no
-                            AND PO_ITEM = :po_item"; 
-                            $res1 = oci_parse(connection(), $attch_sql);
-                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
-                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
-                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
-
-                            oci_execute($res1);
-                            while($attach_row = oci_fetch_row($res1)){
-                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
-                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
-                                } 
-                                
-                                else if ($fileExtension === 'pdf') {
-                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
-                                } 
-                                
-                                else {
-                                    $result.="Unsupported file format";
-                                }
-                            }
-                            $result.="</td>
-                            <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                            <td><button class='btn btn-info view_files' id='view_files' type='button'><i class='fa-solid fa-paperclip'></i></button></td>
+                            <td><button class='btn btn-primary upload_attch' id='upload_attch' type='button'><i class='fa-solid fa-upload'></i></button></td>
                             <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                             <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                             <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
@@ -158,33 +133,8 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
-                        <td>";
-                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
-                            WHERE DOC_NO = :doc_no
-                            AND PO_NO = :po_no
-                            AND PO_ITEM = :po_item"; 
-                            $res1 = oci_parse(connection(), $attch_sql);
-                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
-                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
-                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
-
-                            oci_execute($res1);
-                            while($attach_row = oci_fetch_row($res1)){
-                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
-                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
-                                } 
-                                
-                                else if ($fileExtension === 'pdf') {
-                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
-                                } 
-                                
-                                else {
-                                    $result.="Unsupported file format";
-                                }
-                            }
-                        $result.="</td>
-                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td><button class='btn btn-info view_files' id='view_files' type='button'><i class='fa-solid fa-paperclip'></i></button></td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch' type='button'><i class='fa-solid fa-upload'></i></button></td>
                         <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                         <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                         <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
@@ -258,33 +208,8 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
-                        <td>";
-                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
-                            WHERE DOC_NO = :doc_no
-                            AND PO_NO = :po_no
-                            AND PO_ITEM = :po_item"; 
-                            $res1 = oci_parse(connection(), $attch_sql);
-                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
-                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
-                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
-
-                            oci_execute($res1);
-                            while($attach_row = oci_fetch_row($res1)){
-                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
-                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
-                                } 
-                                
-                                else if ($fileExtension === 'pdf') {
-                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
-                                } 
-                                
-                                else {
-                                    $result.="Unsupported file format";
-                                }
-                            }
-                        $result.="</td>
-                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td><button class='btn btn-info view_files' id='view_files' type='button'><i class='fa-solid fa-paperclip'></i></button></td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch' type='button'><i class='fa-solid fa-upload'></i></button></td>
                         <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                         <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                         <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
@@ -498,33 +423,8 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
-                        <td>";
-                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
-                            WHERE DOC_NO = :doc_no
-                            AND PO_NO = :po_no
-                            AND PO_ITEM = :po_item"; 
-                            $res1 = oci_parse(connection(), $attch_sql);
-                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
-                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
-                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
-
-                            oci_execute($res1);
-                            while($attach_row = oci_fetch_row($res1)){
-                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
-                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
-                                } 
-                                
-                                else if ($fileExtension === 'pdf') {
-                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
-                                } 
-                                
-                                else {
-                                    $result.="Unsupported file format";
-                                }
-                            }
-                        $result.="</td>
-                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td><button class='btn btn-info view_files' id='view_files' type='button'><i class='fa-solid fa-paperclip'></i></button></td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch' type='button'><i class='fa-solid fa-upload'></i></button></td>
                         <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                         <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                         <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
@@ -600,33 +500,8 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
-                        <td>";
-                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
-                            WHERE DOC_NO = :doc_no
-                            AND PO_NO = :po_no
-                            AND PO_ITEM = :po_item"; 
-                            $res1 = oci_parse(connection(), $attch_sql);
-                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
-                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
-                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
-
-                            oci_execute($res1);
-                            while($attach_row = oci_fetch_row($res1)){
-                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
-                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
-                                } 
-                                
-                                else if ($fileExtension === 'pdf') {
-                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
-                                } 
-                                
-                                else {
-                                    $result.="Unsupported file format";
-                                }
-                            }
-                        $result.="</td>
-                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td><button class='btn btn-info view_files' id='view_files' type='button'><i class='fa-solid fa-paperclip'></i></button></td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch' type='button'><i class='fa-solid fa-upload'></i></button></td>
                         <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                         <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                         <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
@@ -700,33 +575,8 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
-                        <td>";
-                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
-                            WHERE DOC_NO = :doc_no
-                            AND PO_NO = :po_no
-                            AND PO_ITEM = :po_item"; 
-                            $res1 = oci_parse(connection(), $attch_sql);
-                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
-                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
-                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
-
-                            oci_execute($res1);
-                            while($attach_row = oci_fetch_row($res1)){
-                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
-                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
-                                } 
-                                
-                                else if ($fileExtension === 'pdf') {
-                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
-                                } 
-                                
-                                else {
-                                    $result.="Unsupported file format";
-                                }
-                            }
-                        $result.="</td>
-                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td><button class='btn btn-info view_files' id='view_files' type='button'><i class='fa-solid fa-paperclip'></i></button></td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch' type='button'><i class='fa-solid fa-upload'></i></button></td>
                         <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                         <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                         <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>
@@ -800,33 +650,8 @@ if (isset($_POST['data'])){
                         <td>".$row["MTRL_SHORT"]."</td>
                         <td>".$row["VENDOR_NAME"]."</td>
                         <td>".$row1["BUSINESSMAIL"]."</td>
-                        <td>";
-                            $attch_sql = "SELECT ATTACHMENT FROM IT_ASSET_ATTACHMENT 
-                            WHERE DOC_NO = :doc_no
-                            AND PO_NO = :po_no
-                            AND PO_ITEM = :po_item"; 
-                            $res1 = oci_parse(connection(), $attch_sql);
-                            oci_bind_by_name($res1, ':doc_no', $row['DOC_NO']);
-                            oci_bind_by_name($res1, ':po_no', $row['PO_NO']);
-                            oci_bind_by_name($res1, ':po_item', $row['PO_ITEM']);
-
-                            oci_execute($res1);
-                            while($attach_row = oci_fetch_row($res1)){
-                                $fileExtension = pathinfo($attach_row[0], PATHINFO_EXTENSION);
-                                if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                    $result.="<img id='view_attch' class='view_attch' src='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."'>";
-                                } 
-                                
-                                else if ($fileExtension === 'pdf') {
-                                    $result.="<a href='http://localhost/assetmonitoring/pages/user/uploads/".$attach_row[0]."' target='_blank'>".$attach_row[0]."</a>";
-                                } 
-                                
-                                else {
-                                    $result.="Unsupported file format";
-                                }
-                            }
-                        $result.="</td>
-                        <td><button class='btn btn-primary upload_attch' id='upload_attch'><i class='fa-solid fa-upload'></i></button></td>
+                        <td><button class='btn btn-info view_files' id='view_files' type='button'><i class='fa-solid fa-paperclip'></i></button></td>
+                        <td><button class='btn btn-primary upload_attch' id='upload_attch' type='button'><i class='fa-solid fa-upload'></i></button></td>
                         <td hidden><input class='req_grp_code' value='".$row["REQ_GRP_ID"]."'></td>
                         <td hidden><input class='req_grp_name' value='".$row["REQ_GRP_NAME"]."'></td>
                         <td hidden><input class='req_type_code' value='".$row["REQ_TYPE_ID"]."'></td>

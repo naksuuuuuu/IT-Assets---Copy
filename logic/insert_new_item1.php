@@ -57,9 +57,9 @@
     
     // if(isset($_POST['image']['name'])){
         // $maxDoc = "SELECT max(DOC_NO) from IT_ASSET_HEADER";
-        // $stmt = oci_parse(connection(), $maxDoc);
-        // oci_execute($stmt);
-        // $row = oci_fetch_row($stmt);
+        // $stmt1 = oci_parse(connection(), $maxDoc);
+        // oci_execute($stmt1);
+        // $row = oci_fetch_row($stmt1);
         // if ($row[0] == '') {
         //     $doc_no = date('y')."AS0001";
         // }
@@ -108,23 +108,40 @@
         // $doc_no = $currentYear . 'AS' . $newNumericPart;
 
         // ------------
-        $currentYear = date('y');
+        // $currentYear = date('y');
 
-        $maxDoc = "SELECT MAX(DOC_NO) FROM IT_ASSET_HEADER WHERE SUBSTR(DOC_NO, 1, 2) = :current_year";
+        // $maxDoc = "SELECT MAX(DOC_NO) FROM IT_ASSET_HEADER WHERE SUBSTR(DOC_NO, 1, 2) = :current_year";
+        // $stmt1 = oci_parse(connection(), $maxDoc);
+        // oci_bind_by_name($stmt1, ':current_year', $currentYear);
+        // oci_execute($stmt1);
+        // $row = oci_fetch_row($stmt1);
+
+        // if ($row[0] == '') {
+        //     $lastNumericPart = '0000';
+        // } else {
+        //     $lastDocNo = $row[0];
+        //     $lastNumericPart = intval(substr($lastDocNo, 4));
+        // }
+
+        // $newNumericPart = str_pad(($lastNumericPart + 1), 4, '0', STR_PAD_LEFT);
+        // $doc_no = $currentYear . 'AS' . $newNumericPart;
+
+        // __________
+        $currentYear = date('y');
+        $maxDoc = "SELECT max(DOC_NO) from IT_ASSET_HEADER";
         $stmt1 = oci_parse(connection(), $maxDoc);
-        oci_bind_by_name($stmt1, ':current_year', $currentYear);
         oci_execute($stmt1);
         $row = oci_fetch_row($stmt1);
 
         if ($row[0] == '') {
-            $lastNumericPart = '0000';
+            $doc_no = date('y')."AS0001";
         } else {
-            $lastDocNo = $row[0];
-            $lastNumericPart = intval(substr($lastDocNo, 4));
+            $doc_no = $row[0];
+            $doc_no = substr($doc_no, -4);
+            $doc_no = (int)$doc_no;
+            $doc_no++;
+            $doc_no = $currentYear."AS".str_pad($doc_no, 4, '0', STR_PAD_LEFT);
         }
-
-        $newNumericPart = str_pad(($lastNumericPart + 1), 4, '0', STR_PAD_LEFT);
-        $doc_no = $currentYear . 'AS' . $newNumericPart;
 
         $sql = "INSERT INTO IT_ASSET_HEADER
         (DOC_NO, DOC_DATE, PO_DOC_DATE, PO_NO, VENDOR_CODE, PLANT_CODE, 
@@ -146,7 +163,7 @@
         oci_bind_by_name($res, ':user_date', $date);
         
         // DETAILS
-        if(oci_execute($res, OCI_NO_AUTO_COMMIT)){
+        if(oci_execute($res,OCI_NO_AUTO_COMMIT)){
             oci_commit(connection());
             
             $ass_id_sql = "SELECT max(ASSET_ID) from IT_ASSET_DETAILS";
@@ -160,6 +177,19 @@
                 $ass_id = $ass_row[0];
                 $ass_id++;
             }
+
+            // $ass_id_sql = "SELECT max(ASSET_ID) from IT_ASSET_DETAILS";
+            // $stmt = oci_parse(connection(), $ass_id_sql);
+            // oci_execute($stmt);
+            // $ass_row = oci_fetch_row($stmt);
+            // if ($ass_row[0] == '') {
+            //     $ass_id = date('y')."AID0001";
+            // } else {
+            //     $ass_id = $ass_row[0];
+            //     $ass_id = intval(substr($ass_id, 3)); // Extract the numeric part
+            //     $ass_id++; // Increment the numeric part
+            //     $ass_id = date('y')."AID".str_pad($ass_id, 4, '0', STR_PAD_LEFT); // Concatenate the parts
+            // }
             
             $det_sql = "INSERT INTO IT_ASSET_DETAILS
             (DOC_NO, DOC_DATE, PO_NO, PO_ITEM, DEL_DATE, REQ_GRP_ID, REQ_TYPE_ID, ASSET_GRP_CODE, 
@@ -168,7 +198,7 @@
             WARRANTY_START_DATE, WARRANTY_MONTH, WARRANTY_EXPIRE_DATE, DEL_NOTE, MTRL_SHORT, REMARKS,
             EMPL_ID, USER_CREATE, USER_CREATED_DATE)
             VALUES 
-            (:doc_num, to_date(:doc_date, 'DD/MM/YY'), :po_no, :po_item, to_date(:del_date, 'DD/MM/YY'), :req_grp1, :req_type1, :ass_grp1, 
+            (:doc_no, to_date(:doc_date, 'DD/MM/YY'), :po_no, :po_item, to_date(:del_date, 'DD/MM/YY'), :req_grp1, :req_type1, :ass_grp1, 
             :ass_sub_grp1, :brand1, :model1, :series, :serial_no1, :serial_no2, :serial_no3, :serial_no4, :ass_code, :unit, 
             :qty, :unit_price, :ass_id, :ass_flag, to_date(:lic_start, 'DD/MM/YY'), :lic_month, to_date(:lic_exp, 'DD/MM/YY'), 
             to_date(:war_start, 'DD/MM/YY'), :war_month, to_date(:war_exp, 'DD/MM/YY'), :del_note, :mtrl_short, :rem,
@@ -176,7 +206,7 @@
 
             $result= oci_parse(connection(), $det_sql);
 
-            oci_bind_by_name($result, ':doc_num', $doc_no);
+            oci_bind_by_name($result, ':doc_no', $doc_no);
             oci_bind_by_name($result, ':doc_date', $doc_date);
             oci_bind_by_name($result, ':po_no', $po_num);
             oci_bind_by_name($result, ':po_item', $po_item1);
@@ -222,17 +252,17 @@
                 // echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));
             }
             oci_free_statement($result);
-        }
-        oci_free_statement($stmt1);
-        oci_free_statement($res);
+    }
+    oci_free_statement($res);
+    oci_free_statement($stmt1);
 
-        if ($count != 0){
-            echo json_encode(array('success' => 1, 'message' => "SUCCESS", 'icon' => "success"));
-            exit();
-        }
-        else{
-            echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));
-            exit();
-        }
-    // }
+    if ($count != 0){
+        echo json_encode(array('success' => 1, 'message' => "SUCCESS", 'icon' => "success"));
+        exit();
+    }
+    else{
+        echo json_encode(array('success' => 0, 'message' => "ERROR", 'icon' => "error"));
+        exit();
+    }
+// }
 ?>

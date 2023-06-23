@@ -56,10 +56,10 @@
     $count = 0;
     
     if(isset($_FILES['image']['name'])){
-        // $maxDoc = "SELECT max(DOC_NO) from IT_ASSET_HEADER";
-        // $stmt = oci_parse(connection(), $maxDoc);
-        // oci_execute($stmt);
-        // $row = oci_fetch_row($stmt);
+        // $maxDoc = "SELECT max(DOC_NO) from IT_ASSET_DOCUMENT_RUNNING";
+        // $stmt1 = oci_parse(connection(), $maxDoc);
+        // oci_execute($stmt1);
+        // $row = oci_fetch_row($stmt1);
         // if ($row[0] == '') {
         //     $doc_no = date('y')."AS0001";
         // }
@@ -68,47 +68,26 @@
         //     $doc_no++;
         // }
 
-        // ----------
-        // $maxDoc = "SELECT MAX(DOC_NO) FROM IT_ASSET_HEADER";
-        // $stmt1 = oci_parse(connection(), $maxDoc);
-        // oci_execute($stmt1);
-        // $row = oci_fetch_row($stmt1);
-
-        // if ($row[0] == '') {
-        //     $lastDocNo = date('y') . 'AS0000';
-        // } else {
-        //     $lastDocNo = $row[0];
-        // }
-
-        // $currentYear = date('y');
-        // $lastYear = substr($lastDocNo, 0, 2);
-        // $numericPart = intval(substr($lastDocNo, 4));
-
-        // if ($currentYear == $lastYear) {
-        //     $newNumericPart = str_pad(($numericPart + 1), 4, '0', STR_PAD_LEFT);
-        // } else {
-        //     $newNumericPart = 'AS0001';
-        // }
-        // $doc_no = $currentYear . 'AS' . $newNumericPart;       
-
-        // ----------
-        $currentYear = date('y');
-
-        $maxDoc = "SELECT MAX(DOC_NO) FROM IT_ASSET_HEADER WHERE SUBSTR(DOC_NO, 1, 2) = :current_year";
+        $maxDoc = "SELECT max(DOC_NO) from IT_ASSET_DOCUMENT_RUNNING";
         $stmt1 = oci_parse(connection(), $maxDoc);
-        oci_bind_by_name($stmt1, ':current_year', $currentYear);
         oci_execute($stmt1);
         $row = oci_fetch_row($stmt1);
-
+        $doc_no = $row[0];
+    
         if ($row[0] == '') {
-            $lastNumericPart = '0000';
-        } else {
-            $lastDocNo = $row[0];
-            $lastNumericPart = intval(substr($lastDocNo, 4));
-        }
+            $doc_no = date('y')."AS0001";
+        } 
+        // else{
+        //     $lastDocNo = $row[0];
+        //     $doc_no = incrementDocNo($lastDocNo);
+        // }
 
-        $newNumericPart = str_pad(($lastNumericPart + 1), 4, '0', STR_PAD_LEFT);
-        $doc_no = $currentYear . 'AS' . $newNumericPart;
+        else{
+            $lastDocNo = $row[0];
+            $lastNumber = intval(substr($lastDocNo, 6)); // Extract the numeric part of the document number
+            $newNumber = $lastNumber + 1; // Increment the numeric part
+            $doc_no = date('y') . "AS" . str_pad($newNumber, 4, '0', STR_PAD_LEFT); // Create the new document number
+        }
 
         $sql = "INSERT INTO IT_ASSET_HEADER
         (DOC_NO, DOC_DATE, PO_DOC_DATE, PO_NO, VENDOR_CODE, PLANT_CODE, 
@@ -207,9 +186,8 @@
             }
             oci_free_statement($result);
         }
-        oci_free_statement($stmt1);
         oci_free_statement($res);
-        
+
         foreach($_FILES['image']['name'] as $key => $value){
             $file_name = $_FILES['image']['name'][$key];
             $file_size = $_FILES['image']['size'][$key];
@@ -247,9 +225,26 @@
             else{
                 $count = 0;
                 unlink('../pages/user/uploads/'.$file_name);
-                exit(0);
+                // exit(0);
             }
         }//foreach end
+
+        $updt_doc_no = "UPDATE IT_ASSET_DOCUMENT_RUNNING SET DOC_NO = :doc_no, LAST_USER_UPDATE = :user_name, 
+            LAST_USER_UPDATE_DATE = to_date(:update_date, 'DD/MM/YY HH:MI:SS am')";
+            $res_updt = oci_parse(connection(), $updt_doc_no);
+            oci_bind_by_name($res_updt, ':doc_no', $doc_no);
+            oci_bind_by_name($res_updt, ':user_name', $username);
+            oci_bind_by_name($res_updt, ':update_date', $date);
+
+            if(oci_execute($res_updt, OCI_NO_AUTO_COMMIT)){
+                oci_commit(connection());
+                $count++;
+            }
+            else{
+                oci_rollback(connection());
+                $count = 0;
+            }
+            oci_free_statement($res_updt);
 
         if ($count != 0){
             echo json_encode(array('success' => 1, 'message' => "SUCCESS", 'icon' => "success"));
@@ -260,6 +255,15 @@
             // oci_close(connection());
         }
     }
+    // function incrementDocNo($lastDocNo){
+    //     $year = substr($lastDocNo, 0, 2);
+    //     $number = intval(substr($lastDocNo, 2));
+    //     $number++;
+    //     $paddedNumber = str_pad($number, 4, '0', STR_PAD_LEFT);
+    //     return $year . 'AS' . $paddedNumber;
+    // }
+
+
 
     // else{
     //     $maxDoc = "SELECT max(DOC_NO) from IT_ASSET_HEADER";
